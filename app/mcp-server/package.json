@@ -1,0 +1,24 @@
+{
+  "name": "puppeteer-mcp-server",
+  "version": "0.1.0",
+  "description": "Puppeteer MCP Server for browser automation",
+  "main": "puppeteer-server.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc puppeteer-server.ts --target ES2020 --module NodeNext --moduleResolution NodeNext --outDir dist",
+    "start": "node dist/puppeteer-server.js",
+    "dev": "tsx puppeteer-server.ts"
+  },
+  "keywords": ["mcp", "puppeteer", "browser", "automation"],
+  "author": "AbacusHub",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.3",
+    "puppeteer": "^24.11.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.2.2"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "puppeteer": {
+      "command": "node",
+      "args": [
+        "/mnt/c/Users/pasca/Desktop/abacushub/app/mcp-server/dist/puppeteer-server.js"
+      ],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "anubis": {
+      "command": "npx",
+      "args": ["-y", "@hive-academy/anubis"],
+      "env": {
+        "PROJECT_ROOT": "/mnt/c/Users/pasca/Desktop"
+      }
+    }
+  }
+}

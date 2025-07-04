@@ -1,0 +1,1 @@
+This is a test file for upload functionality testing. It contains some sample text to verify that the chunked upload system works correctly with the API compatibility fixes.
