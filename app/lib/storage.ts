@@ -1,6 +1,5 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { existsSync } from 'fs';
 
 export interface StorageProvider {
   read(key: string): Promise<Buffer>;
