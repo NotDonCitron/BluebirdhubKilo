@@ -19,6 +19,9 @@
     "postinstall": "prisma generate",
     "vercel:build": "prisma generate && next build",
     "vercel:deploy": "vercel --prod",
+    "gcloud:build": "gcloud builds submit --config cloudbuild.yaml",
+    "gcloud:deploy": "gcloud app deploy app.yaml --quiet",
+    "gcp:setup": "npm run db:generate && npm run build",
     "mcp:build": "npx tsc mcp-server/puppeteer-server.ts --target ES2020 --module ESNext --moduleResolution node --outDir mcp-server/dist --skipLibCheck",
     "mcp:dev": "npx tsx mcp-server/puppeteer-server.ts",
     "mcp:start": "node mcp-server/dist/puppeteer-server.js"
@@ -95,6 +98,7 @@
     "@types/pg": "^8.11.0",
     "@types/plotly.js": "2.35.5",
     "@types/react-plotly.js": "2.6.3",
+    "@google-cloud/storage": "^7.7.0",
     "@vercel/blob": "^0.27.0",
     "@vercel/postgres": "^0.10.0",
     "autoprefixer": "10.4.15",

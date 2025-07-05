@@ -1,0 +1,105 @@
+# This file specifies files that are *not* uploaded to Google Cloud
+# using gcloud. It follows the same syntax as .gitignore, with the addition of
+# "#!include" directives (which insert the entries of the given .gitignore-style
+# file at that point).
+
+# For more information, run:
+#   $ gcloud topic gcloudignore
+
+.gcloudignore
+
+# Include .gitignore content
+#!include:.gitignore
+
+# Node.js dependencies
+node_modules/
+
+# Development files
+.env*.local
+.vscode/
+.idea/
+
+# Build outputs (will be rebuilt)
+.next/
+out/
+dist/
+build/
+
+# Tests
+__tests__/
+coverage/
+*.test.js
+*.test.ts
+*.test.tsx
+jest.config.js
+jest.setup.js
+
+# Documentation
+README.md
+*.md
+docs/
+
+# Development tools
+.eslintrc*
+.prettierrc*
+tsconfig.json
+tailwind.config.ts
+postcss.config.js
+
+# Git
+.git/
+.gitignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Database files (development)
+*.db
+*.sqlite
+*.sqlite3
+prisma/dev.db
+prisma/prisma/
+
+# Temporary files
+temp/
+tmp/
+uploads/
+
+# Development scripts
+test-*.js
+enhanced-test.js
+scripts/create-test-user.js
+
+# Error reports
+*-errors-summary.txt
+*-progress-report.md
+deployment-status.md
+
+# Python virtual environment
+venv/
+test-debug-agent/
+
+# MCP server (development only)
+mcp-server/
+
+# Vercel config (not needed for GCP)
+vercel.json
+.vercelignore
+
+# CodeRabbit config (development only)
+.coderabbit.yaml
+
+# Docker files (not needed for App Engine)
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Cache
+.cache/
+.parcel-cache/
+tsconfig.tsbuildinfo

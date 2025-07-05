@@ -1,0 +1,80 @@
+# Google App Engine configuration for AbacusHub
+runtime: nodejs18
+
+# Environment variables (set via Google Cloud Console or gcloud CLI)
+env_variables:
+  NODE_ENV: production
+  NEXTAUTH_URL: https://abacushub-dot-YOUR-PROJECT-ID.uw.r.appspot.com
+  # Add other environment variables via Cloud Console:
+  # - DATABASE_URL (Cloud SQL connection string)
+  # - NEXTAUTH_SECRET
+  # - GOOGLE_CLOUD_PROJECT_ID
+  # - CLOUD_STORAGE_BUCKET
+
+# Scaling configuration
+automatic_scaling:
+  min_instances: 1
+  max_instances: 10
+  target_cpu_utilization: 0.7
+  target_throughput_utilization: 0.7
+
+# Resource allocation
+resources:
+  cpu: 1
+  memory_gb: 2
+  disk_size_gb: 10
+
+# Network settings
+network:
+  session_affinity: false
+
+# Health checks
+readiness_check:
+  path: "/api/debug/simple"
+  check_interval_sec: 5
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+
+liveness_check:
+  path: "/api/debug/simple"
+  check_interval_sec: 30
+  timeout_sec: 4
+  failure_threshold: 4
+  success_threshold: 2
+
+# File upload limits
+handlers:
+  # Static assets
+  - url: /_next/static
+    static_dir: .next/static
+    expiration: 1y
+    
+  # API routes with larger upload limits
+  - url: /api/upload.*
+    script: auto
+    secure: always
+    upload: 500mb
+    
+  # Other API routes
+  - url: /api/.*
+    script: auto
+    secure: always
+    
+  # All other routes
+  - url: /.*
+    script: auto
+    secure: always
+
+# Cloud SQL connection (uncomment when using Cloud SQL)
+# beta_settings:
+#   cloud_sql_instances: YOUR-PROJECT-ID:REGION:INSTANCE-NAME
+
+# VPC access (if needed for private resources)
+# vpc_access_connector:
+#   name: projects/YOUR-PROJECT-ID/locations/REGION/connectors/CONNECTOR-NAME
+
+# Custom runtime settings
+runtime_config:
+  operating_system: ubuntu22
+  runtime_version: 18

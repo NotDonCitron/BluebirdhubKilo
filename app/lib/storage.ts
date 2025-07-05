@@ -97,7 +97,16 @@ class LocalStorageProvider implements StorageProvider {
   }
 }
 
-// Create and export the storage instance
-export const storage = new LocalStorageProvider(
-  process.env.STORAGE_PATH || './uploads'
-);
+// Choose storage provider based on environment
+function createStorageProvider(): StorageProvider {
+  if (process.env.NODE_ENV === 'production' && process.env.GOOGLE_CLOUD_PROJECT_ID) {
+    // Use Cloud Storage in production
+    const { CloudStorageProvider } = require('./storage/cloud-storage');
+    return new CloudStorageProvider();
+  } else {
+    // Use local storage for development
+    return new LocalStorageProvider(process.env.STORAGE_PATH || './uploads');
+  }
+}
+
+export const storage = createStorageProvider();

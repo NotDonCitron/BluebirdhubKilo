@@ -1,0 +1,107 @@
+# Git and version control
+.git
+.gitignore
+.gitattributes
+
+# Node.js
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Next.js
+.next/
+out/
+dist/
+build/
+
+# Testing
+coverage/
+.nyc_output
+__tests__/
+*.test.js
+*.test.ts
+*.test.tsx
+jest.config.js
+jest.setup.js
+
+# Development
+.env*.local
+.env.example
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Documentation
+README.md
+CHANGELOG.md
+docs/
+*.md
+
+# Development tools
+eslint*
+prettier*
+.eslintrc*
+.prettierrc*
+
+# TypeScript
+*.tsbuildinfo
+tsconfig.json
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+dev.db
+prisma/dev.db
+prisma/prisma/
+
+# Uploads and temporary files
+uploads/
+temp/
+tmp/
+
+# Python virtual environment (from root)
+venv/
+test-debug-agent/
+
+# Misc
+.vercelignore
+vercel.json
+.coderabbit.yaml
+
+# Development scripts
+scripts/create-test-user.js
+test-*.js
+enhanced-test.js
+
+# Error reports and summaries
+*-errors-summary.txt
+*-progress-report.md
+deployment-status.md
+
+# MCP server (if not needed in production)
+mcp-server/
+
+# Cache directories
+.cache/
+.parcel-cache/
