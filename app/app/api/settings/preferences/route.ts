@@ -98,7 +98,7 @@ export async function PUT(request: NextRequest) {
         action: 'SETTINGS_UPDATED',
         entityType: 'preferences',
         entityId: session.user.id,
-        metadata: {
+        details: {
           updatedFields: Object.keys(validatedData)
         }
       }

@@ -1,0 +1,35 @@
+{
+  "summary": {
+    "total_test_files": 15,
+    "total_tests": 0,
+    "passed_tests": 0,
+    "failed_tests": 0,
+    "coverage_percentage": 0,
+    "issues_fixed": 3
+  },
+  "detailed_results": [],
+  "coverage_summary": {},
+  "fixed_issues": [
+    {
+      "file": "/Users/phhtttps/BluebirdhubKilo/app/__tests__/components/dashboard/settings/account-settings.test.tsx",
+      "issue": "mock_date",
+      "fix_applied": "Add proper date mocking in beforeEach",
+      "timestamp": "2025-07-04T20:14:15.107357"
+    },
+    {
+      "file": "/Users/phhtttps/BluebirdhubKilo/app/__tests__/components/dashboard/settings/account-settings.test.tsx",
+      "issue": "wrap_in_act",
+      "fix_applied": "Wrap setSystemTime( updates in act()",
+      "timestamp": "2025-07-04T20:14:15.107524"
+    },
+    {
+      "file": "/Users/phhtttps/BluebirdhubKilo/app/__tests__/components/dashboard/settings/account-settings.test.tsx",
+      "issue": "wrap_in_act",
+      "fix_applied": "Wrap setupSuccessfulMocks( updates in act()",
+      "timestamp": "2025-07-04T20:14:15.107526"
+    }
+  ],
+  "recommendations": [
+    "Increase test coverage to at least 80%"
+  ]
+}

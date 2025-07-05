@@ -154,7 +154,7 @@ export async function PUT(request: NextRequest) {
         action: 'SETTINGS_UPDATED',
         entityType: 'profile',
         entityId: session.user.id,
-        metadata: {
+        details: {
           updatedFields: Object.keys(updateData)
         }
       }

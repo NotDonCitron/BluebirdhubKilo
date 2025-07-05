@@ -1,0 +1,203 @@
+{
+  "total_files": 15,
+  "files_processed": 15,
+  "files_fixed": 15,
+  "total_changes": 73,
+  "high_confidence_fixes": 15,
+  "manual_review_needed": 0,
+  "detailed_results": [
+    {
+      "file": "../app/__tests__/basic-notification-settings.test.tsx",
+      "success": true,
+      "changes": [
+        "Added import: import { act, cleanup, waitFor } from '@testing-library/react';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements",
+        "Convert to async test function",
+        "Fix waitFor pattern with extra semicolon"
+      ],
+      "issues": [],
+      "confidence": 1.0
+    },
+    {
+      "file": "../app/__tests__/integration/real-time-notifications.test.tsx",
+      "success": true,
+      "changes": [
+        "Added import: import { jest } from '@types/jest';",
+        "Added import: import { cleanup } from '@testing-library/react';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements",
+        "Replaced 'as any' with 'as unknown' for better type safety"
+      ],
+      "issues": [],
+      "confidence": 1.0
+    },
+    {
+      "file": "../app/__tests__/components/ui/button.test.tsx",
+      "success": true,
+      "changes": [
+        "Added import: import { jest } from '@types/jest';",
+        "Added import: import { act, cleanup } from '@testing-library/react';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements"
+      ],
+      "issues": [],
+      "confidence": 1.0
+    },
+    {
+      "file": "../app/__tests__/components/providers/real-time-provider.test.tsx",
+      "success": true,
+      "changes": [
+        "Added import: import { jest } from '@types/jest';",
+        "Added import: import { act, cleanup } from '@testing-library/react';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements",
+        "Convert to async test function",
+        "Replaced 'as any' with 'as unknown' for better type safety"
+      ],
+      "issues": [],
+      "confidence": 0.9
+    },
+    {
+      "file": "../app/__tests__/components/dashboard/test-real-time.test.tsx",
+      "success": true,
+      "changes": [
+        "Added import: import { jest } from '@types/jest';",
+        "Added import: import { act, cleanup } from '@testing-library/react';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements",
+        "Convert to async test function",
+        "Fix waitFor pattern with extra semicolon"
+      ],
+      "issues": [],
+      "confidence": 0.9
+    },
+    {
+      "file": "../app/__tests__/components/dashboard/settings/privacy-settings.test.tsx",
+      "success": true,
+      "changes": [
+        "Added import: import { jest } from '@types/jest';",
+        "Added import: import { act, cleanup } from '@testing-library/react';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements",
+        "Fix waitFor pattern with extra semicolon"
+      ],
+      "issues": [],
+      "confidence": 1.0
+    },
+    {
+      "file": "../app/__tests__/components/dashboard/settings/notification-settings.test.tsx",
+      "success": true,
+      "changes": [
+        "Added import: import { jest } from '@types/jest';",
+        "Added import: import { act, cleanup } from '@testing-library/react';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements",
+        "Convert to async test function",
+        "Fix waitFor pattern with extra semicolon"
+      ],
+      "issues": [],
+      "confidence": 0.9
+    },
+    {
+      "file": "../app/__tests__/components/dashboard/settings/account-settings.test.tsx",
+      "success": true,
+      "changes": [
+        "Added import: import { jest } from '@types/jest';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements",
+        "Convert to async test function",
+        "Replaced 'as any' with 'as unknown' for better type safety"
+      ],
+      "issues": [],
+      "confidence": 1.0
+    },
+    {
+      "file": "../app/__tests__/hooks-basic.test.ts",
+      "success": true,
+      "changes": [
+        "Added import: import { cleanup, render } from '@testing-library/react';",
+        "Added import: import { jest } from '@types/jest';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements",
+        "Replaced 'as any' with 'as unknown' for better type safety"
+      ],
+      "issues": [],
+      "confidence": 1.0
+    },
+    {
+      "file": "../app/__tests__/api-basic.test.ts",
+      "success": true,
+      "changes": [
+        "Added import: import { jest } from '@types/jest';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements",
+        "Convert to async test function"
+      ],
+      "issues": [],
+      "confidence": 1.0
+    },
+    {
+      "file": "../app/__tests__/setup.test.ts",
+      "success": true,
+      "changes": [
+        "Added import: import { jest } from '@types/jest';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements"
+      ],
+      "issues": [],
+      "confidence": 1.0
+    },
+    {
+      "file": "../app/__tests__/hooks/use-real-time-events.test.ts",
+      "success": true,
+      "changes": [
+        "Added import: import { render } from '@testing-library/react';",
+        "Added import: import { jest } from '@types/jest';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements",
+        "Replaced 'as any' with 'as unknown' for better type safety"
+      ],
+      "issues": [],
+      "confidence": 1.0
+    },
+    {
+      "file": "../app/__tests__/api/settings/notifications.test.ts",
+      "success": true,
+      "changes": [
+        "Added import: import { act } from '@testing-library/react';",
+        "Added import: import { jest } from '@types/jest';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements"
+      ],
+      "issues": [],
+      "confidence": 1.0
+    },
+    {
+      "file": "../app/__tests__/api/settings/privacy.test.ts",
+      "success": true,
+      "changes": [
+        "Added import: import { act } from '@testing-library/react';",
+        "Added import: import { jest } from '@types/jest';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements"
+      ],
+      "issues": [],
+      "confidence": 1.0
+    },
+    {
+      "file": "../app/__tests__/api/events/stream.test.ts",
+      "success": true,
+      "changes": [
+        "Added import: import { jest } from '@types/jest';",
+        "Added import: import { act, cleanup } from '@testing-library/react';",
+        "Added import: import { expect } from '@testing-library/jest-dom';",
+        "Fix unmatched parentheses in expect statements",
+        "Convert to async test function",
+        "Replaced 'as any' with 'as unknown' for better type safety"
+      ],
+      "issues": [],
+      "confidence": 0.9
+    }
+  ]
+}

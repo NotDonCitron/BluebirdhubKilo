@@ -507,7 +507,7 @@ export function useFileUpload() {
           });
           
           input.click();
-          file = await fileSelected;
+          file = (await fileSelected) || undefined;
           
           if (!file) {
             return;

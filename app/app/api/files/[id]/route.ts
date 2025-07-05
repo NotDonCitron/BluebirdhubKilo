@@ -4,12 +4,6 @@ import { authOptions } from "@/lib/auth-config";
 import { prisma } from "@/lib/db";
 import { storage } from "@/lib/storage";
 
-// Helper to extract storage key from URL
-function getStorageKeyFromUrl(url: string): string {
-  // Remove leading slash and "uploads/" prefix if present
-  return url.replace(/^\/?(uploads\/)?/, "");
-}
-
 // Helper to stream file to response with range support
 async function streamFile(
   key: string,

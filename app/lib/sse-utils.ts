@@ -13,7 +13,7 @@ export function sendEventToUser(userId: string, eventType: string, data: any) {
         timestamp: new Date().toISOString(),
       };
       
-      connection.enqueue(
+      connection.write(
         encoder.encode(`data: ${JSON.stringify(event)}\n\n`)
       );
     } catch (error) {
@@ -36,7 +36,7 @@ export function broadcastEvent(eventType: string, data: any) {
   
   connections.forEach((connection, userId) => {
     try {
-      connection.enqueue(eventData);
+      connection.write(eventData);
     } catch (error) {
       console.error(`Error broadcasting to user ${userId}:`, error);
       connections.delete(userId);
