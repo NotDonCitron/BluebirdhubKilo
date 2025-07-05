@@ -97,16 +97,14 @@ export default function TasksPage() {
 
   const fetchData = async () => {
     try {
-      const [tasksRes, workspacesRes, usersRes] = await Promise.all([
+      const [tasksRes, workspacesRes] = await Promise.all([
         fetch('/api/tasks'),
-        fetch('/api/workspaces'),
-        fetch('/api/users')
+        fetch('/api/workspaces')
       ]);
 
-      const [tasksData, workspacesData, usersData] = await Promise.all([
+      const [tasksData, workspacesData] = await Promise.all([
         tasksRes.json(),
-        workspacesRes.json(),
-        usersRes.json()
+        workspacesRes.json()
       ]);
 
       setTasks(tasksData);

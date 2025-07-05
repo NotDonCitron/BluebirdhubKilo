@@ -1,11 +1,11 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -19,24 +19,44 @@ import {
 import {
   Settings,
   Plus,
-  MoreVertical,
   CheckSquare,
   FileText,
   Users,
   Calendar,
-  Brain,
   Upload,
-  MessageSquare,
-  Edit,
-  Trash2
+  MessageSquare
 } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 
+interface WorkspaceMember {
+  id: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    image?: string;
+  };
+  role: string;
+}
+
+interface Workspace {
+  id: string;
+  name: string;
+  description?: string;
+  color: string;
+  icon?: string;
+  members: WorkspaceMember[];
+  _count: {
+    tasks: number;
+    files: number;
+  };
+}
+
 export default function WorkspaceDetailPage() {
   const params = useParams();
   const workspaceId = params.id as string;
-  const [workspace, setWorkspace] = useState<any>(null);
+  const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -44,9 +64,9 @@ export default function WorkspaceDetailPage() {
     if (workspaceId) {
       fetchWorkspace();
     }
-  }, [workspaceId]);
+  }, [workspaceId, fetchWorkspace]);
 
-  const fetchWorkspace = async () => {
+  const fetchWorkspace = useCallback(async () => {
     try {
       const response = await fetch(`/api/workspaces/${workspaceId}`);
       if (response.ok) {
@@ -65,7 +85,7 @@ export default function WorkspaceDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [workspaceId, toast]);
 
   const getStatusColor = (status: string) => {
     switch (status) {

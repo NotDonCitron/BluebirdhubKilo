@@ -101,6 +101,8 @@ class LocalStorageProvider implements StorageProvider {
 function createStorageProvider(): StorageProvider {
   if (process.env.NODE_ENV === 'production' && process.env.GOOGLE_CLOUD_PROJECT_ID) {
     // Use Cloud Storage in production
+    // Dynamic import for production-only dependency
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { CloudStorageProvider } = require('./storage/cloud-storage');
     return new CloudStorageProvider();
   } else {
