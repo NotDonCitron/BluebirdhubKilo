@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
         );
 
         // Store the connection
-        const writer = controller as any;
+        const writer = controller as ReadableStreamDefaultController<Uint8Array>;
         addConnection(userId, writer);
 
         // Send heartbeat every 30 seconds

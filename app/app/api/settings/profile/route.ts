@@ -123,7 +123,12 @@ export async function PUT(request: NextRequest) {
     }
 
     // Update user profile
-    const updateData: any = {};
+    const updateData: {
+      name?: string;
+      email?: string;
+      image?: string;
+      password?: string;
+    } = {};
     if (validatedData.name) updateData.name = validatedData.name;
     if (validatedData.email) updateData.email = validatedData.email;
     if (validatedData.image) updateData.image = validatedData.image;

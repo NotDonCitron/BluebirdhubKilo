@@ -1,14 +1,32 @@
+import '@testing-library/jest-dom';
+/**
+ * @jest-environment node
+ */
+
+// Mock the auth function first, before any imports
+const mockGetServerSession = jest.fn();
+jest.mock('next-auth', () => ({
+  getServerSession: mockGetServerSession,
+}));
+
+// Mock database
+const mockDb = {
+  userSettings: {
+    findUnique: jest.fn(),
+    create: jest.fn(),
+    upsert: jest.fn(),
+  }
+};
+
+jest.mock('@/lib/db', () => ({
+  db: mockDb
+}));
+
 import { NextRequest } from 'next/server';
 import { GET, PUT } from '@/app/api/settings/privacy/route';
-import { getServerSession } from 'next-auth';
-import { db } from '@/lib/db';
 
-// Mock dependencies
-jest.mock('next-auth');
-jest.mock('@/lib/db');
-
-const mockGetServerSession = getServerSession as jest.MockedFunction<typeof getServerSession>;
-const mockDb = db as jest.Mocked<typeof db>;
+// Mock global Request if needed for tests
+global.Request = global.Request || class MockRequest {};
 
 const mockSession = {
   user: {
@@ -36,6 +54,15 @@ const mockUserSettings = {
 };
 
 describe('/api/settings/privacy', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date('2024-01-01'));
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
     mockGetServerSession.mockResolvedValue(mockSession);

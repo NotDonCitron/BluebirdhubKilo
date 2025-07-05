@@ -119,7 +119,10 @@ export const fileUploadRateLimit = createRateLimiter({
 });
 
 // Utility function for API routes
-export function withRateLimit(handler: Function, rateLimiter: Function) {
+export function withRateLimit(
+  handler: (request: NextRequest) => Promise<NextResponse>,
+  rateLimiter: (request: NextRequest, callback: () => Promise<NextResponse>) => Promise<NextResponse>
+) {
   return async (request: NextRequest) => {
     const rateLimitResponse = await rateLimiter(request, async () => {
       return handler(request);

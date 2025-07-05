@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
@@ -71,7 +71,6 @@ export async function POST() {
             name: true,
           },
         },
-        aiMetadata: true,
       },
     });
 
@@ -110,7 +109,6 @@ export async function POST() {
         size: file.size,
         uploadedAt: file.createdAt,
         workspace: file.workspace,
-        aiMetadata: file.aiMetadata,
       })),
       comments: userData.comments.map(comment => ({
         id: comment.id,

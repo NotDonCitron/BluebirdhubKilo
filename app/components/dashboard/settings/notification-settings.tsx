@@ -271,7 +271,7 @@ export function NotificationSettings() {
             <div className="space-y-0.5">
               <Label>Workspace Invites</Label>
               <p className="text-sm text-muted-foreground">
-                When you're invited to join a workspace
+                When you&apos;re invited to join a workspace
               </p>
             </div>
             <Switch

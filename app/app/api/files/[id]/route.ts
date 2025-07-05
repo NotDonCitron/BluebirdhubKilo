@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth-config";
 import { prisma } from "@/lib/db";
-import { storage } from "@/app/lib/storage";
-import { Readable } from "stream";
+import { storage } from "@/lib/storage";
 
 // Helper to extract storage key from URL
 function getStorageKeyFromUrl(url: string): string {
@@ -123,7 +122,7 @@ export async function GET(
       return NextResponse.json({ error: "Invalid file URL" }, { status: 400 });
     }
 
-    const storageKey = getStorageKeyFromUrl(file.url);
+    const storageKey = file.url;
 
     // Check if file exists in storage
     const exists = await storage.exists(storageKey);

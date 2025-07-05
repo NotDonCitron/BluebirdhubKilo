@@ -64,15 +64,83 @@ jest.mock('next-auth/react', () => ({
 global.fetch = jest.fn();
 
 // Mock EventSource for SSE tests
-global.EventSource = jest.fn(() => ({
-  addEventListener: jest.fn(),
-  removeEventListener: jest.fn(),
-  close: jest.fn(),
-  readyState: 1,
-  CONNECTING: 0,
-  OPEN: 1,
-  CLOSED: 2,
-}));
+class MockEventSource {
+  constructor(url) {
+    this.url = url;
+    this.readyState = 0; // CONNECTING
+    this.CONNECTING = 0;
+    this.OPEN = 1;
+    this.CLOSED = 2;
+    this.onopen = null;
+    this.onmessage = null;
+    this.onerror = null;
+    this.onclose = null;
+    this.listeners = {};
+    
+    // Simulate connection opening asynchronously - use setTimeout to ensure
+    // the hook has time to set event handlers
+    setTimeout(() => {
+      if (this.readyState !== 2) { // Only if not already closed
+        this.readyState = 1; // OPEN
+        if (this.onopen) {
+          this.onopen(new Event('open'));
+        }
+        // Also trigger any addEventListener handlers
+        if (this.listeners.open) {
+          this.listeners.open.forEach(handler => handler(new Event('open')));
+        }
+      }
+    }, 0);
+  }
+
+  addEventListener(event, handler) {
+    if (!this.listeners[event]) {
+      this.listeners[event] = [];
+    }
+    this.listeners[event].push(handler);
+  }
+
+  removeEventListener(event, handler) {
+    if (this.listeners[event]) {
+      this.listeners[event] = this.listeners[event].filter(h => h !== handler);
+    }
+  }
+
+  close() {
+    this.readyState = 2; // CLOSED
+    if (this.onclose) {
+      this.onclose(new Event('close'));
+    }
+    // Trigger close event listeners
+    if (this.listeners.close) {
+      this.listeners.close.forEach(handler => handler(new Event('close')));
+    }
+  }
+
+  // Helper method to simulate receiving a message
+  simulateMessage(data) {
+    const event = new MessageEvent('message', { data });
+    if (this.onmessage) {
+      this.onmessage(event);
+    }
+    if (this.listeners.message) {
+      this.listeners.message.forEach(handler => handler(event));
+    }
+  }
+
+  // Helper method to simulate an error
+  simulateError() {
+    const event = new Event('error');
+    if (this.onerror) {
+      this.onerror(event);
+    }
+    if (this.listeners.error) {
+      this.listeners.error.forEach(handler => handler(event));
+    }
+  }
+}
+
+global.EventSource = jest.fn((url) => new MockEventSource(url));
 
 // Mock react-hot-toast
 jest.mock('react-hot-toast', () => ({

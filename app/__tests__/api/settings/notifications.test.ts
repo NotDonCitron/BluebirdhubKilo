@@ -1,15 +1,32 @@
+import '@testing-library/jest-dom';
 /**
  * @jest-environment node
  */
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
 
-// Mock dependencies
-jest.mock('next-auth');
-jest.mock('@/lib/db');
+// Mock the auth function first, before any imports
+const mockGetServerSession = jest.fn();
+jest.mock('next-auth', () => ({
+  getServerSession: mockGetServerSession,
+}));
 
-const mockGetServerSession = getServerSession as jest.MockedFunction<typeof getServerSession>;
-const mockDb = db as jest.Mocked<typeof db>;
+// Mock database
+const mockDb = {
+  notificationSettings: {
+    findUnique: jest.fn(),
+    create: jest.fn(),
+    upsert: jest.fn(),
+  }
+};
+
+jest.mock('@/lib/db', () => ({
+  db: mockDb
+}));
+
+import { NextRequest } from 'next/server';
+import { GET, PUT } from '@/app/api/settings/notifications/route';
+
+// Mock global Request if needed for tests
+global.Request = global.Request || class MockRequest {};
 
 const mockSession = {
   user: {
@@ -42,8 +59,14 @@ const mockNotificationSettings = {
 
 describe('/api/settings/notifications', () => {
   beforeEach(() => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date('2024-01-01'));
     jest.clearAllMocks();
     mockGetServerSession.mockResolvedValue(mockSession);
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   describe('GET', () => {
@@ -70,6 +93,7 @@ describe('/api/settings/notifications', () => {
       const data = await response.json();
 
       expect(response.status).toBe(200);
+      expect(data).toEqual(mockNotificationSettings);
       expect(mockDb.notificationSettings.create).toHaveBeenCalledWith({
         data: {
           userId: 'user-1',

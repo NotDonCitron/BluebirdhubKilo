@@ -1,11 +1,12 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TestRealTime } from '@/components/dashboard/test-real-time';
-import { useRealTime } from '@/components/providers/real-time-provider';
+import { RealTimeProvider } from '@/components/providers/real-time-provider';
+import { useSession } from 'next-auth/react';
 
 // Mock dependencies
-jest.mock('@/components/providers/real-time-provider');
+jest.mock('next-auth/react');
 jest.mock('react-hot-toast', () => ({
   toast: {
     success: jest.fn(),
@@ -13,57 +14,138 @@ jest.mock('react-hot-toast', () => ({
   },
 }));
 
-const mockUseRealTime = useRealTime as jest.MockedFunction<typeof useRealTime>;
+// Mock useRealTime hook
+jest.mock('@/components/providers/real-time-provider', () => ({
+  RealTimeProvider: ({ children }: { children: React.ReactNode }) => children,
+  useRealTime: () => mockRealTimeContext,
+}));
+
+const mockUseSession = useSession as jest.MockedFunction<typeof useSession>;
 const mockSendEvent = jest.fn();
+
+// Mock real-time context
+const mockRealTimeContext = {
+  isConnected: true,
+  connectionState: 'connected' as const,
+  lastEvent: null,
+  connect: jest.fn(),
+  disconnect: jest.fn(),
+  sendEvent: mockSendEvent,
+};
+
+// Mock EventSource
+const mockEventSource = {
+  addEventListener: jest.fn(),
+  removeEventListener: jest.fn(),
+  close: jest.fn(),
+  readyState: 1,
+  CONNECTING: 0,
+  OPEN: 1,
+  CLOSED: 2,
+  onopen: null,
+  onmessage: null,
+  onerror: null,
+};
+
+global.EventSource = jest.fn(() => mockEventSource) as any;
 
 // Mock fetch
 global.fetch = jest.fn();
 
-const mockRealTimeContext = {
-  isConnected: true,
-  connectionState: 'connected' as const,
-  lastMessage: null,
-  error: null,
-  sendEvent: mockSendEvent,
+const mockSession = {
+  user: {
+    id: 'user-1',
+    name: 'Test User',
+    email: 'test@example.com',
+  },
+};
+
+const mockNotificationSettings = {
+  taskNotifications: true,
+  commentNotifications: true,
+  mentionNotifications: true,
+  workspaceInviteNotifications: true,
+  fileShareNotifications: true,
+  systemUpdateNotifications: true,
+  soundEnabled: true,
+  desktopNotifications: true,
 };
 
 describe('TestRealTime', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockUseRealTime.mockReturnValue(mockRealTimeContext);
+    mockUseSession.mockReturnValue({
+      data: mockSession,
+      status: 'authenticated',
+    } as any);
     
-    // Mock successful API response
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ success: true, message: 'Test event triggered' }),
-    });
+    // Mock notification settings fetch
+    (global.fetch as jest.Mock)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockNotificationSettings,
+      })
+      .mockResolvedValue({
+        ok: true,
+        json: async () => ({ success: true, message: 'Test event triggered' }),
+      });
   });
 
-  it('renders test component with all elements', () => {
-    render(<TestRealTime />);
+  it('renders test component with all elements', async () => {
+    render(
+      <RealTimeProvider>
+        <TestRealTime />
+      </RealTimeProvider>
+    );
+
+    // Wait for EventSource to be created and set up
+    await waitFor(() => {
+      expect(global.EventSource).toHaveBeenCalled();
+    });
+
+    // Simulate EventSource connection established
+    act(() => {
+      if (mockEventSource.onopen) {
+        const event = new Event('open') as any;
+        mockEventSource.onopen(event);
+      }
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Connected')).toBeInTheDocument();
+    });
 
     expect(screen.getByText('Real-time Events Test')).toBeInTheDocument();
     expect(screen.getByText('Test real-time notifications and events system.')).toBeInTheDocument();
-    expect(screen.getByText('Connected')).toBeInTheDocument();
     expect(screen.getByText('Status: connected')).toBeInTheDocument();
     expect(screen.getByLabelText('Event Type')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /trigger test event/i })).toBeInTheDocument();
   });
 
   it('displays correct connection status when connected', () => {
-    render(<TestRealTime />);
+    render(
+      <RealTimeProvider>
+        <TestRealTime />
+      </RealTimeProvider>
+    );
 
     const connectionBadge = screen.getByText('Connected');
     expect(connectionBadge).toBeInTheDocument();
-    expect(connectionBadge.closest('.bg-primary')).toBeTruthy(); // Should have primary variant
+    expect(screen.getByText('Status: connected')).toBeInTheDocument();
   });
 
   it('displays correct connection status when disconnected', () => {
-    mockUseRealTime.mockReturnValue({
+    // Mock disconnected state
+    const disconnectedContext = {
       ...mockRealTimeContext,
       isConnected: false,
-      connectionState: 'error',
-    });
+      connectionState: 'error' as const,
+    };
+    
+    jest.doMock('@/components/providers/real-time-provider', () => ({
+      RealTimeProvider: ({ children }: { children: React.ReactNode }) => children,
+      useRealTime: () => disconnectedContext,
+    }));
 
     render(<TestRealTime />);
 
@@ -74,7 +156,11 @@ describe('TestRealTime', () => {
 
   it('allows selecting different event types', async () => {
     const user = userEvent.setup();
-    render(<TestRealTime />);
+    render(
+      <RealTimeProvider>
+        <TestRealTime />
+      </RealTimeProvider>
+    );
 
     const eventTypeSelect = screen.getByRole('combobox');
     await user.click(eventTypeSelect);
@@ -97,7 +183,11 @@ describe('TestRealTime', () => {
     const mockToast = require('react-hot-toast').toast;
     const user = userEvent.setup();
     
-    render(<TestRealTime />);
+    render(
+      <RealTimeProvider>
+        <TestRealTime />
+      </RealTimeProvider>
+    );
 
     const triggerButton = screen.getByRole('button', { name: /trigger test event/i });
     await user.click(triggerButton);
@@ -121,7 +211,11 @@ describe('TestRealTime', () => {
 
   it('triggers test event with selected event type', async () => {
     const user = userEvent.setup();
-    render(<TestRealTime />);
+    render(
+      <RealTimeProvider>
+        <TestRealTime />
+      </RealTimeProvider>
+    );
 
     // Select different event type
     const eventTypeSelect = screen.getByRole('combobox');
@@ -158,7 +252,11 @@ describe('TestRealTime', () => {
       }), 100))
     );
 
-    render(<TestRealTime />);
+    render(
+      <RealTimeProvider>
+        <TestRealTime />
+      </RealTimeProvider>
+    );
 
     const triggerButton = screen.getByRole('button', { name: /trigger test event/i });
     await user.click(triggerButton);
@@ -172,11 +270,17 @@ describe('TestRealTime', () => {
   });
 
   it('disables button when not connected', () => {
-    mockUseRealTime.mockReturnValue({
+    // Mock disconnected state
+    const disconnectedContext = {
       ...mockRealTimeContext,
       isConnected: false,
-      connectionState: 'error',
-    });
+      connectionState: 'error' as const,
+    };
+    
+    jest.doMock('@/components/providers/real-time-provider', () => ({
+      RealTimeProvider: ({ children }: { children: React.ReactNode }) => children,
+      useRealTime: () => disconnectedContext,
+    }));
 
     render(<TestRealTime />);
 
@@ -194,7 +298,11 @@ describe('TestRealTime', () => {
       status: 500,
     });
 
-    render(<TestRealTime />);
+    render(
+      <RealTimeProvider>
+        <TestRealTime />
+      </RealTimeProvider>
+    );
 
     const triggerButton = screen.getByRole('button', { name: /trigger test event/i });
     await user.click(triggerButton);
@@ -211,7 +319,11 @@ describe('TestRealTime', () => {
     // Mock network error
     (global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
 
-    render(<TestRealTime />);
+    render(
+      <RealTimeProvider>
+        <TestRealTime />
+      </RealTimeProvider>
+    );
 
     const triggerButton = screen.getByRole('button', { name: /trigger test event/i });
     await user.click(triggerButton);
@@ -227,7 +339,11 @@ describe('TestRealTime', () => {
     // Mock sendEvent to throw error
     mockSendEvent.mockRejectedValue(new Error('Send event failed'));
 
-    render(<TestRealTime />);
+    render(
+      <RealTimeProvider>
+        <TestRealTime />
+      </RealTimeProvider>
+    );
 
     const triggerButton = screen.getByRole('button', { name: /trigger test event/i });
     await user.click(triggerButton);
@@ -239,14 +355,22 @@ describe('TestRealTime', () => {
   });
 
   it('displays helpful instructions', () => {
-    render(<TestRealTime />);
+    render(
+      <RealTimeProvider>
+        <TestRealTime />
+      </RealTimeProvider>
+    );
 
     expect(screen.getByText('This will trigger a test notification based on your notification settings.')).toBeInTheDocument();
     expect(screen.getByText('Make sure notifications are enabled in Settings → Notifications.')).toBeInTheDocument();
   });
 
   it('shows connection status with proper icons', () => {
-    render(<TestRealTime />);
+    render(
+      <RealTimeProvider>
+        <TestRealTime />
+      </RealTimeProvider>
+    );
 
     // Should show Wifi icon when connected
     const connectionBadge = screen.getByText('Connected').closest('.flex');
@@ -254,11 +378,17 @@ describe('TestRealTime', () => {
   });
 
   it('shows disconnected status with proper icons', () => {
-    mockUseRealTime.mockReturnValue({
+    // Mock disconnected state
+    const disconnectedContext = {
       ...mockRealTimeContext,
       isConnected: false,
-      connectionState: 'disconnected',
-    });
+      connectionState: 'disconnected' as const,
+    };
+    
+    jest.doMock('@/components/providers/real-time-provider', () => ({
+      RealTimeProvider: ({ children }: { children: React.ReactNode }) => children,
+      useRealTime: () => disconnectedContext,
+    }));
 
     render(<TestRealTime />);
 
@@ -269,7 +399,11 @@ describe('TestRealTime', () => {
 
   it('maintains selected event type across re-renders', async () => {
     const user = userEvent.setup();
-    const { rerender } = render(<TestRealTime />);
+    const { rerender } = render(
+      <RealTimeProvider>
+        <TestRealTime />
+      </RealTimeProvider>
+    );
 
     // Select different event type
     const eventTypeSelect = screen.getByRole('combobox');
@@ -277,7 +411,11 @@ describe('TestRealTime', () => {
     await user.click(screen.getByText('Mention'));
 
     // Re-render component
-    rerender(<TestRealTime />);
+    rerender(
+      <RealTimeProvider>
+        <TestRealTime />
+      </RealTimeProvider>
+    );
 
     // Should maintain the selected value
     expect(screen.getByDisplayValue('Mention')).toBeInTheDocument();

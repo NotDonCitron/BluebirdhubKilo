@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 /**
  * @jest-environment node
  */
@@ -22,6 +23,9 @@ jest.mock('@/lib/db', () => ({
 }));
 
 import { NextRequest } from 'next/server';
+
+// Mock global Request if needed for tests
+global.Request = global.Request || class MockRequest {};
 
 describe('API Basic Tests', () => {
   beforeEach(() => {
@@ -59,7 +63,7 @@ describe('API Basic Tests', () => {
     });
   });
 
-  it('should create NextRequest objects', () => {
+  it('should create NextRequest objects', async () => {
     const request = new NextRequest('http://localhost:3000/api/test');
     
     expect(request).toBeInstanceOf(NextRequest);

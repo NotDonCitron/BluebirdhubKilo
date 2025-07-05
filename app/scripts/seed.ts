@@ -10,9 +10,7 @@ async function main() {
   // Clean existing data
   await prisma.fileComment.deleteMany();
   await prisma.taskComment.deleteMany();
-  await prisma.taskAISuggestion.deleteMany();
   await prisma.fileTag.deleteMany();
-  await prisma.fileAIMetadata.deleteMany();
   await prisma.file.deleteMany();
   await prisma.taskAssignment.deleteMany();
   await prisma.task.deleteMany();
@@ -285,54 +283,6 @@ async function main() {
 
   console.log('✅ Files created');
 
-  // Create AI metadata for files
-  await prisma.fileAIMetadata.createMany({
-    data: [
-      {
-        fileId: file1.id,
-        category: 'Documentation',
-        subcategory: 'Requirements',
-        summary: 'Comprehensive project requirements document outlining functional and non-functional specifications for the new productivity application.',
-                    keywords: JSON.stringify(['requirements', 'specifications', 'project', 'documentation', 'features']),
-        confidence: 0.95,
-        extractedText: 'Project Requirements Document\n\n1. Functional Requirements\n- User authentication and authorization\n- Workspace management\n- Task tracking and assignment\n- File management with AI categorization\n\n2. Non-functional Requirements\n- Performance: Load times under 2 seconds\n- Scalability: Support 10,000+ concurrent users\n- Security: End-to-end encryption for sensitive data',
-      },
-      {
-        fileId: file2.id,
-        category: 'Design',
-        subcategory: 'UI/UX',
-        summary: 'User interface mockups and wireframes for the new application design system including dark mode and responsive layouts.',
-                    keywords: JSON.stringify(['ui', 'mockups', 'design', 'wireframes', 'figma', 'responsive']),
-        confidence: 0.88,
-      },
-      {
-        fileId: file3.id,
-        category: 'Analytics',
-        subcategory: 'Reports',
-        summary: 'Quarterly user analytics report showing engagement metrics, user behavior patterns, and conversion rates.',
-                    keywords: JSON.stringify(['analytics', 'metrics', 'engagement', 'conversion', 'behavior', 'quarterly']),
-        confidence: 0.92,
-        extractedText: 'Q3 User Analytics Report\n\nKey Metrics:\n- Monthly Active Users: 15,234\n- Average Session Duration: 12.5 minutes\n- Conversion Rate: 3.2%\n- User Retention (30-day): 68%\n- Feature Adoption Rate: 45%',
-      },
-      {
-        fileId: file4.id,
-        category: 'Marketing',
-        subcategory: 'Branding',
-        summary: 'Complete brand guidelines including logo usage, color palette, typography, and visual identity standards.',
-                    keywords: JSON.stringify(['brand', 'guidelines', 'logo', 'colors', 'typography', 'identity']),
-        confidence: 0.90,
-      },
-      {
-        fileId: file5.id,
-        category: 'Technical',
-        subcategory: 'Documentation',
-        summary: 'Technical API documentation with endpoints, authentication methods, and integration examples.',
-                    keywords: JSON.stringify(['api', 'documentation', 'endpoints', 'technical', 'integration', 'authentication']),
-        confidence: 0.94,
-        extractedText: 'API Documentation\n\n## Authentication\nAll API requests require authentication using Bearer tokens.\n\n## Endpoints\n- GET /api/workspaces - List all workspaces\n- POST /api/tasks - Create new task\n- PUT /api/files/{id} - Update file metadata\n\n## Rate Limiting\n1000 requests per hour per user',
-      },
-    ],
-  });
 
   console.log('✅ AI metadata created');
 
@@ -404,36 +354,6 @@ async function main() {
   });
 
   console.log('✅ File comments created');
-
-  // Create AI suggestions for tasks
-  await prisma.taskAISuggestion.createMany({
-    data: [
-      {
-        taskId: task1.id,
-        suggestion: 'Consider adding user feedback collection during the onboarding process to gather insights for future improvements.',
-        type: 'improvement',
-        confidence: 0.85,
-      },
-      {
-        taskId: task2.id,
-        suggestion: 'Based on current progress, this task might benefit from being broken down into smaller subtasks for better tracking.',
-        type: 'completion',
-        confidence: 0.78,
-      },
-      {
-        taskId: task4.id,
-        suggestion: 'This task could be prioritized higher as analytics setup is crucial for data-driven decision making.',
-        type: 'priority',
-        confidence: 0.82,
-      },
-      {
-        taskId: task5.id,
-        suggestion: 'Consider implementing caching strategies to improve performance. Redis could be a good solution.',
-        type: 'improvement',
-        confidence: 0.88,
-      },
-    ],
-  });
 
   console.log('✅ AI suggestions created');
 

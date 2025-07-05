@@ -11,7 +11,6 @@ import {
   CheckCircle2, 
   Clock, 
   FileText, 
-  Users, 
   Plus,
   ArrowRight,
   Brain,
@@ -100,7 +99,7 @@ export default function DashboardPage() {
               Welcome back, {session?.user?.name?.split(' ')[0] || 'there'}! 👋
             </h1>
             <p className="text-muted-foreground mt-2">
-              Here's what's happening in your workspaces today.
+              Here&apos;s what&apos;s happening in your workspaces today.
             </p>
           </div>
           <Button asChild>
@@ -314,7 +313,7 @@ export default function DashboardPage() {
               <div className="p-4 bg-card/50 rounded-lg">
                 <h4 className="font-medium mb-2">Productivity Tip</h4>
                 <p className="text-sm text-muted-foreground">
-                  You've completed {completionRate}% of your tasks this week. 
+                  You&apos;ve completed {completionRate}% of your tasks this week. 
                   Consider breaking down larger tasks for better progress tracking.
                 </p>
               </div>

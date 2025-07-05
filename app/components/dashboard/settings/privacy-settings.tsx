@@ -207,7 +207,7 @@ export function PrivacySettings() {
             <div className="space-y-0.5">
               <Label>Show Activity Status</Label>
               <p className="text-sm text-muted-foreground">
-                Let others know when you're active or recently active
+                Let others know when you&apos;re active or recently active
               </p>
             </div>
             <Switch
@@ -220,7 +220,7 @@ export function PrivacySettings() {
             <div className="space-y-0.5">
               <Label>Show Online Status</Label>
               <p className="text-sm text-muted-foreground">
-                Display a green dot when you're online
+                Display a green dot when you&apos;re online
               </p>
             </div>
             <Switch

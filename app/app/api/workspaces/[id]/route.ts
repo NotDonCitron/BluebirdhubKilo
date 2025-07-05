@@ -65,7 +65,6 @@ export async function GET(
               select: { id: true, name: true, email: true, image: true }
             },
             folder: true,
-            aiMetadata: true,
             tags: true,
             _count: {
               select: { comments: true }

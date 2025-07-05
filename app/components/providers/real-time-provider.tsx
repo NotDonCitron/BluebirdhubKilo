@@ -7,14 +7,14 @@ import { toast } from 'react-hot-toast';
 
 interface RealTimeEvent {
   type: string;
-  data: any;
+  data: Record<string, unknown>;
   timestamp: string;
 }
 
 interface RealTimeContextType {
   isConnected: boolean;
   connectionState: 'disconnected' | 'connecting' | 'connected' | 'error';
-  sendEvent: (eventType: string, data: any) => Promise<void>;
+  sendEvent: (eventType: string, data: Record<string, unknown>) => Promise<void>;
   lastEvent: RealTimeEvent | null;
 }
 
@@ -34,7 +34,7 @@ interface RealTimeProviderProps {
 
 export function RealTimeProvider({ children }: RealTimeProviderProps) {
   const { data: session } = useSession();
-  const [notificationSettings, setNotificationSettings] = useState<any>(null);
+  const [notificationSettings, setNotificationSettings] = useState<Record<string, unknown> | null>(null);
 
   // Load notification settings
   useEffect(() => {
@@ -79,7 +79,7 @@ export function RealTimeProvider({ children }: RealTimeProviderProps) {
 
       case 'comment_added':
         if (notificationSettings?.commentNotifications && notificationSettings?.desktopNotifications) {
-          toast.info(`New comment from ${event.data.senderName}`);
+          toast(`New comment from ${event.data.senderName}`);
           
           if ('Notification' in window && Notification.permission === 'granted') {
             new Notification('New Comment', {
@@ -92,7 +92,7 @@ export function RealTimeProvider({ children }: RealTimeProviderProps) {
 
       case 'mention':
         if (notificationSettings?.mentionNotifications && notificationSettings?.desktopNotifications) {
-          toast.info(`You were mentioned by ${event.data.senderName}`);
+          toast(`You were mentioned by ${event.data.senderName}`);
           
           if ('Notification' in window && Notification.permission === 'granted') {
             new Notification('You were mentioned', {
@@ -105,19 +105,19 @@ export function RealTimeProvider({ children }: RealTimeProviderProps) {
 
       case 'workspace_invite':
         if (notificationSettings?.workspaceInvites && notificationSettings?.desktopNotifications) {
-          toast.info(`Invited to workspace: ${event.data.workspaceName}`);
+          toast(`Invited to workspace: ${event.data.workspaceName}`);
         }
         break;
 
       case 'file_shared':
         if (notificationSettings?.systemUpdates && notificationSettings?.desktopNotifications) {
-          toast.info(`File shared: ${event.data.fileName}`);
+          toast(`File shared: ${event.data.fileName}`);
         }
         break;
 
       case 'system_update':
         if (notificationSettings?.systemUpdates && notificationSettings?.desktopNotifications) {
-          toast.info(event.data.message);
+          toast(event.data.message);
         }
         break;
 

@@ -200,7 +200,7 @@ export function validateRequest<T>(schema: z.ZodSchema<T>) {
 }
 
 // Rate limiting validation
-export function validateRateLimit(identifier: string, maxRequests: number, windowMs: number): boolean {
+export function validateRateLimit(_identifier: string, _maxRequests: number, _windowMs: number): boolean {
   // Implement rate limiting logic here
   // This is a placeholder - in production, use Redis or similar
   return true;

@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { storage } from "@/app/lib/storage";
+import { storage } from "@/lib/storage";
+import { sendUploadNotification } from "@/lib/notifications";
 import { z } from "zod";
 import path from "path";
 import crypto from "crypto";
@@ -13,14 +14,6 @@ const CHUNK_SIZE = 1024 * 1024; // 1MB
 const UPLOAD_TIMEOUT = 24 * 60 * 60 * 1000; // 24 hours
 
 // Request schemas
-const chunkSchema = z.object({
-  uploadId: z.string(),
-  chunkIndex: z.number().int().min(0),
-  totalChunks: z.number().int().min(1),
-  filename: z.string(),
-  fileType: z.string(),
-  workspaceId: z.string(),
-});
 
 const completeSchema = z.object({
   uploadId: z.string(),
@@ -96,7 +89,7 @@ async function handleChunkUpload(request: NextRequest, userId: string) {
     const fileId = formData.get("fileId") as string;
     const chunkIndex = parseInt(formData.get("chunkIndex") as string);
     const totalChunks = parseInt(formData.get("totalChunks") as string);
-    const fileSize = parseInt(formData.get("fileSize") as string);
+    // fileSize extracted but not used in chunk processing
     const workspaceId = formData.get("workspaceId") as string;
 
     if (!chunk || !fileName || !fileId || isNaN(chunkIndex) || isNaN(totalChunks)) {
@@ -124,7 +117,6 @@ async function handleChunkUpload(request: NextRequest, userId: string) {
         members: {
           some: {
             userId,
-            status: "ACTIVE",
           },
         },
       },
@@ -169,6 +161,15 @@ async function handleChunkUpload(request: NextRequest, userId: string) {
         lastActivity: new Date(),
       };
       activeUploads.set(uploadId, upload);
+
+      // Send upload started notification
+      await sendUploadNotification('upload_started', {
+        id: uploadId,
+        name: filename,
+        size: totalSize,
+        uploadedBy: userId,
+        workspaceId,
+      });
     }
 
     // Verify upload ownership
@@ -197,6 +198,21 @@ async function handleChunkUpload(request: NextRequest, userId: string) {
     }
 
     upload.receivedChunks.add(chunkIndex);
+
+    // Send progress notification every 10% or on significant milestones
+    const progress = (upload.receivedChunks.size / totalChunks) * 100;
+    const shouldNotify = progress % 20 === 0 || progress >= 90 || chunkIndex === 0;
+    
+    if (shouldNotify) {
+      await sendUploadNotification('upload_progress', {
+        id: uploadId,
+        name: upload.filename,
+        size: totalChunks * CHUNK_SIZE,
+        progress: Math.round(progress),
+        uploadedBy: upload.userId,
+        workspaceId: upload.workspaceId,
+      });
+    }
 
     return NextResponse.json({
       uploadId,
@@ -275,12 +291,22 @@ async function handleCompleteUpload(request: NextRequest, userId: string) {
       data: {
         id: fileId,
         name: upload.filename,
+        originalName: upload.filename,
         size: fileSize,
         mimeType: upload.fileType,
-        path: filePath,
+        url: filePath,
         workspaceId: upload.workspaceId,
         uploadedById: userId,
       },
+    });
+
+    // Send upload completed notification
+    await sendUploadNotification('upload_completed', {
+      id: file.id,
+      name: file.name,
+      size: file.size,
+      uploadedBy: userId,
+      workspaceId: upload.workspaceId,
     });
 
     // Clean up upload session

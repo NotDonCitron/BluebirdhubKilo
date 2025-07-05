@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     const priority = searchParams.get('priority');
     const assignedToMe = searchParams.get('assignedToMe');
 
-    const whereCondition: any = {
+    const whereCondition = {
       workspace: {
         OR: [
           { ownerId: session.user.id },

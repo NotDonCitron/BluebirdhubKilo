@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { storage } from "@/app/lib/storage";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const storageType = process.env.STORAGE_TYPE || 'local';
     
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     await storage.write(testKey, testData);
     
     // Test read
-    const readData = await storage.read(testKey);
+    await storage.read(testKey);
     
     // Test delete
     await storage.delete(testKey);

@@ -4,10 +4,15 @@ import React, { Suspense, lazy } from 'react';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { LoadingSpinner } from '@/components/ui/loading-states';
 
+interface ErrorFallbackProps {
+  error?: Error;
+  resetErrorBoundary: () => void;
+}
+
 interface LazyComponentProps {
   children: React.ReactNode;
   fallback?: React.ReactNode;
-  errorFallback?: React.ComponentType<any>;
+  errorFallback?: React.ComponentType<ErrorFallbackProps>;
 }
 
 // Generic lazy component wrapper
@@ -29,7 +34,7 @@ export function LazyComponent({
 export function withLazyLoading<P extends object>(
   Component: React.ComponentType<P>,
   loadingComponent?: React.ComponentType,
-  errorComponent?: React.ComponentType<any>
+  errorComponent?: React.ComponentType<ErrorFallbackProps>
 ) {
   const LazyLoadedComponent = lazy(() => Promise.resolve({ default: Component }));
 
@@ -46,7 +51,7 @@ export function withLazyLoading<P extends object>(
 }
 
 // Hook for dynamic imports with loading state
-export function useLazyImport<T = any>(
+export function useLazyImport<T = React.ComponentType>(
   importFunc: () => Promise<{ default: T }>,
   deps: React.DependencyList = []
 ) {

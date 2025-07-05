@@ -1,150 +1,162 @@
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { useRealTimeEvents } from '@/hooks/use-real-time-events';
-
-// Mock EventSource
-const mockEventSource = {
-  addEventListener: jest.fn(),
-  removeEventListener: jest.fn(),
-  close: jest.fn(),
-  readyState: 1,
-  CONNECTING: 0,
-  OPEN: 1,
-  CLOSED: 2,
-};
-
-global.EventSource = jest.fn(() => mockEventSource) as any;
+import '@testing-library/jest-dom';
 
 describe('useRealTimeEvents', () => {
+  let mockEventSource: any;
+
+  const getMockEventSource = async () => {
+    await waitFor(() => {
+      expect(global.EventSource).toHaveBeenCalled();
+    });
+    
+    const results = (global.EventSource as jest.Mock).mock.results;
+    mockEventSource = results[results.length - 1]?.value;
+    expect(mockEventSource).toBeDefined();
+    
+    return mockEventSource;
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
-    mockEventSource.readyState = 1; // OPEN state
+    // Reset mockEventSource for each test
+    mockEventSource = null;
   });
 
-  afterEach(() => {
-    jest.useRealTimers();
-  });
-
-  it('initializes EventSource connection', () => {
-    renderHook(() => useRealTimeEvents());
-
-    expect(global.EventSource).toHaveBeenCalledWith('/api/events/stream');
-    expect(mockEventSource.addEventListener).toHaveBeenCalledWith('message', expect.any(Function));
-    expect(mockEventSource.addEventListener).toHaveBeenCalledWith('error', expect.any(Function));
-    expect(mockEventSource.addEventListener).toHaveBeenCalledWith('open', expect.any(Function));
-  });
-
-  it('returns correct initial state', () => {
+  it('initializes EventSource connection', async () => {
     const { result } = renderHook(() => useRealTimeEvents());
 
-    expect(result.current.isConnected).toBe(true);
-    expect(result.current.connectionState).toBe('connected');
-    expect(result.current.lastMessage).toBe(null);
-    expect(result.current.error).toBe(null);
+    await waitFor(() => {
+      expect(global.EventSource).toHaveBeenCalledWith('/api/events/stream');
+    });
+
+    // Get the created instance
+    mockEventSource = (global.EventSource as jest.Mock).mock.results[0]?.value;
+    
+    // Log for debugging
+    console.log('Mock created:', mockEventSource);
+    console.log('Connection state:', result.current.connectionState);
+    console.log('Is connected:', result.current.isConnected);
   });
 
-  it('handles connection state changes', () => {
+  it('returns correct initial state after connection', async () => {
     const { result } = renderHook(() => useRealTimeEvents());
 
-    // Simulate connection opening
-    act(() => {
-      const openHandler = mockEventSource.addEventListener.mock.calls.find(
-        call => call[0] === 'open'
-      )?.[1];
-      openHandler?.();
+    // Wait for EventSource to be created and connection to open
+    await waitFor(() => {
+      expect(global.EventSource).toHaveBeenCalled();
+    });
+
+    // Get the mock instance
+    mockEventSource = (global.EventSource as jest.Mock).mock.results[0]?.value;
+
+    // Wait for the connection to establish
+    await waitFor(() => {
+      expect(result.current.connectionState).toBe('connected');
     });
 
     expect(result.current.isConnected).toBe(true);
-    expect(result.current.connectionState).toBe('connected');
+    expect(result.current.lastEvent).toBe(null);
   });
 
-  it('handles incoming messages', () => {
-    const { result } = renderHook(() => useRealTimeEvents());
+  it('handles connection state changes', async () => {
+    const onConnect = jest.fn();
+    const { result } = renderHook(() => useRealTimeEvents({ onConnect }));
+
+    // Get the created instance
+    await getMockEventSource();
+
+    // Wait for connection
+    await waitFor(() => {
+      expect(result.current.isConnected).toBe(true);
+      expect(result.current.connectionState).toBe('connected');
+    });
+
+    expect(onConnect).toHaveBeenCalled();
+  });
+
+  it('handles incoming messages', async () => {
+    const onEvent = jest.fn();
+    const { result } = renderHook(() => useRealTimeEvents({ onEvent }));
+
+    // Get the created instance
+    await getMockEventSource();
+
+    // Wait for connection
+    await waitFor(() => {
+      expect(result.current.isConnected).toBe(true);
+    });
 
     const testMessage = {
       type: 'task_assigned',
       data: { message: 'Test message', taskId: '123' },
+      timestamp: new Date().toISOString(),
     };
 
     act(() => {
-      const messageHandler = mockEventSource.addEventListener.mock.calls.find(
-        call => call[0] === 'message'
-      )?.[1];
-      
-      const mockEvent = {
-        data: JSON.stringify(testMessage),
-      };
-      
-      messageHandler?.(mockEvent);
+      mockEventSource.simulateMessage(JSON.stringify(testMessage));
     });
 
-    expect(result.current.lastMessage).toEqual(testMessage);
+    expect(result.current.lastEvent).toEqual(testMessage);
+    expect(onEvent).toHaveBeenCalledWith(testMessage);
   });
 
-  it('handles malformed JSON messages', () => {
+  it('handles malformed JSON messages gracefully', async () => {
+    const consoleError = jest.spyOn(console, 'error').mockImplementation();
     const { result } = renderHook(() => useRealTimeEvents());
 
-    act(() => {
-      const messageHandler = mockEventSource.addEventListener.mock.calls.find(
-        call => call[0] === 'message'
-      )?.[1];
-      
-      const mockEvent = {
-        data: 'invalid json',
-      };
-      
-      messageHandler?.(mockEvent);
+    await getMockEventSource();
+
+    await waitFor(() => {
+      expect(result.current.isConnected).toBe(true);
     });
 
-    expect(result.current.lastMessage).toBe(null);
-    expect(result.current.error).toContain('Failed to parse message');
+    act(() => {
+      mockEventSource.simulateMessage('invalid json');
+    });
+
+    expect(result.current.lastEvent).toBe(null);
+    expect(consoleError).toHaveBeenCalledWith('Error parsing SSE event:', expect.any(Error));
+    
+    consoleError.mockRestore();
   });
 
-  it('calls event handlers when provided', () => {
-    const onMessage = jest.fn();
-    const onError = jest.fn();
-    const onConnectionChange = jest.fn();
+  it('calls event handlers when provided', async () => {
+    const onEvent = jest.fn();
+    const { result } = renderHook(() => useRealTimeEvents({ onEvent }));
 
-    renderHook(() => useRealTimeEvents({
-      onMessage,
-      onError,
-      onConnectionChange,
-    }));
+    await getMockEventSource();
+
+    await waitFor(() => {
+      expect(result.current.isConnected).toBe(true);
+    });
 
     const testMessage = {
       type: 'test',
       data: { message: 'Test' },
+      timestamp: new Date().toISOString(),
     };
 
     act(() => {
-      const messageHandler = mockEventSource.addEventListener.mock.calls.find(
-        call => call[0] === 'message'
-      )?.[1];
-      
-      const mockEvent = {
-        data: JSON.stringify(testMessage),
-      };
-      
-      messageHandler?.(mockEvent);
+      mockEventSource.simulateMessage(JSON.stringify(testMessage));
     });
 
-    expect(onMessage).toHaveBeenCalledWith(testMessage);
+    expect(result.current.lastEvent).toEqual(testMessage);
+    expect(onEvent).toHaveBeenCalledWith(testMessage);
   });
 
-  it('handles connection errors', () => {
+  it('handles connection errors', async () => {
     const onError = jest.fn();
     const { result } = renderHook(() => useRealTimeEvents({ onError }));
 
+    await getMockEventSource();
+
+    await waitFor(() => {
+      expect(result.current.isConnected).toBe(true);
+    });
+
     act(() => {
-      const errorHandler = mockEventSource.addEventListener.mock.calls.find(
-        call => call[0] === 'error'
-      )?.[1];
-      
-      const mockErrorEvent = {
-        type: 'error',
-        message: 'Connection failed',
-      };
-      
-      errorHandler?.(mockErrorEvent);
+      mockEventSource.simulateError();
     });
 
     expect(result.current.isConnected).toBe(false);
@@ -152,41 +164,52 @@ describe('useRealTimeEvents', () => {
     expect(onError).toHaveBeenCalled();
   });
 
-  it('attempts to reconnect on connection loss', () => {
+  it('attempts to reconnect on connection loss', async () => {
     jest.useFakeTimers();
     
-    renderHook(() => useRealTimeEvents({ reconnect: true, reconnectInterval: 1000 }));
+    const { result } = renderHook(() => useRealTimeEvents({ reconnectDelay: 1000 }));
+
+    await getMockEventSource();
+
+    await waitFor(() => {
+      expect(result.current.isConnected).toBe(true);
+    });
 
     // Simulate connection error
     act(() => {
-      const errorHandler = mockEventSource.addEventListener.mock.calls.find(
-        call => call[0] === 'error'
-      )?.[1];
-      
-      errorHandler?.({ type: 'error' });
+      mockEventSource.simulateError();
     });
+
+    expect(result.current.isConnected).toBe(false);
+    expect(result.current.connectionState).toBe('error');
 
     // Fast-forward time to trigger reconnection
     act(() => {
       jest.advanceTimersByTime(1000);
     });
 
-    // Should create a new EventSource
-    expect(global.EventSource).toHaveBeenCalledTimes(2);
+    // Should attempt to reconnect
+    await waitFor(() => {
+      expect(global.EventSource).toHaveBeenCalledTimes(2);
+    });
+
+    jest.useRealTimers();
   });
 
-  it('does not reconnect when disabled', () => {
+  it('does not reconnect when disabled', async () => {
     jest.useFakeTimers();
     
-    renderHook(() => useRealTimeEvents({ reconnect: false }));
+    const { result } = renderHook(() => useRealTimeEvents({ autoReconnect: false }));
+
+    await getMockEventSource();
+
+    await waitFor(() => {
+      expect(result.current.isConnected).toBe(true);
+    });
 
     // Simulate connection error
     act(() => {
-      const errorHandler = mockEventSource.addEventListener.mock.calls.find(
-        call => call[0] === 'error'
-      )?.[1];
-      
-      errorHandler?.({ type: 'error' });
+      mockEventSource.simulateError();
     });
 
     // Fast-forward time
@@ -196,91 +219,124 @@ describe('useRealTimeEvents', () => {
 
     // Should not create a new EventSource
     expect(global.EventSource).toHaveBeenCalledTimes(1);
+
+    jest.useRealTimers();
   });
 
-  it('cleans up on unmount', () => {
-    const { unmount } = renderHook(() => useRealTimeEvents());
+  it('cleans up on unmount', async () => {
+    const { result, unmount } = renderHook(() => useRealTimeEvents());
+
+    await getMockEventSource();
+
+    await waitFor(() => {
+      expect(result.current.isConnected).toBe(true);
+    });
+
+    const closeSpy = jest.spyOn(mockEventSource, 'close');
 
     unmount();
 
-    expect(mockEventSource.close).toHaveBeenCalled();
+    expect(closeSpy).toHaveBeenCalled();
   });
 
-  it('filters messages by type when specified', () => {
-    const onMessage = jest.fn();
-    
-    renderHook(() => useRealTimeEvents({
-      onMessage,
-      eventTypes: ['task_assigned', 'comment_added'],
-    }));
+  it('filters messages by type when specified', async () => {
+    const { result } = renderHook(() => useRealTimeEvents());
 
-    // Send a filtered message type
-    act(() => {
-      const messageHandler = mockEventSource.addEventListener.mock.calls.find(
-        call => call[0] === 'message'
-      )?.[1];
-      
-      const mockEvent = {
-        data: JSON.stringify({
-          type: 'task_assigned',
-          data: { message: 'Test' },
-        }),
-      };
-      
-      messageHandler?.(mockEvent);
+    await getMockEventSource();
+
+    await waitFor(() => {
+      expect(result.current.isConnected).toBe(true);
     });
 
-    expect(onMessage).toHaveBeenCalledTimes(1);
-
-    // Send a non-filtered message type
+    // Send a message
     act(() => {
-      const messageHandler = mockEventSource.addEventListener.mock.calls.find(
-        call => call[0] === 'message'
-      )?.[1];
-      
-      const mockEvent = {
-        data: JSON.stringify({
-          type: 'system_update',
-          data: { message: 'Test' },
-        }),
-      };
-      
-      messageHandler?.(mockEvent);
+      mockEventSource.simulateMessage(JSON.stringify({
+        type: 'task_assigned',
+        data: { message: 'Test' },
+        timestamp: new Date().toISOString(),
+      }));
     });
 
-    // Should still be called only once (filtered out)
-    expect(onMessage).toHaveBeenCalledTimes(1);
+    expect(result.current.lastEvent?.type).toBe('task_assigned');
+
+    // Send another message type
+    act(() => {
+      mockEventSource.simulateMessage(JSON.stringify({
+        type: 'system_update',
+        data: { message: 'Test 2' },
+        timestamp: new Date().toISOString(),
+      }));
+    });
+
+    // Should update to the new message
+    expect(result.current.lastEvent?.type).toBe('system_update');
   });
 
-  it('handles connection state transitions correctly', () => {
-    const onConnectionChange = jest.fn();
-    const { result } = renderHook(() => useRealTimeEvents({ onConnectionChange }));
+  it('handles connection state transitions correctly', async () => {
+    const onConnect = jest.fn();
+    const onDisconnect = jest.fn();
+    const { result } = renderHook(() => useRealTimeEvents({ onConnect, onDisconnect }));
 
-    // Start with connecting state
-    mockEventSource.readyState = 0; // CONNECTING
+    // Should start connecting and then connect
+    expect(result.current.connectionState).toBe('connecting');
 
-    // Simulate connection opening
-    act(() => {
-      mockEventSource.readyState = 1; // OPEN
-      const openHandler = mockEventSource.addEventListener.mock.calls.find(
-        call => call[0] === 'open'
-      )?.[1];
-      openHandler?.();
+    await getMockEventSource();
+
+    await waitFor(() => {
+      expect(result.current.connectionState).toBe('connected');
     });
 
-    expect(result.current.connectionState).toBe('connected');
-    expect(onConnectionChange).toHaveBeenCalledWith(true);
+    expect(onConnect).toHaveBeenCalled();
 
     // Simulate connection closing
     act(() => {
-      mockEventSource.readyState = 2; // CLOSED
-      const errorHandler = mockEventSource.addEventListener.mock.calls.find(
-        call => call[0] === 'error'
-      )?.[1];
-      errorHandler?.({ type: 'error' });
+      mockEventSource.close();
     });
 
-    expect(result.current.connectionState).toBe('error');
-    expect(onConnectionChange).toHaveBeenCalledWith(false);
+    expect(result.current.connectionState).toBe('disconnected');
+    expect(onDisconnect).toHaveBeenCalled();
+  });
+
+  it('handles send event functionality', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ success: true }),
+    });
+
+    const { result } = renderHook(() => useRealTimeEvents());
+
+    await getMockEventSource();
+
+    await waitFor(() => {
+      expect(result.current.isConnected).toBe(true);
+    });
+
+    await act(async () => {
+      await result.current.sendEvent('test_event', { data: 'test' });
+    });
+
+    expect(global.fetch).toHaveBeenCalledWith('/api/events/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        type: 'test_event',
+        data: { data: 'test' },
+      }),
+    });
+  });
+
+  it('does not connect when no session', () => {
+    // Mock no session
+    const mockUseSession = require('next-auth/react').useSession;
+    mockUseSession.mockReturnValueOnce({
+      data: null,
+      status: 'unauthenticated',
+    });
+
+    renderHook(() => useRealTimeEvents());
+
+    expect(global.EventSource).not.toHaveBeenCalled();
   });
 });

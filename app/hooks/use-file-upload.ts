@@ -200,16 +200,58 @@ export function useFileUpload() {
     setTimeout(persistProgress, 100);
   }, [persistProgress]);
 
-  // Calculate exponential backoff delay
-  const getRetryDelay = useCallback((retryCount: number, baseDelay: number) => {
+  // Calculate exponential backoff delay with error-specific handling
+  const getRetryDelay = useCallback((retryCount: number, baseDelay: number, errorType?: string) => {
     // Exponential backoff with jitter
-    const exponentialDelay = baseDelay * Math.pow(2, retryCount);
+    let exponentialDelay = baseDelay * Math.pow(2, retryCount);
+    
+    // Adjust delay based on error type
+    if (errorType?.includes("Rate limited")) {
+      exponentialDelay = Math.max(exponentialDelay, 10000); // Min 10s for rate limiting
+    } else if (errorType?.includes("Server error")) {
+      exponentialDelay = Math.max(exponentialDelay, 5000); // Min 5s for server errors
+    } else if (errorType?.includes("Authentication failed")) {
+      exponentialDelay = Math.max(exponentialDelay, 2000); // Min 2s for auth errors
+    }
+    
     const jitter = Math.random() * 0.3 * exponentialDelay; // 30% jitter
-    return Math.min(exponentialDelay + jitter, 30000); // Cap at 30 seconds
+    return Math.min(exponentialDelay + jitter, 60000); // Cap at 60 seconds
   }, []);
 
   const generateFileId = useCallback((file: File): string => {
     return `${file.name}-${file.size}-${file.lastModified}`;
+  }, []);
+
+  // Verify upload status with server
+  const verifyUploadStatus = useCallback(async (fileId: string, options: UploadOptions) => {
+    try {
+      const response = await fetch(`${options.url}?action=status`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...options.headers,
+        },
+        body: JSON.stringify({ uploadId: fileId }),
+      });
+
+      if (response.ok) {
+        const status = await response.json();
+        return {
+          exists: true,
+          uploadId: status.uploadId,
+          filename: status.filename,
+          totalChunks: status.totalChunks,
+          receivedChunks: status.receivedChunks,
+          missingChunks: status.missingChunks,
+          lastActivity: status.lastActivity,
+        };
+      }
+      
+      return { exists: false };
+    } catch (error) {
+      console.error("Failed to verify upload status:", error);
+      return { exists: false };
+    }
   }, []);
 
   const uploadChunk = useCallback(
@@ -232,6 +274,9 @@ export function useFileUpload() {
       formData.append("chunkIndex", chunkIndex.toString());
       formData.append("totalChunks", uploadProgress.totalChunks.toString());
       formData.append("fileSize", file.size.toString());
+      if (options.workspaceId) {
+        formData.append("workspaceId", options.workspaceId);
+      }
 
       const response = await fetch(options.url, {
         method: "POST",
@@ -241,7 +286,20 @@ export function useFileUpload() {
       });
 
       if (!response.ok) {
-        throw new Error(`Upload failed: ${response.statusText}`);
+        // Enhanced error handling with more specific error types
+        if (response.status === 413) {
+          throw new Error(`Chunk too large: ${response.statusText}`);
+        } else if (response.status === 429) {
+          throw new Error(`Rate limited: ${response.statusText}`);
+        } else if (response.status >= 500) {
+          throw new Error(`Server error: ${response.statusText}`);
+        } else if (response.status === 401) {
+          throw new Error(`Authentication failed: ${response.statusText}`);
+        } else if (response.status === 403) {
+          throw new Error(`Access denied: ${response.statusText}`);
+        } else {
+          throw new Error(`Upload failed: ${response.statusText}`);
+        }
       }
 
       return response.json();
@@ -330,13 +388,23 @@ export function useFileUpload() {
               
               break; // Success, move to next chunk
             } catch (error) {
+              const errorMessage = error instanceof Error ? error.message : "Upload failed";
               retries++;
-              if (retries > (options.maxRetries || DEFAULT_MAX_RETRIES)) {
+              
+              // Check if error is retryable
+              const isRetryable = !errorMessage.includes("Authentication failed") && 
+                                !errorMessage.includes("Access denied") && 
+                                !errorMessage.includes("Chunk too large");
+              
+              if (retries > (options.maxRetries || DEFAULT_MAX_RETRIES) || !isRetryable) {
+                if (!isRetryable) {
+                  console.log(`Non-retryable error for chunk ${i}: ${errorMessage}`);
+                }
                 throw error;
               }
               
-              // Wait before retrying with exponential backoff
-              const delay = getRetryDelay(retries - 1, options.retryDelay || DEFAULT_RETRY_DELAY);
+              // Wait before retrying with error-specific exponential backoff
+              const delay = getRetryDelay(retries - 1, options.retryDelay || DEFAULT_RETRY_DELAY, errorMessage);
               console.log(`Retrying chunk ${i} after ${Math.round(delay)}ms (attempt ${retries}/${options.maxRetries || DEFAULT_MAX_RETRIES})`);
               await new Promise((resolve) => setTimeout(resolve, delay));
               
@@ -458,12 +526,36 @@ export function useFileUpload() {
         return;
       }
 
+      // Verify upload status with server before resuming
+      const serverStatus = await verifyUploadStatus(fileId, options);
+      if (serverStatus.exists) {
+        // Update local state with server status
+        const missingChunks = serverStatus.missingChunks || [];
+        const receivedChunks = Array.from({ length: serverStatus.totalChunks }, (_, i) => i)
+          .filter(i => !missingChunks.includes(i));
+        
+        updateUpload(fileId, {
+          uploadedChunks: receivedChunks,
+          uploadedBytes: receivedChunks.length * upload.chunkSize,
+          progress: (receivedChunks.length / serverStatus.totalChunks) * 100,
+        });
+        
+        toast.success(`Resuming upload with ${receivedChunks.length}/${serverStatus.totalChunks} chunks already uploaded`);
+      } else {
+        toast("Server has no record of this upload, starting fresh");
+        updateUpload(fileId, {
+          uploadedChunks: [],
+          uploadedBytes: 0,
+          progress: 0,
+        });
+      }
+
       // Store options for future auto-resume
       autoResumeOptions.current.set(fileId, options);
       
       uploadFile(file, options);
     },
-    [uploads, uploadFile]
+    [uploads, uploadFile, verifyUploadStatus, updateUpload]
   );
 
   const cancelUpload = useCallback((fileId: string) => {

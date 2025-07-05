@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category');
     const search = searchParams.get('search');
 
-    const whereCondition: any = {
+    const whereCondition = {
       workspace: {
         OR: [
           { ownerId: session.user.id },
@@ -85,7 +85,6 @@ export async function GET(request: NextRequest) {
           select: { id: true, name: true, color: true, icon: true }
         },
         folder: true,
-        aiMetadata: true,
         tags: true,
         _count: {
           select: { comments: true }
@@ -185,7 +184,6 @@ export async function POST(request: NextRequest) {
           select: { id: true, name: true, color: true, icon: true }
         },
         folder: true,
-        aiMetadata: true,
         tags: true,
         _count: {
           select: { comments: true }

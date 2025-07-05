@@ -9,13 +9,13 @@ import { z } from 'zod';
 // In a real app, these would be in a separate service file
 const eventSchema = z.object({
   type: z.string().min(1),
-  data: z.any(),
+  data: z.record(z.unknown()),
   targetUserId: z.string().optional(),
   workspaceId: z.string().optional(),
 });
 
 // Store for active connections (this would typically be in a shared service)
-const activeConnections = new Map<string, any>();
+const activeConnections = new Map<string, unknown>();
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = eventSchema.parse(body);
 
-    const { type, data, targetUserId, workspaceId } = validatedData;
+    const { type, data, workspaceId } = validatedData;
 
     // Log the event to the database for audit purposes
     await prisma.activityLog.create({

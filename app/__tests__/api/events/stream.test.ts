@@ -1,3 +1,5 @@
+import { act, cleanup } from '@testing-library/react';
+import '@testing-library/jest-dom';
 /**
  * @jest-environment node
  */
@@ -168,7 +170,7 @@ describe('/api/events/stream', () => {
   });
 
   describe('Message Format', () => {
-    it('formats SSE messages correctly', () => {
+    it('formats SSE messages correctly', async () => {
       const testMessage = { type: 'test', data: { message: 'hello' } };
       const encoder = new TextEncoder();
       const expected = encoder.encode(`data: ${JSON.stringify(testMessage)}\n\n`);
@@ -178,7 +180,7 @@ describe('/api/events/stream', () => {
       expect(expected.length).toBeGreaterThan(0);
     });
 
-    it('handles special characters in messages', () => {
+    it('handles special characters in messages', async () => {
       const testMessage = { 
         type: 'test', 
         data: { 
