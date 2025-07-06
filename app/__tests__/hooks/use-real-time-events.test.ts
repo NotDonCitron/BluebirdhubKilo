@@ -10,7 +10,7 @@ describe('useRealTimeEvents', () => {
       expect(global.EventSource).toHaveBeenCalled();
     });
     
-    const results = (global.EventSource as jest.Mock).mock.results;
+    const results = (global.EventSource as jest.MockedClass<typeof EventSource>).mock.results;
     mockEventSource = results[results.length - 1]?.value;
     expect(mockEventSource).toBeDefined();
     
@@ -31,7 +31,7 @@ describe('useRealTimeEvents', () => {
     });
 
     // Get the created instance
-    mockEventSource = (global.EventSource as jest.Mock).mock.results[0]?.value;
+    mockEventSource = (global.EventSource as jest.MockedClass<typeof EventSource>).mock.results[0]?.value;
     
     // Log for debugging
     console.log('Mock created:', mockEventSource);
@@ -48,7 +48,7 @@ describe('useRealTimeEvents', () => {
     });
 
     // Get the mock instance
-    mockEventSource = (global.EventSource as jest.Mock).mock.results[0]?.value;
+    mockEventSource = (global.EventSource as jest.MockedClass<typeof EventSource>).mock.results[0]?.value;
 
     // Wait for the connection to establish
     await waitFor(() => {

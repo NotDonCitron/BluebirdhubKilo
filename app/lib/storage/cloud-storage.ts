@@ -30,11 +30,12 @@ export class CloudStorageProvider implements StorageProvider {
       const file = this.getFile(key);
       const [buffer] = await file.download();
       return buffer;
-    } catch (error: any) {
-      if (error.code === 404) {
+    } catch (error: unknown) {
+      const err = error as Error & { code?: number | string };
+      if (err.code === 404) {
         throw new Error(`File not found: ${key}`);
       }
-      throw new Error(`Failed to read file ${key}: ${error.message}`);
+      throw new Error(`Failed to read file ${key}: ${err.message}`);
     }
   }
 
@@ -48,8 +49,9 @@ export class CloudStorageProvider implements StorageProvider {
         },
         resumable: false, // For small files, use simple upload
       });
-    } catch (error: any) {
-      throw new Error(`Failed to write file ${key}: ${error.message}`);
+    } catch (error: unknown) {
+      const err = error as Error & { code?: number | string };
+      throw new Error(`Failed to write file ${key}: ${err.message}`);
     }
   }
 
@@ -57,9 +59,10 @@ export class CloudStorageProvider implements StorageProvider {
     try {
       const file = this.getFile(key);
       await file.delete();
-    } catch (error: any) {
-      if (error.code !== 404) {
-        throw new Error(`Failed to delete file ${key}: ${error.message}`);
+    } catch (error: unknown) {
+      const err = error as Error & { code?: number | string };
+      if (err.code !== 404) {
+        throw new Error(`Failed to delete file ${key}: ${err.message}`);
       }
       // File doesn't exist, consider deletion successful
     }
@@ -81,18 +84,20 @@ export class CloudStorageProvider implements StorageProvider {
       const [metadata] = await file.getMetadata();
       
       return {
-        size: parseInt(metadata.size || '0'),
-        lastModified: new Date(metadata.updated || metadata.timeCreated),
+        size: parseInt(String(metadata.size || 0)),
+        lastModified: new Date(metadata.updated || metadata.timeCreated || new Date()),
       };
-    } catch (error: any) {
-      if (error.code === 404) {
+    } catch (error: unknown) {
+      const err = error as Error & { code?: number | string };
+      if (err.code === 404) {
         throw new Error(`File not found: ${key}`);
       }
-      throw new Error(`Failed to get metadata for ${key}: ${error.message}`);
+      throw new Error(`Failed to get metadata for ${key}: ${err.message}`);
     }
   }
 
-  async createDir(dir: string): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async createDir(_dir: string): Promise<void> {
     // Cloud Storage doesn't require directory creation
     // Directories are created implicitly when files are uploaded
     return Promise.resolve();
@@ -113,8 +118,9 @@ export class CloudStorageProvider implements StorageProvider {
       });
       
       return url;
-    } catch (error: any) {
-      throw new Error(`Failed to generate signed URL for ${key}: ${error.message}`);
+    } catch (error: unknown) {
+      const err = error as Error & { code?: number | string };
+      throw new Error(`Failed to generate signed URL for ${key}: ${err.message}`);
     }
   }
 
@@ -132,8 +138,9 @@ export class CloudStorageProvider implements StorageProvider {
       });
       
       return url;
-    } catch (error: any) {
-      throw new Error(`Failed to generate signed download URL for ${key}: ${error.message}`);
+    } catch (error: unknown) {
+      const err = error as Error & { code?: number | string };
+      throw new Error(`Failed to generate signed download URL for ${key}: ${err.message}`);
     }
   }
 

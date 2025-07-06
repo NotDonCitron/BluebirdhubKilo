@@ -41,10 +41,11 @@ export function withLazyLoading<P extends object>(
   return function WrappedComponent(props: P) {
     return (
       <LazyComponent
-        fallback={loadingComponent ? <loadingComponent /> : <LoadingSpinner />}
+        fallback={loadingComponent ? React.createElement(loadingComponent) : <LoadingSpinner />}
         errorFallback={errorComponent}
       >
-        <LazyLoadedComponent {...props} />
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <LazyLoadedComponent {...(props as any)} />
       </LazyComponent>
     );
   };
@@ -87,7 +88,8 @@ export function useLazyImport<T = React.ComponentType>(
     return () => {
       mounted = false;
     };
-  }, deps);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [importFunc, ...deps]);
 
   return { component, loading, error };
 }

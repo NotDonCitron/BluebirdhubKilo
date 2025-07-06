@@ -1,5 +1,4 @@
-import { jest } from '@types/jest';
-import { expect } from '@testing-library/jest-dom';
+import '@testing-library/jest-dom';
 describe('Test Setup', () => {
   it('should run a basic test', () => {
     expect(1 + 1).toBe(2);

@@ -3,7 +3,7 @@
 import { useCallback, useRef, useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 
-interface UploadProgress {
+export interface UploadProgress {
   fileId: string;
   fileName: string;
   fileSize: number;
@@ -29,7 +29,7 @@ interface UploadOptions {
   maxRetries?: number;
   retryDelay?: number;
   onProgress?: (progress: UploadProgress) => void;
-  onComplete?: (fileId: string, response: any) => void;
+  onComplete?: (fileId: string, response: Record<string, unknown>) => void;
   onError?: (fileId: string, error: Error) => void;
   workspaceId?: string;
 }

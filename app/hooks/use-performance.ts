@@ -162,7 +162,7 @@ export function useVirtualScroll<T>(
 // Optimized form validation hook
 export function useOptimizedValidation<T extends Record<string, any>>(
   values: T,
-  validationSchema: Record<keyof T, (value: any) => string | null>,
+  validationSchema: Record<keyof T, (value: unknown) => string | null>,
   debounceDelay: number = 300
 ) {
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});

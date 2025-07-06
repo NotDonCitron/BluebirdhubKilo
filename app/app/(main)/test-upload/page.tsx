@@ -226,8 +226,8 @@ export default function TestUploadPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       {getStatusIcon(upload.status)}
-                      <span className="font-medium truncate max-w-xs" title={upload.file.name}>
-                        {upload.file.name}
+                      <span className="font-medium truncate max-w-xs" title={upload.file?.name || 'Unknown file'}>
+                        {upload.file?.name || 'Unknown file'}
                       </span>
                       <Badge 
                         className={`${getStatusColor(upload.status)} text-white`}
@@ -279,7 +279,7 @@ export default function TestUploadPage() {
                     <div className="flex justify-between text-xs text-gray-500">
                       <span>{upload.progress.toFixed(1)}%</span>
                       <span>
-                        {formatBytes(upload.uploadedBytes)} / {formatBytes(upload.file.size)}
+                        {formatBytes(upload.uploadedBytes)} / {formatBytes(upload.file?.size || 0)}
                       </span>
                     </div>
                   </div>
@@ -336,7 +336,7 @@ export default function TestUploadPage() {
                               rel="noopener noreferrer"
                               className="underline"
                             >
-                              Download: {upload.response.fileName || upload.file.name}
+                              Download: {upload.response.fileName || upload.file?.name || 'file'}
                             </a>
                           </div>
                         )}
@@ -349,7 +349,7 @@ export default function TestUploadPage() {
                     <div className="bg-gray-100 rounded p-3 text-xs font-mono">
                       <div className="font-semibold mb-2">Debug Info:</div>
                       <div>ID: {upload.id}</div>
-                      <div>File Size: {formatBytes(upload.file.size)}</div>
+                      <div>File Size: {formatBytes(upload.file?.size || 0)}</div>
                       <div>Chunk Size: {formatBytes(upload.chunkSize)}</div>
                       <div>Total Chunks: {upload.totalChunks}</div>
                       <div>Upload Session: {upload.uploadSession || 'Not started'}</div>

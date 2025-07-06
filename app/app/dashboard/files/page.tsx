@@ -68,9 +68,15 @@ interface FileData {
   };
 }
 
+interface WorkspaceData {
+  id: string;
+  name: string;
+  color: string;
+}
+
 export default function FilesPage() {
   const [files, setFiles] = useState<FileData[]>([]);
-  const [workspaces, setWorkspaces] = useState([]);
+  const [workspaces, setWorkspaces] = useState<WorkspaceData[]>([]);
   const [loading, setLoading] = useState(true);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -78,11 +84,7 @@ export default function FilesPage() {
   const [selectedWorkspace, setSelectedWorkspace] = useState('');
   const { toast } = useToast();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [filesRes, workspacesRes] = await Promise.all([
         fetch('/api/files'),
@@ -106,7 +108,12 @@ export default function FilesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (!selectedWorkspace) {
@@ -198,6 +205,7 @@ export default function FilesPage() {
 
   const getFileIcon = (mimeType: string) => {
     if (mimeType.startsWith('image/')) {
+      // eslint-disable-next-line jsx-a11y/alt-text
       return <Image className="w-8 h-8 text-blue-500" />;
     } else if (mimeType.includes('pdf')) {
       return <FileText className="w-8 h-8 text-red-500" />;
@@ -266,7 +274,7 @@ export default function FilesPage() {
                     <SelectValue placeholder="Select workspace" />
                   </SelectTrigger>
                   <SelectContent>
-                    {workspaces.map((workspace: any) => (
+                    {workspaces.map((workspace: WorkspaceData) => (
                       <SelectItem key={workspace.id} value={workspace.id}>
                         <div className="flex items-center gap-2">
                           <div
@@ -329,7 +337,7 @@ export default function FilesPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Workspaces</SelectItem>
-            {workspaces.map((workspace: any) => (
+            {workspaces.map((workspace: WorkspaceData) => (
               <SelectItem key={workspace.id} value={workspace.id}>
                 {workspace.name}
               </SelectItem>

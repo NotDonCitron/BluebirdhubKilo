@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -69,9 +69,15 @@ interface Task {
   };
 }
 
+interface Workspace {
+  id: string;
+  name: string;
+  color: string;
+}
+
 export default function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [workspaces, setWorkspaces] = useState([]);
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   // const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -91,11 +97,7 @@ export default function TasksPage() {
     assignedUserIds: [] as string[]
   });
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [tasksRes, workspacesRes] = await Promise.all([
         fetch('/api/tasks'),
@@ -120,7 +122,11 @@ export default function TasksPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleCreateTask = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -324,7 +330,7 @@ export default function TasksPage() {
                         <SelectValue placeholder="Select workspace" />
                       </SelectTrigger>
                       <SelectContent>
-                        {workspaces.map((workspace: any) => (
+                        {workspaces.map((workspace: Workspace) => (
                           <SelectItem key={workspace.id} value={workspace.id}>
                             <div className="flex items-center gap-2">
                               <div
@@ -417,7 +423,7 @@ export default function TasksPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Workspaces</SelectItem>
-            {workspaces.map((workspace: any) => (
+            {workspaces.map((workspace: Workspace) => (
               <SelectItem key={workspace.id} value={workspace.id}>
                 {workspace.name}
               </SelectItem>

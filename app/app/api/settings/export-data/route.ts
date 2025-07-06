@@ -30,20 +30,34 @@ export async function POST() {
         },
         assignedTasks: {
           include: {
-            workspace: {
-              select: {
-                id: true,
-                name: true,
+            task: {
+              include: {
+                workspace: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
               },
             },
           },
         },
-        comments: {
+        taskComments: {
           include: {
             task: {
               select: {
                 id: true,
                 title: true,
+              },
+            },
+          },
+        },
+        fileComments: {
+          include: {
+            file: {
+              select: {
+                id: true,
+                name: true,
               },
             },
           },
@@ -90,31 +104,37 @@ export async function POST() {
         name: membership.workspace.name,
         description: membership.workspace.description,
         role: membership.role,
-        joinedAt: membership.createdAt,
+        joinedAt: membership.joinedAt,
       })),
-      tasks: userData.assignedTasks.map(task => ({
-        id: task.id,
-        title: task.title,
-        description: task.description,
-        status: task.status,
-        priority: task.priority,
-        dueDate: task.dueDate,
-        createdAt: task.createdAt,
-        workspace: task.workspace,
+      tasks: userData.assignedTasks.map(assignment => ({
+        id: assignment.task.id,
+        title: assignment.task.title,
+        description: assignment.task.description,
+        status: assignment.task.status,
+        priority: assignment.task.priority,
+        dueDate: assignment.task.dueDate,
+        createdAt: assignment.task.createdAt,
+        workspace: assignment.task.workspace,
       })),
       files: userFiles.map(file => ({
         id: file.id,
         name: file.name,
-        type: file.type,
+        mimeType: file.mimeType,
         size: file.size,
         uploadedAt: file.createdAt,
         workspace: file.workspace,
       })),
-      comments: userData.comments.map(comment => ({
+      taskComments: userData.taskComments.map(comment => ({
         id: comment.id,
         content: comment.content,
         createdAt: comment.createdAt,
         task: comment.task,
+      })),
+      fileComments: userData.fileComments.map(comment => ({
+        id: comment.id,
+        content: comment.content,
+        createdAt: comment.createdAt,
+        file: comment.file,
       })),
       activityLogs: userData.activityLogs.map(log => ({
         id: log.id,

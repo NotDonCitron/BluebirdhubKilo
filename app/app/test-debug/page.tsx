@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 
 export default function TestDebugPage() {
-  const [dbStatus, setDbStatus] = useState<any>(null);
-  const [storageStatus, setStorageStatus] = useState<any>(null);
+  const [dbStatus, setDbStatus] = useState<Record<string, unknown> | null>(null);
+  const [storageStatus, setStorageStatus] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

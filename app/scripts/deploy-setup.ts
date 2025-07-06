@@ -138,7 +138,7 @@ async function setupDatabase() {
     // Log deployment info
     await prisma.activityLog.create({
       data: {
-        userId: existingUser?.id || demoUser!.id,
+        userId: existingUser?.id || 'system',
         action: 'DEPLOYMENT',
         entityType: 'SYSTEM',
         entityId: 'production',

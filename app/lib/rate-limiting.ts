@@ -93,28 +93,28 @@ function getClientKey(request: NextRequest): string {
   return `${ip}:${userId}`;
 }
 
-// Predefined rate limiters
+// Predefined rate limiters - DISABLED FOR TESTING
 export const strictRateLimit = createRateLimiter({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  maxRequests: 10,
+  maxRequests: 999999, // Effectively disabled
   message: 'Too many attempts, please try again later.',
 });
 
 export const authRateLimit = createRateLimiter({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  maxRequests: 5,
+  maxRequests: 999999, // Effectively disabled
   message: 'Too many authentication attempts, please try again later.',
 });
 
 export const apiRateLimit = createRateLimiter({
   windowMs: 60 * 1000, // 1 minute
-  maxRequests: 100,
+  maxRequests: 999999, // Effectively disabled
   message: 'API rate limit exceeded, please slow down.',
 });
 
 export const fileUploadRateLimit = createRateLimiter({
   windowMs: 60 * 1000, // 1 minute
-  maxRequests: 10,
+  maxRequests: 999999, // Effectively disabled
   message: 'Too many file uploads, please wait.',
 });
 

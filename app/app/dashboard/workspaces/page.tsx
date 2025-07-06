@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -40,8 +40,38 @@ import {
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 
+interface WorkspaceMember {
+  id: string;
+  user: {
+    id: string;
+    name: string;
+    image?: string;
+  };
+  role: string;
+}
+
+interface Workspace {
+  id: string;
+  name: string;
+  description?: string;
+  color: string;
+  icon?: string;
+  updatedAt: string;
+  owner?: {
+    id: string;
+    name?: string;
+    email: string;
+    image?: string;
+  };
+  members?: WorkspaceMember[];
+  _count: {
+    tasks: number;
+    files: number;
+  };
+}
+
 export default function WorkspacesPage() {
-  const [workspaces, setWorkspaces] = useState<any[]>([]);
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,11 +84,7 @@ export default function WorkspacesPage() {
     icon: '🚀'
   });
 
-  useEffect(() => {
-    fetchWorkspaces();
-  }, []);
-
-  const fetchWorkspaces = async () => {
+  const fetchWorkspaces = useCallback(async () => {
     try {
       const response = await fetch('/api/workspaces');
       const data = await response.json();
@@ -73,7 +99,12 @@ export default function WorkspacesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    fetchWorkspaces();
+  }, [fetchWorkspaces]);
+
 
   const handleCreateWorkspace = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -125,7 +156,7 @@ export default function WorkspacesPage() {
       });
 
       if (response.ok) {
-        setWorkspaces(workspaces.filter((w: any) => w.id !== workspaceId));
+        setWorkspaces(workspaces.filter((w: Workspace) => w.id !== workspaceId));
         toast({
           title: 'Success',
           description: 'Workspace deleted successfully',
@@ -143,7 +174,7 @@ export default function WorkspacesPage() {
     }
   };
 
-  const filteredWorkspaces = workspaces.filter((workspace: any) =>
+  const filteredWorkspaces = workspaces.filter((workspace: Workspace) =>
     workspace.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     workspace.description?.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -282,7 +313,7 @@ export default function WorkspacesPage() {
         className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
         {filteredWorkspaces.length > 0 ? (
-          filteredWorkspaces.map((workspace: any, index: number) => (
+          filteredWorkspaces.map((workspace: Workspace, index: number) => (
             <motion.div
               key={workspace.id}
               initial={{ opacity: 0, y: 20 }}
@@ -359,12 +390,12 @@ export default function WorkspacesPage() {
                       <div className="flex items-center justify-center">
                         <Users className="w-4 h-4 text-muted-foreground" />
                       </div>
-                      <div className="text-sm font-medium">{(workspace.members?.length || 0) + 1}</div>
+                      <div className="text-sm font-medium">{(workspace.members && workspace.members.length || 0) + 1}</div>
                       <div className="text-xs text-muted-foreground">Members</div>
                     </div>
                   </div>
 
-                  {workspace.members?.length > 0 && (
+                  {workspace.members && workspace.members.length > 0 && (
                     <div className="flex items-center space-x-2">
                       <div className="flex -space-x-2">
                         <Avatar className="w-6 h-6 border-2 border-background">
@@ -373,7 +404,7 @@ export default function WorkspacesPage() {
                             {workspace.owner?.name?.charAt(0) || 'O'}
                           </AvatarFallback>
                         </Avatar>
-                        {workspace.members?.slice(0, 3).map((member: any) => (
+                        {workspace.members && workspace.members.slice(0, 3).map((member: WorkspaceMember) => (
                           <Avatar key={member.id} className="w-6 h-6 border-2 border-background">
                             <AvatarImage src={member.user?.image} />
                             <AvatarFallback className="text-xs">
@@ -381,7 +412,7 @@ export default function WorkspacesPage() {
                             </AvatarFallback>
                           </Avatar>
                         ))}
-                        {workspace.members?.length > 3 && (
+                        {workspace.members && workspace.members.length > 3 && (
                           <div className="w-6 h-6 rounded-full bg-muted border-2 border-background flex items-center justify-center">
                             <span className="text-xs text-muted-foreground">
                               +{workspace.members.length - 3}

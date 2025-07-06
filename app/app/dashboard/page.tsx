@@ -20,10 +20,44 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { TestRealTime } from '@/components/dashboard/test-real-time';
 
+interface Workspace {
+  id: string;
+  name: string;
+  color: string;
+  _count: {
+    tasks: number;
+    files: number;
+  };
+}
+
+interface Task {
+  id: string;
+  title: string;
+  status: string;
+  priority: string;
+  dueDate?: string;
+  workspace: {
+    name: string;
+    color: string;
+  };
+}
+
+interface FileItem {
+  id: string;
+  name: string;
+  size: number;
+  mimeType: string;
+  createdAt: string;
+  workspace: {
+    name: string;
+    color: string;
+  };
+}
+
 interface DashboardStats {
-  workspaces: any[];
-  recentTasks: any[];
-  recentFiles: any[];
+  workspaces: Workspace[];
+  recentTasks: Task[];
+  recentFiles: FileItem[];
   stats: {
     totalTasks: number;
     completedTasks: number;
@@ -52,17 +86,26 @@ export default function DashboardPage() {
 
         const stats = {
           totalTasks: tasks.length,
-          completedTasks: tasks.filter((t: any) => t.status === 'COMPLETED').length,
+          completedTasks: tasks.filter((t: Task) => t.status === 'COMPLETED').length,
           totalFiles: files.length,
           totalWorkspaces: workspaces.length
         };
 
-        setData({
+        const dashboardData = {
           workspaces: workspaces.slice(0, 3),
           recentTasks: tasks.slice(0, 5),
           recentFiles: files.slice(0, 5),
           stats
+        };
+        
+        console.log('Dashboard data loaded:', {
+          workspacesCount: workspaces.length,
+          tasksCount: tasks.length,
+          filesCount: files.length,
+          stats
         });
+        
+        setData(dashboardData);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       } finally {
@@ -198,7 +241,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {data?.workspaces?.length ? (
-                data.workspaces.map((workspace: any) => (
+                data.workspaces.map((workspace: Workspace) => (
                   <div
                     key={workspace.id}
                     className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors"
@@ -208,7 +251,8 @@ export default function DashboardPage() {
                         className="w-10 h-10 rounded-lg flex items-center justify-center text-white"
                         style={{ backgroundColor: workspace.color }}
                       >
-                        {workspace.icon || workspace.name.charAt(0)}
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                        {(workspace as any).icon || workspace.name.charAt(0)}
                       </div>
                       <div>
                         <h4 className="font-medium">{workspace.name}</h4>
@@ -258,7 +302,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {data?.recentTasks?.length ? (
-                data.recentTasks.map((task: any) => (
+                data.recentTasks.map((task: Task) => (
                   <div
                     key={task.id}
                     className="flex items-center space-x-3 p-3 rounded-lg hover:bg-muted/50 transition-colors"

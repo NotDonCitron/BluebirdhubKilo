@@ -55,7 +55,7 @@ export function NotificationSettings() {
   };
 
   // Debounced update function to prevent excessive API calls
-  const debouncedUpdateSetting = useDebouncedCallback(async (key: keyof NotificationSettings, value: any) => {
+  const debouncedUpdateSetting = useDebouncedCallback(async (key: keyof NotificationSettings, value: string | boolean) => {
     try {
       const response = await fetch('/api/settings/notifications', {
         method: 'PUT',
@@ -87,7 +87,7 @@ export function NotificationSettings() {
     }
   }, 500);
 
-  const updateSetting = useCallback((key: keyof NotificationSettings, value: any) => {
+  const updateSetting = useCallback((key: keyof NotificationSettings, value: string | boolean) => {
     if (!settings) return;
 
     // Optimistic update
@@ -335,7 +335,7 @@ export function NotificationSettings() {
               <div className="space-y-0.5">
                 <Label>Quiet Hours</Label>
                 <p className="text-sm text-muted-foreground">
-                  Don't send notifications during these hours
+                  Don&apos;t send notifications during these hours
                 </p>
               </div>
               <Switch

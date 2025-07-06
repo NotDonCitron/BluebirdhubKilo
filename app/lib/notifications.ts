@@ -2,7 +2,7 @@ import { prisma } from "./db";
 
 export interface NotificationData {
   type: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   workspaceId?: string;
   userId?: string;
 }

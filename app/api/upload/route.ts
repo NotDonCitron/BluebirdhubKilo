@@ -127,25 +127,21 @@ export async function POST(request: NextRequest) {
       try {
         file = await prisma.$transaction(async (tx) => {
           // Create file record
-          const fileData: any = {
+          // Create file record - build object conditionally to match Prisma types
+          const fileData = {
             name: fileName,
             originalName: fileName,
             size: fileSize,
             mimeType,
             url: `/uploads/${finalKey}`,
             uploadedById: session.user.id,
+            ...(workspaceId ? { workspaceId } : {}),
+            ...(folderId ? { folderId } : {}),
           };
 
-          // Only include optional fields if they have values
-          if (workspaceId) {
-            fileData.workspaceId = workspaceId;
-          }
-          if (folderId) {
-            fileData.folderId = folderId;
-          }
-
           const createdFile = await tx.file.create({
-            data: fileData,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            data: fileData as any,
             include: {
               uploadedBy: {
                 select: {

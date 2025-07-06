@@ -50,7 +50,11 @@ global.Audio = jest.fn().mockImplementation(() => ({
 })) as any;
 
 global.Notification = jest.fn() as any;
-global.Notification.permission = 'granted';
+Object.defineProperty(global.Notification, 'permission', {
+  value: 'granted',
+  writable: true,
+  configurable: true
+});
 global.Notification.requestPermission = jest.fn().mockResolvedValue('granted');
 
 const mockSession = {
@@ -344,7 +348,11 @@ describe('Real-time Notifications Integration', () => {
   it('shows desktop notifications when enabled', async () => {
     const mockNotificationConstructor = jest.fn();
     global.Notification = mockNotificationConstructor as any;
-    global.Notification.permission = 'granted';
+    Object.defineProperty(global.Notification, 'permission', {
+      value: 'granted',
+      writable: true,
+      configurable: true
+    });
 
     render(
       <RealTimeProvider>

@@ -52,7 +52,7 @@ export function RealTimeStatus() {
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="sm" className="h-8 px-2">
-          <Badge variant={getStatusColor() as any} className="flex items-center space-x-1">
+          <Badge variant={getStatusColor() as "default" | "secondary" | "destructive" | "outline"} className="flex items-center space-x-1">
             {getStatusIcon()}
             <span className="text-xs">{getStatusText()}</span>
           </Badge>

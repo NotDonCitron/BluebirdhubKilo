@@ -291,7 +291,11 @@ describe('RealTimeProvider', () => {
     // Mock Notification API
     const mockNotificationConstructor = jest.fn();
     global.Notification = mockNotificationConstructor as any;
-    global.Notification.permission = 'granted';
+    Object.defineProperty(global.Notification, 'permission', {
+      value: 'granted',
+      writable: true,
+      configurable: true
+    });
     global.Notification.requestPermission = jest.fn().mockResolvedValue('granted');
 
     render(

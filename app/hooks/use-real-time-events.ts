@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/react';
 
 interface RealTimeEvent {
   type: string;
-  data: any;
+  data: Record<string, unknown>;
   timestamp: string;
 }
 
@@ -123,7 +123,7 @@ export function useRealTimeEvents(options: UseRealTimeEventsOptions = {}) {
     };
   }, [disconnect]);
 
-  const sendEvent = useCallback(async (eventType: string, data: any) => {
+  const sendEvent = useCallback(async (eventType: string, data: Record<string, unknown>) => {
     try {
       const response = await fetch('/api/events/send', {
         method: 'POST',

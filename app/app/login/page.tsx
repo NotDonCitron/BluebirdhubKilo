@@ -2,8 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn, getSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,7 +19,6 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const router = useRouter();
   const { toast } = useToast();
 
   const [loginForm, setLoginForm] = useState({
@@ -53,8 +51,15 @@ export default function LoginPage() {
           title: 'Welcome back!',
           description: 'You have been successfully signed in.',
         });
-        router.push('/dashboard');
-        router.refresh();
+        
+        console.log('Login successful, using NextAuth redirect...');
+        // Use NextAuth's built-in redirect after successful authentication
+        await signIn('credentials', {
+          email: loginForm.email,
+          password: loginForm.password,
+          callbackUrl: '/dashboard',
+          redirect: true
+        });
       }
     } catch (error) {
       setError('An unexpected error occurred');
@@ -85,19 +90,14 @@ export default function LoginPage() {
           description: 'Your account has been created successfully. Please sign in.',
         });
         
-        // Auto sign in after successful signup
-        const result = await signIn('credentials', {
+        // Auto sign in after successful signup using NextAuth redirect
+        console.log('Account created, signing in with NextAuth redirect...');
+        await signIn('credentials', {
           email: signupForm.email,
           password: signupForm.password,
-          redirect: false
+          callbackUrl: '/dashboard',
+          redirect: true
         });
-
-        if (result?.error) {
-          setError('Account created but sign in failed. Please try signing in manually.');
-        } else {
-          router.push('/dashboard');
-          router.refresh();
-        }
       } else {
         setError(data.error || 'Failed to create account');
       }
@@ -113,22 +113,19 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const result = await signIn('credentials', {
+      toast({
+        title: 'Demo Access Granted!',
+        description: 'Welcome to the demo workspace.',
+      });
+      
+      console.log('Demo login starting with NextAuth redirect...');
+      // Use NextAuth's built-in redirect for demo login
+      await signIn('credentials', {
         email: 'john@doe.com',
         password: 'johndoe123',
-        redirect: false
+        callbackUrl: '/dashboard',
+        redirect: true
       });
-
-      if (result?.error) {
-        setError('Demo login failed');
-      } else {
-        toast({
-          title: 'Demo Access Granted!',
-          description: 'Welcome to the demo workspace.',
-        });
-        router.push('/dashboard');
-        router.refresh();
-      }
     } catch (error) {
       setError('An unexpected error occurred');
     } finally {
@@ -153,7 +150,7 @@ export default function LoginPage() {
             <span className="text-xl font-bold text-gradient">AppFlowy Clone</span>
           </Link>
           <h1 className="text-2xl font-bold mb-2">Welcome back</h1>
-          <p className="text-muted-foreground">Choose how you'd like to continue</p>
+          <p className="text-muted-foreground">Choose how you&apos;d like to continue</p>
         </div>
 
         {/* Demo Access Card */}

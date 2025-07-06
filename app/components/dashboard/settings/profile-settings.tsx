@@ -23,7 +23,7 @@ interface UserProfile {
 }
 
 export function ProfileSettings() {
-  const { data: session, update } = useSession();
+  const { update } = useSession();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -82,7 +82,7 @@ export function ProfileSettings() {
     setIsSaving(true);
 
     try {
-      const updateData: any = {
+      const updateData: Record<string, string> = {
         name: formData.name,
         email: formData.email,
         image: formData.image,

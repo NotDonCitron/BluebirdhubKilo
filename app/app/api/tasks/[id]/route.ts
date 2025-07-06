@@ -53,9 +53,6 @@ export async function GET(
             }
           },
           orderBy: { createdAt: 'desc' }
-        },
-        aiSuggestions: {
-          orderBy: { createdAt: 'desc' }
         }
       }
     });

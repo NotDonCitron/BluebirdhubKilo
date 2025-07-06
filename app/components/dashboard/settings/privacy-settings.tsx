@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'react-hot-toast';
-import { Loader2, Shield, Eye, EyeOff, Users, Globe, Lock, Download, Trash2 } from 'lucide-react';
+import { Loader2, Shield, Eye, Users, Globe, Lock, Download, Trash2 } from 'lucide-react';
 
 interface PrivacySettings {
   id: string;
@@ -50,7 +50,7 @@ export function PrivacySettings() {
     }
   };
 
-  const updateSetting = async (key: keyof PrivacySettings, value: any) => {
+  const updateSetting = async (key: keyof PrivacySettings, value: string | boolean) => {
     if (!settings) return;
 
     const updatedSettings = { ...settings, [key]: value };

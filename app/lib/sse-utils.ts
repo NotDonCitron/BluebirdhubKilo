@@ -2,7 +2,7 @@
 const connections = new Map<string, WritableStreamDefaultWriter>();
 
 // Function to send events to specific user
-export function sendEventToUser(userId: string, eventType: string, data: any) {
+export function sendEventToUser(userId: string, eventType: string, data: Record<string, unknown>) {
   const connection = connections.get(userId);
   if (connection) {
     try {
@@ -24,7 +24,7 @@ export function sendEventToUser(userId: string, eventType: string, data: any) {
 }
 
 // Function to broadcast events to all connected users
-export function broadcastEvent(eventType: string, data: any) {
+export function broadcastEvent(eventType: string, data: Record<string, unknown>) {
   const encoder = new TextEncoder();
   const event = {
     type: eventType,

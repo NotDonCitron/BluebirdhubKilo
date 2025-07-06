@@ -78,7 +78,9 @@ export function FileUpload({
         uploadFile(file, {
           url: uploadUrl,
           headers,
-          onComplete: onUploadComplete,
+          onComplete: onUploadComplete ? (fileId: string, response: Record<string, unknown>) => {
+            onUploadComplete(fileId, response as UploadResponse);
+          } : undefined,
           onError: onUploadError,
         });
       });
@@ -134,7 +136,9 @@ export function FileUpload({
               resumeUpload(upload.fileId, {
                 url: uploadUrl,
                 headers,
-                onComplete: onUploadComplete,
+                onComplete: onUploadComplete ? (fileId: string, response: Record<string, unknown>) => {
+                  onUploadComplete(fileId, response as UploadResponse);
+                } : undefined,
                 onError: onUploadError,
               })
             }
@@ -151,7 +155,9 @@ export function FileUpload({
               retryUpload(upload.fileId, {
                 url: uploadUrl,
                 headers,
-                onComplete: onUploadComplete,
+                onComplete: onUploadComplete ? (fileId: string, response: Record<string, unknown>) => {
+                  onUploadComplete(fileId, response as UploadResponse);
+                } : undefined,
                 onError: onUploadError,
               })
             }

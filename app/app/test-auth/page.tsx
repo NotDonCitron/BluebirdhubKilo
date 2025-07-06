@@ -4,7 +4,7 @@ import { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 
 export default function TestAuthPage() {
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(false);
   const { data: session, status } = useSession();
 
@@ -16,9 +16,9 @@ export default function TestAuthPage() {
         password: 'password123',
         redirect: false
       });
-      setResult(result);
+      setResult(result as unknown as Record<string, unknown> || null);
     } catch (error) {
-      setResult({ error: error.message });
+      setResult({ error: (error as Error).message });
     } finally {
       setLoading(false);
     }

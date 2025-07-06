@@ -107,7 +107,7 @@ describe('TestRealTime', () => {
     act(() => {
       if (mockEventSource.onopen) {
         const event = new Event('open') as any;
-        mockEventSource.onopen(event);
+        (mockEventSource.onopen as any)?.(event);
       }
     });
 

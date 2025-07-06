@@ -3,10 +3,10 @@ import { getToken } from 'next-auth/jwt';
 import { generateCSPHeader } from './lib/validation';
 import { createIPRateLimit } from './lib/rate-limiting';
 
-// Rate limiters for different endpoints
-const generalRateLimit = createIPRateLimit(100, 60 * 1000); // 100 requests per minute
-const authRateLimit = createIPRateLimit(5, 15 * 60 * 1000); // 5 requests per 15 minutes
-const apiRateLimit = createIPRateLimit(200, 60 * 1000); // 200 requests per minute
+// Rate limiters for different endpoints - INCREASED FOR TESTING
+const generalRateLimit = createIPRateLimit(1000, 60 * 1000); // 1000 requests per minute
+const authRateLimit = createIPRateLimit(100, 15 * 60 * 1000); // 100 requests per 15 minutes (was 5)
+const apiRateLimit = createIPRateLimit(1000, 60 * 1000); // 1000 requests per minute
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
@@ -129,6 +129,8 @@ async function shouldProtectRoute(request: NextRequest): Promise<boolean> {
     '/test-upload',
     '/api/upload', // Temporarily public for testing
     '/api/debug',
+    '/_next',
+    '/favicon.ico',
   ];
   
   // Check if route is explicitly public

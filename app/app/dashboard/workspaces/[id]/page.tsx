@@ -40,13 +40,60 @@ interface WorkspaceMember {
   role: string;
 }
 
+interface Assignment {
+  user: {
+    id: string;
+    name: string;
+    image?: string;
+  };
+}
+
+interface Task {
+  id: string;
+  title: string;
+  description?: string;
+  status: string;
+  priority: string;
+  dueDate?: string;
+  assignments?: Assignment[];
+  _count?: {
+    comments: number;
+  };
+}
+
+interface File {
+  id: string;
+  name: string;
+  originalName: string;
+  createdAt: string;
+  uploadedBy: {
+    name: string;
+  };
+  aiMetadata?: Array<{
+    category: string;
+    summary?: string;
+  }>;
+  _count?: {
+    comments: number;
+  };
+}
+
 interface Workspace {
   id: string;
   name: string;
   description?: string;
   color: string;
   icon?: string;
+  createdAt: string;
+  owner?: {
+    id: string;
+    name?: string;
+    email: string;
+    image?: string;
+  };
   members: WorkspaceMember[];
+  tasks?: Task[];
+  files?: File[];
   _count: {
     tasks: number;
     files: number;
@@ -59,12 +106,6 @@ export default function WorkspaceDetailPage() {
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-
-  useEffect(() => {
-    if (workspaceId) {
-      fetchWorkspace();
-    }
-  }, [workspaceId, fetchWorkspace]);
 
   const fetchWorkspace = useCallback(async () => {
     try {
@@ -86,6 +127,12 @@ export default function WorkspaceDetailPage() {
       setLoading(false);
     }
   }, [workspaceId, toast]);
+
+  useEffect(() => {
+    if (workspaceId) {
+      fetchWorkspace();
+    }
+  }, [workspaceId, fetchWorkspace]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -117,7 +164,7 @@ export default function WorkspaceDetailPage() {
     return (
       <div className="text-center py-12">
         <h3 className="text-lg font-medium mb-2">Workspace not found</h3>
-        <p className="text-muted-foreground">The workspace you're looking for doesn't exist or you don't have access to it.</p>
+        <p className="text-muted-foreground">The workspace you&apos;re looking for doesn&apos;t exist or you don&apos;t have access to it.</p>
       </div>
     );
   }
@@ -205,7 +252,7 @@ export default function WorkspaceDetailPage() {
           <CardContent>
             <div className="text-2xl font-bold">{workspace.tasks?.length || 0}</div>
             <p className="text-xs text-muted-foreground">
-              {workspace.tasks?.filter((t: any) => t.status === 'COMPLETED').length || 0} completed
+              {workspace.tasks?.filter((t: Task) => t.status === 'COMPLETED').length || 0} completed
             </p>
           </CardContent>
         </Card>
@@ -243,8 +290,8 @@ export default function WorkspaceDetailPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {(workspace.tasks?.reduce((acc: number, task: any) => acc + (task._count?.comments || 0), 0) || 0) +
-               (workspace.files?.reduce((acc: number, file: any) => acc + (file._count?.comments || 0), 0) || 0)}
+              {(workspace.tasks?.reduce((acc: number, task: Task) => acc + (task._count?.comments || 0), 0) || 0) +
+               (workspace.files?.reduce((acc: number, file: File) => acc + (file._count?.comments || 0), 0) || 0)}
             </div>
             <p className="text-xs text-muted-foreground">
               Total comments
@@ -273,9 +320,9 @@ export default function WorkspaceDetailPage() {
                 <Link href="/dashboard/tasks">View All</Link>
               </Button>
             </div>
-            {workspace.tasks?.length > 0 ? (
+            {workspace.tasks && workspace.tasks.length > 0 ? (
               <div className="grid gap-4">
-                {workspace.tasks.slice(0, 5).map((task: any) => (
+                {workspace.tasks.slice(0, 5).map((task: Task) => (
                   <Card key={task.id} className="hover:shadow-md transition-shadow">
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between">
@@ -300,9 +347,9 @@ export default function WorkspaceDetailPage() {
                             )}
                           </div>
                         </div>
-                        {task.assignments?.length > 0 && (
+                        {task.assignments && task.assignments.length > 0 && (
                           <div className="flex -space-x-2 ml-4">
-                            {task.assignments.slice(0, 3).map((assignment: any) => (
+                            {task.assignments.slice(0, 3).map((assignment: Assignment) => (
                               <Avatar key={assignment.user.id} className="w-6 h-6 border-2 border-background">
                                 <AvatarImage src={assignment.user.image} />
                                 <AvatarFallback className="text-xs">
@@ -332,9 +379,9 @@ export default function WorkspaceDetailPage() {
                 <Link href="/dashboard/files">View All</Link>
               </Button>
             </div>
-            {workspace.files?.length > 0 ? (
+            {workspace.files && workspace.files.length > 0 ? (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {workspace.files.slice(0, 6).map((file: any) => (
+                {workspace.files.slice(0, 6).map((file: File) => (
                   <Card key={file.id} className="hover:shadow-md transition-shadow">
                     <CardContent className="p-4">
                       <div className="space-y-3">
@@ -402,7 +449,7 @@ export default function WorkspaceDetailPage() {
               </Card>
 
               {/* Members */}
-              {workspace.members?.map((member: any) => (
+              {workspace.members?.map((member: WorkspaceMember) => (
                 <Card key={member.id}>
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">

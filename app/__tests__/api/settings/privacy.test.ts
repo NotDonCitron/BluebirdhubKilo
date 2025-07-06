@@ -72,8 +72,7 @@ describe('/api/settings/privacy', () => {
     it('returns privacy settings for authenticated user', async () => {
       mockDb.userSettings.findUnique.mockResolvedValue(mockUserSettings);
 
-      const request = new NextRequest('http://localhost:3000/api/settings/privacy');
-      const response = await GET(request);
+      const response = await GET();
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -87,8 +86,7 @@ describe('/api/settings/privacy', () => {
       mockDb.userSettings.findUnique.mockResolvedValue(null);
       mockDb.userSettings.create.mockResolvedValue(mockUserSettings);
 
-      const request = new NextRequest('http://localhost:3000/api/settings/privacy');
-      const response = await GET(request);
+      const response = await GET();
 
       expect(response.status).toBe(200);
       expect(mockDb.userSettings.create).toHaveBeenCalledWith({
@@ -110,8 +108,7 @@ describe('/api/settings/privacy', () => {
     it('returns 401 for unauthenticated requests', async () => {
       mockGetServerSession.mockResolvedValue(null);
 
-      const request = new NextRequest('http://localhost:3000/api/settings/privacy');
-      const response = await GET(request);
+      const response = await GET();
       const data = await response.json();
 
       expect(response.status).toBe(401);
@@ -121,8 +118,7 @@ describe('/api/settings/privacy', () => {
     it('handles database errors', async () => {
       mockDb.userSettings.findUnique.mockRejectedValue(new Error('Database error'));
 
-      const request = new NextRequest('http://localhost:3000/api/settings/privacy');
-      const response = await GET(request);
+      const response = await GET();
       const data = await response.json();
 
       expect(response.status).toBe(500);

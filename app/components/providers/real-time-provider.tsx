@@ -64,7 +64,8 @@ export function RealTimeProvider({ children }: RealTimeProviderProps) {
           // Browser notification if permission granted
           if ('Notification' in window && Notification.permission === 'granted') {
             new Notification('New Task Assigned', {
-              body: event.data.taskTitle,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              body: (event.data as any).taskTitle,
               icon: '/favicon.ico',
             });
           }
@@ -117,7 +118,8 @@ export function RealTimeProvider({ children }: RealTimeProviderProps) {
 
       case 'system_update':
         if (notificationSettings?.systemUpdates && notificationSettings?.desktopNotifications) {
-          toast(event.data.message);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          toast((event.data as any).message);
         }
         break;
 
