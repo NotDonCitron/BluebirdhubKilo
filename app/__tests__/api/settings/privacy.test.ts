@@ -1,7 +1,56 @@
 import '@testing-library/jest-dom';
 /**
- * @jest-environment node
+ * @jest-environment jsdom
  */
+
+// Setup global web APIs for Next.js API routes
+import { TextEncoder, TextDecoder } from 'util';
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder as any;
+
+// Mock web APIs needed by Next.js
+Object.defineProperty(global, 'Request', {
+  writable: true,
+  value: class MockRequest {
+    constructor(url: string, init?: RequestInit) {
+      this.url = url;
+      this.method = init?.method || 'GET';
+      this.headers = new Headers(init?.headers);
+      this.body = init?.body;
+    }
+    async json() { return JSON.parse(this.body as string || '{}'); }
+    async text() { return this.body as string || ''; }
+  }
+});
+
+Object.defineProperty(global, 'Response', {
+  writable: true,
+  value: class MockResponse {
+    constructor(body?: any, init?: ResponseInit) {
+      this.body = body;
+      this.status = init?.status || 200;
+      this.statusText = init?.statusText || 'OK';
+      this.headers = new Headers(init?.headers);
+      this.ok = this.status >= 200 && this.status < 300;
+    }
+    async json() { return this.body; }
+    async text() { return JSON.stringify(this.body); }
+    static json(data: any, init?: ResponseInit) {
+      return new MockResponse(data, { ...init, headers: { 'Content-Type': 'application/json', ...init?.headers } });
+    }
+  }
+});
+
+Object.defineProperty(global, 'Headers', {
+  writable: true,
+  value: class MockHeaders extends Map {
+    append(name: string, value: string) { this.set(name.toLowerCase(), value); }
+    get(name: string) { return super.get(name.toLowerCase()); }
+    set(name: string, value: string) { return super.set(name.toLowerCase(), value); }
+    has(name: string) { return super.has(name.toLowerCase()); }
+    delete(name: string) { return super.delete(name.toLowerCase()); }
+  }
+});
 
 // Mock the auth function first, before any imports
 const mockGetServerSession = jest.fn();
@@ -24,9 +73,6 @@ jest.mock('@/lib/db', () => ({
 
 import { NextRequest } from 'next/server';
 import { GET, PUT } from '@/app/api/settings/privacy/route';
-
-// Mock global Request if needed for tests
-global.Request = global.Request || class MockRequest {};
 
 const mockSession = {
   user: {

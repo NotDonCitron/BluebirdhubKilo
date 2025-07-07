@@ -242,9 +242,9 @@ describe('Comprehensive Interactive Elements Tests', () => {
           await testBrowser.screenshot('interactions-test', 'task-form-filled');
           
           // 7. Submit task form
-          const submitExists = await helpers.elementExists('button[type="submit"], button:has-text("Create"), button:has-text("Save")');
+          const submitExists = await helpers.elementExists('button[type="submit"]"Save")');
           if (submitExists) {
-            const submitResult = await helpers.clickElement('button[type="submit"], button:has-text("Create"), button:has-text("Save")');
+            const submitResult = await helpers.clickElement('button[type="submit"]"Save")');
             recordResult('Tasks', 'Create Task Submit', 'Submit Form', submitResult);
             
             await page.waitForTimeout(3000);
@@ -640,9 +640,9 @@ describe('Comprehensive Interactive Elements Tests', () => {
           await page.waitForTimeout(1000);
           
           // Try to submit empty form
-          const submitExists = await helpers.elementExists('button[type="submit"], button:has-text("Create"), button:has-text("Save")');
+          const submitExists = await helpers.elementExists('button[type="submit"]"Save")');
           if (submitExists) {
-            const submitResult = await helpers.clickElement('button[type="submit"], button:has-text("Create"), button:has-text("Save")');
+            const submitResult = await helpers.clickElement('button[type="submit"]"Save")');
             recordResult('Form Validation', `${form.name} Empty Submit`, 'Submit', submitResult);
             
             await page.waitForTimeout(2000);

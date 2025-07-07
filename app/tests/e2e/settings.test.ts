@@ -239,9 +239,9 @@ describe('Settings Page Tests', () => {
         }
         
         // Close form if modal or cancel button exists
-        const cancelExists = await helpers.elementExists('button:has-text("Cancel")');
+        const cancelExists = await helpers.elementExists('[data-testid="cancel"]');
         if (cancelExists) {
-          await helpers.clickElement('button:has-text("Cancel")');
+          await helpers.clickElement('[data-testid="cancel"]');
         } else {
           await page.keyboard.press('Escape');
         }
@@ -269,9 +269,9 @@ describe('Settings Page Tests', () => {
           await helpers.typeText(SETTINGS_SELECTORS.CONFIRM_PASSWORD_INPUT, 'differentpassword');
           
           // Try to submit
-          const submitExists = await helpers.elementExists('button[type="submit"], button:has-text("Change"), button:has-text("Update")');
+          const submitExists = await helpers.elementExists('button[type="submit"]"Update")');
           if (submitExists) {
-            await helpers.clickElement('button[type="submit"], button:has-text("Change"), button:has-text("Update")');
+            await helpers.clickElement('button[type="submit"]"Update")');
             await page.waitForTimeout(1000);
             
             await testBrowser.screenshot('settings-test', 'password-validation-error');
@@ -508,7 +508,7 @@ describe('Settings Page Tests', () => {
       
       let featuresFound = 0;
       for (const feature of securityFeatures) {
-        const exists = await helpers.elementExists(`:has-text("${feature}")`);
+        const exists = await helpers.elementExists(`[data-testid="${feature}"]`);
         if (exists) {
           featuresFound++;
           logger.success(`${feature} section found`);
@@ -521,10 +521,10 @@ describe('Settings Page Tests', () => {
     test('should handle two-factor authentication if available', async () => {
       logger.info('Testing two-factor authentication settings');
       
-      const twoFactorExists = await helpers.elementExists('button:has-text("Enable"), button:has-text("Two-Factor"), :has-text("2FA")');
+      const twoFactorExists = await helpers.elementExists('[data-testid="enable"]"Two-Factor")');
       
       if (twoFactorExists) {
-        await helpers.clickElement('button:has-text("Enable"), button:has-text("Two-Factor"), :has-text("2FA"):first-child');
+        await helpers.clickElement('[data-testid="enable"]"Two-Factor")');
         await page.waitForTimeout(1000);
         
         await testBrowser.screenshot('settings-test', '2fa-setup');
@@ -532,9 +532,9 @@ describe('Settings Page Tests', () => {
         logger.success('Two-factor authentication setup initiated');
         
         // Cancel or close if modal appears
-        const cancelExists = await helpers.elementExists('button:has-text("Cancel")');
+        const cancelExists = await helpers.elementExists('[data-testid="cancel"]');
         if (cancelExists) {
-          await helpers.clickElement('button:has-text("Cancel")');
+          await helpers.clickElement('[data-testid="cancel"]');
         } else {
           await page.keyboard.press('Escape');
         }

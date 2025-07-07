@@ -229,8 +229,8 @@ describe('Dashboard Navigation Tests', () => {
         await testBrowser.screenshot('dashboard-test', 'user-menu-opened');
         
         // Check for menu items
-        const settingsLinkExists = await helpers.elementExists('a[href="/dashboard/settings"], button:has-text("Settings")');
-        const logoutButtonExists = await helpers.elementExists('button:has-text("Log out"), button:has-text("Sign out")');
+        const settingsLinkExists = await helpers.elementExists('a[href="/dashboard/settings"]');
+        const logoutButtonExists = await helpers.elementExists('[data-testid="log-out"]"Sign out")');
         
         if (settingsLinkExists) {
           logger.success('Settings link found in user menu');
@@ -290,7 +290,7 @@ describe('Dashboard Navigation Tests', () => {
       await page.waitForTimeout(1000);
       
       // Look for recent workspaces section
-      const recentWorkspacesExists = await helpers.elementExists('[data-testid="recent-workspaces"], :has-text("Recent Workspaces")');
+      const recentWorkspacesExists = await helpers.elementExists('[data-testid="recent-workspaces"]');
       
       if (recentWorkspacesExists) {
         await testBrowser.screenshot('dashboard-test', 'recent-workspaces');

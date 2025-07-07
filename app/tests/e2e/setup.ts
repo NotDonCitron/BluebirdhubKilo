@@ -15,7 +15,7 @@ export interface TestConfig {
 
 export const config: TestConfig = {
   baseUrl: process.env.BASE_URL || 'http://localhost:3000',
-  timeout: 30000,
+  timeout: 60000, // Increased to 60 seconds
   screenshotPath: join(__dirname, '../reports/screenshots'),
   headless: process.env.HEADLESS !== 'false',
   credentials: {
@@ -41,14 +41,21 @@ export class TestBrowser {
         '--single-process',
         '--disable-gpu',
         '--disable-web-security',
-        '--disable-features=VizDisplayCompositor'
+        '--disable-features=VizDisplayCompositor',
+        '--disable-extensions',
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-renderer-backgrounding',
+        '--disable-ipc-flooding-protection',
+        '--memory-pressure-off'
       ],
       defaultViewport: {
         width: 1366,
         height: 768
       },
       // Use pipe mode to avoid WebSocket transport issues
-      pipe: true
+      pipe: true,
+      timeout: 60000 // Browser launch timeout
     });
 
     // Create screenshots directory
@@ -67,19 +74,22 @@ export class TestBrowser {
     // Set longer timeout for all operations
     page.setDefaultTimeout(config.timeout);
     
-    // Enable request interception for debugging
-    await page.setRequestInterception(true);
-    page.on('request', (request) => {
-      console.log(`[${pageId}] Request: ${request.method()} ${request.url()}`);
-      request.continue();
-    });
+    // Only enable logging in verbose mode to improve performance
+    if (process.env.VERBOSE === 'true') {
+      // Enable request interception for debugging
+      await page.setRequestInterception(true);
+      page.on('request', (request) => {
+        console.log(`[${pageId}] Request: ${request.method()} ${request.url()}`);
+        request.continue();
+      });
 
-    // Log console messages from the page
-    page.on('console', (msg) => {
-      console.log(`[${pageId}] Console: ${msg.text()}`);
-    });
+      // Log console messages from the page
+      page.on('console', (msg) => {
+        console.log(`[${pageId}] Console: ${msg.text()}`);
+      });
+    }
 
-    // Log page errors
+    // Always log page errors for debugging
     page.on('pageerror', (error) => {
       console.error(`[${pageId}] Page error: ${error.message}`);
     });

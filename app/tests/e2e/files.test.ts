@@ -166,7 +166,7 @@ describe('Files Management Tests', () => {
           await testBrowser.screenshot('files-test', 'folder-created');
           
           // Check if folder was created
-          const newFolderExists = await helpers.elementExists(`${FILE_SELECTORS.FOLDER_ITEM}:has-text("${folderName}")`, 3000);
+          const newFolderExists = await helpers.elementExists(`[data-testid="${foldername}"]`, 3000);
           
           if (newFolderExists) {
             logger.success(`Folder "${folderName}" created successfully`);
@@ -259,9 +259,9 @@ describe('Files Management Tests', () => {
         const filterOptions = ['Images', 'Documents', 'Videos', 'All'];
         
         for (const option of filterOptions) {
-          const optionExists = await helpers.elementExists(`button:has-text("${option}"), option:has-text("${option}")`);
+          const optionExists = await helpers.elementExists(`[data-testid="${option}"]"${option}")`);
           if (optionExists) {
-            await helpers.clickElement(`button:has-text("${option}"), option:has-text("${option}")`);
+            await helpers.clickElement(`[data-testid="${option}"]"${option}")`);
             await new Promise(resolve => setTimeout(resolve, 1000));
             
             await testBrowser.screenshot('files-test', `filter-${option.toLowerCase()}`);
@@ -290,9 +290,9 @@ describe('Files Management Tests', () => {
         const sizeOptions = ['Small', 'Medium', 'Large', 'All Sizes'];
         
         for (const option of sizeOptions) {
-          const optionExists = await helpers.elementExists(`button:has-text("${option}"), option:has-text("${option}")`);
+          const optionExists = await helpers.elementExists(`[data-testid="${option}"]"${option}")`);
           if (optionExists) {
-            await helpers.clickElement(`button:has-text("${option}"), option:has-text("${option}")`);
+            await helpers.clickElement(`[data-testid="${option}"]"${option}")`);
             await new Promise(resolve => setTimeout(resolve, 1000));
             
             logger.success(`File size filter "${option}" tested`);
@@ -481,10 +481,10 @@ describe('Files Management Tests', () => {
     test('should sort files if sorting controls exist', async () => {
       logger.info('Testing file sorting');
       
-      const sortExists = await helpers.elementExists('button:has-text("Sort"), [data-testid*="sort"]');
+      const sortExists = await helpers.elementExists('[data-testid*="sort"]');
       
       if (sortExists) {
-        await helpers.clickElement('button:has-text("Sort"), [data-testid*="sort"]:first-child');
+        await helpers.clickElement('[data-testid*="sort"]:first-child');
         await new Promise(resolve => setTimeout(resolve, 1000));
         
         await testBrowser.screenshot('files-test', 'sort-options');
@@ -493,9 +493,9 @@ describe('Files Management Tests', () => {
         const sortOptions = ['Name', 'Date', 'Size', 'Type'];
         
         for (const option of sortOptions) {
-          const optionExists = await helpers.elementExists(`button:has-text("${option}"), option:has-text("${option}")`);
+          const optionExists = await helpers.elementExists(`[data-testid="${option}"]"${option}")`);
           if (optionExists) {
-            await helpers.clickElement(`button:has-text("${option}"), option:has-text("${option}")`);
+            await helpers.clickElement(`[data-testid="${option}"]"${option}")`);
             await new Promise(resolve => setTimeout(resolve, 1000));
             
             logger.success(`File sorting by ${option} tested`);
@@ -530,7 +530,7 @@ describe('Files Management Tests', () => {
             await new Promise(resolve => setTimeout(resolve, 1000));
             
             // Look for confirmation dialog
-            const confirmationExists = await helpers.elementExists('[role="alertdialog"], [data-testid*="confirm"], button:has-text("Confirm")');
+            const confirmationExists = await helpers.elementExists('[role="alertdialog"], [data-testid*="confirm"]');
             
             if (confirmationExists) {
               await testBrowser.screenshot('files-test', 'delete-confirmation');
@@ -538,9 +538,9 @@ describe('Files Management Tests', () => {
               logger.success('File deletion confirmation dialog appeared');
               
               // Cancel the deletion
-              const cancelExists = await helpers.elementExists('button:has-text("Cancel")');
+              const cancelExists = await helpers.elementExists('[data-testid="cancel"]');
               if (cancelExists) {
-                await helpers.clickElement('button:has-text("Cancel")');
+                await helpers.clickElement('[data-testid="cancel"]');
                 await new Promise(resolve => setTimeout(resolve, 1000));
               }
             } else {
@@ -557,7 +557,7 @@ describe('Files Management Tests', () => {
       logger.info('Testing storage information display');
       
       // Look for storage usage indicators
-      const storageInfoExists = await helpers.elementExists('[data-testid*="storage"], .storage-info, :has-text("GB"), :has-text("MB")');
+      const storageInfoExists = await helpers.elementExists('[data-testid*="storage"], .storage-info"MB")');
       
       if (storageInfoExists) {
         await testBrowser.screenshot('files-test', 'storage-info');

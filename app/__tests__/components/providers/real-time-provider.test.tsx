@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { RealTimeProvider, useRealTime } from '@/components/providers/real-time-provider';
 import { useSession } from 'next-auth/react';
 
@@ -15,18 +15,7 @@ jest.mock('react-hot-toast', () => ({
 
 const mockUseSession = useSession as jest.MockedFunction<typeof useSession>;
 
-// Mock EventSource
-const mockEventSource = {
-  addEventListener: jest.fn(),
-  removeEventListener: jest.fn(),
-  close: jest.fn(),
-  readyState: 1,
-  CONNECTING: 0,
-  OPEN: 1,
-  CLOSED: 2,
-};
-
-global.EventSource = jest.fn(() => mockEventSource) as any;
+// Use the global EventSource mock from jest.setup.js instead of overriding it
 
 // Mock fetch for settings
 global.fetch = jest.fn();
@@ -91,6 +80,21 @@ describe('RealTimeProvider', () => {
         <TestComponent />
       </RealTimeProvider>
     );
+
+    // Wait for EventSource to be created
+    await waitFor(() => {
+      expect(global.EventSource).toHaveBeenCalledWith('/api/events/stream');
+    });
+
+    // Get the mock EventSource instance
+    const mockInstance = (global.EventSource as jest.MockedClass<typeof EventSource>).mock.results[0]?.value;
+    
+    if (mockInstance && mockInstance.simulateOpen) {
+      // Trigger the connection to open
+      act(() => {
+        mockInstance.simulateOpen();
+      });
+    }
 
     await waitFor(() => {
       expect(screen.getByTestId('connection-status')).toHaveTextContent('Connected');

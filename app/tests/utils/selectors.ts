@@ -23,7 +23,7 @@ export const NAVIGATION_SELECTORS = {
   SETTINGS_LINK: 'a[href="/dashboard/settings"], [data-testid="settings-link"]',
   
   // Mobile navigation
-  MOBILE_MENU_TRIGGER: 'button[data-testid="mobile-menu"], button:has([data-testid="menu-icon"])',
+  MOBILE_MENU_TRIGGER: 'button[data-testid="mobile-menu"], button[aria-label*="menu" i]',
   MOBILE_MENU: '[data-testid="mobile-menu-content"]',
   
   // Command palette
@@ -40,10 +40,10 @@ export const DASHBOARD_SELECTORS = {
   RECENT_ACTIVITY: '[data-testid="recent-activity"]',
   
   // Theme toggle
-  THEME_TOGGLE: 'button[data-testid="theme-toggle"], button:has([data-testid="theme-icon"])',
+  THEME_TOGGLE: 'button[data-testid="theme-toggle"], button[aria-label*="theme" i]',
   
   // Notifications
-  NOTIFICATIONS_BUTTON: 'button[data-testid="notifications"], button:has([data-testid="bell-icon"])',
+  NOTIFICATIONS_BUTTON: 'button[data-testid="notifications"], button[aria-label*="notification" i]',
   NOTIFICATION_ITEM: '[data-testid="notification-item"]'
 };
 
@@ -51,15 +51,15 @@ export const WORKSPACE_SELECTORS = {
   // Workspaces list
   WORKSPACES_CONTAINER: '[data-testid="workspaces-container"]',
   WORKSPACE_CARD: '[data-testid="workspace-card"]',
-  CREATE_WORKSPACE_BUTTON: '[data-testid="create-workspace-button"], button:has-text("New Workspace"), button:contains("New Workspace")',
+  CREATE_WORKSPACE_BUTTON: '[data-testid="create-workspace-button"]',
   
   // Create workspace modal
-  WORKSPACE_MODAL: '[data-testid="workspace-modal"], [role="dialog"]',
-  WORKSPACE_NAME_INPUT: '[data-testid="workspace-name-input"], input[name="name"], input[placeholder*="workspace name"]',
-  WORKSPACE_DESCRIPTION_INPUT: '[data-testid="workspace-description-input"], textarea[name="description"], textarea[placeholder*="description"]',
+  WORKSPACE_MODAL: '[data-testid="workspace-modal"]',
+  WORKSPACE_NAME_INPUT: '[data-testid="workspace-name-input"]',
+  WORKSPACE_DESCRIPTION_INPUT: '[data-testid="workspace-description-input"]',
   WORKSPACE_COLOR_PICKER: '[data-testid="color-picker"]',
   WORKSPACE_ICON_PICKER: '[data-testid="icon-picker"]',
-  WORKSPACE_SUBMIT_BUTTON: '[data-testid="workspace-submit-button"], button[type="submit"]',
+  WORKSPACE_SUBMIT_BUTTON: '[data-testid="workspace-submit-button"]',
   
   // Workspace actions
   WORKSPACE_MENU: '[data-testid="workspace-menu"]',
@@ -72,18 +72,18 @@ export const TASK_SELECTORS = {
   // Tasks page
   TASKS_CONTAINER: '[data-testid="tasks-container"]',
   TASK_ITEM: '[data-testid="task-item"]',
-  CREATE_TASK_BUTTON: '[data-testid="create-task"], button:has-text("New Task"), button:contains("New Task")',
+  CREATE_TASK_BUTTON: '[data-testid="create-task"]',
   
   // Task form
-  TASK_MODAL: '[data-testid="task-modal"], [role="dialog"]',
-  TASK_TITLE_INPUT: '[data-testid="task-title-input"], input[name="title"], input[placeholder*="title"]',
-  TASK_DESCRIPTION_INPUT: '[data-testid="task-description-input"], textarea[name="description"], textarea[placeholder*="description"]',
-  TASK_PRIORITY_SELECT: '[data-testid="task-priority-select"], select[name="priority"], [data-testid="priority-select"]',
-  TASK_STATUS_SELECT: '[data-testid="task-status-select"], select[name="status"], [data-testid="status-select"]',
-  TASK_WORKSPACE_SELECT: '[data-testid="task-workspace-select"], select[name="workspaceId"], [data-testid="workspace-select"]',
-  TASK_ASSIGNEE_SELECT: 'select[name="assignee"], [data-testid="assignee-select"]',
-  TASK_DUE_DATE_INPUT: '[data-testid="task-due-date-input"], input[type="date"], input[name="dueDate"]',
-  TASK_SUBMIT_BUTTON: '[data-testid="task-submit-button"], button[type="submit"], button[data-testid="create-task-submit"]',
+  TASK_MODAL: '[data-testid="task-modal"]',
+  TASK_TITLE_INPUT: '[data-testid="task-title-input"]',
+  TASK_DESCRIPTION_INPUT: '[data-testid="task-description-input"]',
+  TASK_PRIORITY_SELECT: '[data-testid="task-priority-select"]',
+  TASK_STATUS_SELECT: '[data-testid="task-status-select"]',
+  TASK_WORKSPACE_SELECT: '[data-testid="task-workspace-select"]',
+  TASK_ASSIGNEE_SELECT: '[data-testid="task-assignee-select"]',
+  TASK_DUE_DATE_INPUT: '[data-testid="task-due-date-input"]',
+  TASK_SUBMIT_BUTTON: '[data-testid="task-submit-button"]',
   
   // Task actions
   TASK_CHECKBOX: 'input[type="checkbox"][data-testid*="task"]',
@@ -105,13 +105,13 @@ export const FILE_SELECTORS = {
   // Files page
   FILES_CONTAINER: '[data-testid="files-container"]',
   FILE_ITEM: '[data-testid="file-item"]',
-  UPLOAD_BUTTON: '[data-testid="upload-button"], button:has-text("Upload Files"), input[type="file"]',
+  UPLOAD_BUTTON: '[data-testid="upload-button"]',
   UPLOAD_AREA: '[data-testid="upload-area"]',
   FILE_DROP_ZONE: '[data-testid="file-drop-zone"]',
-  FILE_INPUT: '[data-testid="file-input"], input[type="file"]',
-  FILE_WORKSPACE_SELECT: '[data-testid="file-workspace-select"], select[name="workspaceId"], [data-testid="file-workspace-select"]',
+  FILE_INPUT: '[data-testid="file-input"]',
+  FILE_WORKSPACE_SELECT: '[data-testid="file-workspace-select"]',
   UPLOAD_PROGRESS: '[data-testid="upload-progress"]',
-  UPLOAD_MODAL: '[data-testid="upload-modal"], [role="dialog"]',
+  UPLOAD_MODAL: '[data-testid="upload-modal"]',
   
   // File actions
   FILE_MENU: '[data-testid="file-menu"]',

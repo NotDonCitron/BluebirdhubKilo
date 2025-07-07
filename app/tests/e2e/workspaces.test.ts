@@ -123,7 +123,7 @@ describe('Workspaces Functionality Tests', () => {
       
       // Check for success indication (toast or redirect)
       const toastExists = await helpers.elementExists(TOAST_SELECTORS.TOAST_SUCCESS, 5000);
-      const newWorkspaceExists = await helpers.elementExists(`${WORKSPACE_SELECTORS.WORKSPACE_CARD}:has-text("${testData.name}")`, 5000);
+      const newWorkspaceExists = await helpers.elementExists(`[data-testid="${testdata.name}"]`, 5000);
       
       // At least one success indicator should be present
       expect(toastExists || newWorkspaceExists).toBe(true);
@@ -279,15 +279,15 @@ describe('Workspaces Functionality Tests', () => {
       logger.info('Testing workspace filters');
       
       // Look for filter buttons or dropdowns
-      const filterButtons = await helpers.getElementCount('button:has-text("All"), button:has-text("Active"), button:has-text("Archived")');
+      const filterButtons = await helpers.getElementCount('[data-testid="all"]"Active")');
       
       if (filterButtons > 0) {
         logger.info(`Found ${filterButtons} filter options`);
         
         // Test clicking different filters
-        const allButtonExists = await helpers.elementExists('button:has-text("All")');
+        const allButtonExists = await helpers.elementExists('[data-testid="all"]');
         if (allButtonExists) {
-          await helpers.clickElement('button:has-text("All")');
+          await helpers.clickElement('[data-testid="all"]');
           await new Promise(resolve => setTimeout(resolve, 1000));
           logger.success('All workspaces filter tested');
         }

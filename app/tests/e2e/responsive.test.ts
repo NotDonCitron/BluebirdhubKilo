@@ -384,7 +384,7 @@ describe('Responsive Design Tests', () => {
         await testBrowser.screenshot('responsive-test', `settings-${viewport.name.toLowerCase().replace(' ', '-')}`);
         
         // Check if settings tabs are accessible
-        const tabCount = await helpers.getElementCount('button:has-text("Profile"), button:has-text("Account"), button:has-text("Notifications")');
+        const tabCount = await helpers.getElementCount('[data-testid="profile"]"Account")');
         
         if (viewport.width <= 768) {
           // On mobile, tabs might be stacked or in a dropdown

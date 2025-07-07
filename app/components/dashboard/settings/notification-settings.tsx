@@ -140,11 +140,11 @@ export function NotificationSettings() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="notification-settings">
       {/* Delivery Methods */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+          <CardTitle className="flex items-center space-x-2" data-testid="notification-preferences-title">
             <Bell className="h-4 w-4" />
             <span>Delivery Methods</span>
           </CardTitle>
@@ -164,6 +164,7 @@ export function NotificationSettings() {
               </p>
             </div>
             <Switch
+              data-testid="email-notifications-switch"
               checked={settings.emailNotifications}
               onCheckedChange={(checked) => updateSetting('emailNotifications', checked)}
             />
@@ -180,6 +181,7 @@ export function NotificationSettings() {
               </p>
             </div>
             <Switch
+              data-testid="push-notifications-switch"
               checked={settings.pushNotifications}
               onCheckedChange={(checked) => updateSetting('pushNotifications', checked)}
             />
@@ -196,6 +198,7 @@ export function NotificationSettings() {
               </p>
             </div>
             <Switch
+              data-testid="desktop-notifications-switch"
               checked={settings.desktopNotifications}
               onCheckedChange={(checked) => updateSetting('desktopNotifications', checked)}
             />
@@ -212,6 +215,7 @@ export function NotificationSettings() {
               </p>
             </div>
             <Switch
+              data-testid="sound-enabled-switch"
               checked={settings.soundEnabled}
               onCheckedChange={(checked) => updateSetting('soundEnabled', checked)}
             />
@@ -236,6 +240,7 @@ export function NotificationSettings() {
               </p>
             </div>
             <Switch
+              data-testid="task-reminders-switch"
               checked={settings.taskReminders}
               onCheckedChange={(checked) => updateSetting('taskReminders', checked)}
             />
@@ -249,6 +254,7 @@ export function NotificationSettings() {
               </p>
             </div>
             <Switch
+              data-testid="comment-notifications-switch"
               checked={settings.commentNotifications}
               onCheckedChange={(checked) => updateSetting('commentNotifications', checked)}
             />
@@ -262,6 +268,7 @@ export function NotificationSettings() {
               </p>
             </div>
             <Switch
+              data-testid="mention-notifications-switch"
               checked={settings.mentionNotifications}
               onCheckedChange={(checked) => updateSetting('mentionNotifications', checked)}
             />
@@ -275,6 +282,7 @@ export function NotificationSettings() {
               </p>
             </div>
             <Switch
+              data-testid="workspace-invites-switch"
               checked={settings.workspaceInvites}
               onCheckedChange={(checked) => updateSetting('workspaceInvites', checked)}
             />
@@ -288,6 +296,7 @@ export function NotificationSettings() {
               </p>
             </div>
             <Switch
+              data-testid="system-updates-switch"
               checked={settings.systemUpdates}
               onCheckedChange={(checked) => updateSetting('systemUpdates', checked)}
             />
@@ -315,7 +324,7 @@ export function NotificationSettings() {
                 updateSetting('notificationFrequency', value)
               }
             >
-              <SelectTrigger>
+              <SelectTrigger data-testid="notification-frequency-select">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -339,6 +348,7 @@ export function NotificationSettings() {
                 </p>
               </div>
               <Switch
+                data-testid="quiet-hours-switch"
                 checked={settings.quietHoursEnabled}
                 onCheckedChange={(checked) => updateSetting('quietHoursEnabled', checked)}
               />
@@ -371,9 +381,9 @@ export function NotificationSettings() {
       </Card>
 
       <div className="flex justify-end">
-        <Button onClick={saveAllSettings} disabled={isSaving}>
+        <Button onClick={saveAllSettings} disabled={isSaving} data-testid="save-preferences-button">
           {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Save All Settings
+          Save Preferences
         </Button>
       </div>
     </div>

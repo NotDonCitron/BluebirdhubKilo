@@ -137,7 +137,7 @@ describe('Authentication Flow Tests', () => {
         await testBrowser.screenshot('auth-test', 'user-menu-opened');
         
         // Look for user email in dropdown
-        const userInfoVisible = await helpers.elementExists('[data-testid="user-email"], :has-text("john@doe.com")');
+        const userInfoVisible = await helpers.elementExists('[data-testid="user-email"]');
         
         if (userInfoVisible) {
           logger.success('User information displayed correctly');
@@ -188,10 +188,10 @@ describe('Authentication Flow Tests', () => {
         await new Promise(resolve => setTimeout(resolve, 1000));
         
         // Look for logout button
-        const logoutExists = await helpers.elementExists('button:has-text("Log out"), button:has-text("Sign out")');
+        const logoutExists = await helpers.elementExists('[data-testid="log-out"]"Sign out")');
         
         if (logoutExists) {
-          await helpers.clickElement('button:has-text("Log out"), button:has-text("Sign out")');
+          await helpers.clickElement('[data-testid="log-out"]"Sign out")');
           await new Promise(resolve => setTimeout(resolve, 3000));
           
           await testBrowser.screenshot('auth-test', 'after-logout');

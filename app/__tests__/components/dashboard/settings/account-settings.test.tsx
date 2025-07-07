@@ -5,6 +5,15 @@ import userEvent from '@testing-library/user-event';
 import { useSession } from 'next-auth/react';
 import { toast } from 'react-hot-toast';
 import { AccountSettings } from '@/components/dashboard/settings/account-settings';
+import { 
+  setupAccountSettingsMocks,
+  createSessionMock,
+  createToastMocks,
+  mockAccountInfo,
+  mockSecuritySettings,
+  mockActivityLogs,
+  createErrorResponse
+} from '@/__tests__/utils/test-mocks';
 
 // Mock next-auth
 jest.mock('next-auth/react');
@@ -12,10 +21,7 @@ const mockUseSession = useSession as jest.MockedFunction<typeof useSession>;
 
 // Mock react-hot-toast
 jest.mock('react-hot-toast');
-const mockToast = {
-  success: jest.fn(),
-  error: jest.fn(),
-};
+const mockToast = createToastMocks();
 (toast as any).success = mockToast.success;
 (toast as any).error = mockToast.error;
 
@@ -23,52 +29,13 @@ const mockToast = {
 const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
-
-// Mock data that exactly matches what the component expects
-const mockAccountInfo = {
-  id: 'user-123',
-  email: 'test@example.com',
-  createdAt: '2024-01-01T00:00:00.000Z',
-  lastLoginAt: '2024-01-15T10:00:00.000Z',
-  activeSessionsCount: 2,
-  storageUsed: 1024,
-  storageLimit: 10240
-};
-
-const mockSecuritySettings = {
-  twoFactorEnabled: false,
-  sessionTimeout: 60,
-  loginNotifications: true,
-  suspiciousActivityAlerts: true
-};
-
-const mockActivityLogs = [
-  {
-    id: 'log-1',
-    action: 'Login',
-    timestamp: '2024-01-15T10:00:00.000Z',
-    ipAddress: '192.168.1.1',
-    userAgent: 'Mozilla/5.0'
-  },
-  {
-    id: 'log-2',
-    action: 'Password changed',
-    timestamp: '2024-01-14T09:30:00.000Z',
-    ipAddress: '192.168.1.1',
-    userAgent: 'Mozilla/5.0'
-  }
-];
-
 describe('AccountSettings', () => {
   beforeEach(() => {
     jest.useFakeTimers();
     jest.setSystemTime(new Date('2024-01-15T12:00:00.000Z'));
     
-    // Mock session
-    mockUseSession.mockReturnValue({
-      data: { user: { email: 'test@example.com' } },
-      status: 'authenticated'
-    } as any);
+    // Mock session using utility
+    mockUseSession.mockReturnValue(createSessionMock() as any);
     
     // Clear all mocks
     jest.clearAllMocks();
@@ -83,23 +50,6 @@ describe('AccountSettings', () => {
     jest.useRealTimers();
   });
 
-  // Helper to setup successful mocks
-  const setupSuccessfulMocks = () => {
-    mockFetch
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockAccountInfo)
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockSecuritySettings)  
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockActivityLogs) // Ensure this is an array
-      });
-  };
-
   it('renders loading state initially', () => {
     // Don't setup any mocks so it stays in loading state
     render(<AccountSettings />);
@@ -109,7 +59,7 @@ describe('AccountSettings', () => {
   });
 
   it('renders account settings after loading', async () => {
-    setupSuccessfulMocks();
+    setupAccountSettingsMocks(mockFetch);
     
     await act(async () => {
       render(<AccountSettings />);
@@ -125,7 +75,7 @@ describe('AccountSettings', () => {
   });
 
   it('displays account information correctly', async () => {
-    setupSuccessfulMocks();
+    setupAccountSettingsMocks(mockFetch);
     
     await act(async () => {
       render(<AccountSettings />);
@@ -141,7 +91,7 @@ describe('AccountSettings', () => {
   });
 
   it('displays activity logs when data loads', async () => {
-    setupSuccessfulMocks();
+    setupAccountSettingsMocks(mockFetch);
     
     await act(async () => {
       render(<AccountSettings />);
@@ -155,7 +105,7 @@ describe('AccountSettings', () => {
   });
 
   it('handles email change interaction', async () => {
-    setupSuccessfulMocks();
+    setupAccountSettingsMocks(mockFetch);
     
     await act(async () => {
       render(<AccountSettings />);
@@ -169,7 +119,7 @@ describe('AccountSettings', () => {
   });
 
   it('toggles security settings', async () => {
-    setupSuccessfulMocks();
+    setupAccountSettingsMocks(mockFetch);
     
     await act(async () => {
       render(<AccountSettings />);
@@ -215,7 +165,7 @@ describe('AccountSettings', () => {
   });
 
   it('handles empty activity logs', async () => {
-    // Setup mocks with empty activity logs
+    // Setup mocks with empty activity logs using utility
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
@@ -242,28 +192,28 @@ describe('AccountSettings', () => {
   });
 
   it('handles session termination dialog', async () => {
-    setupSuccessfulMocks();
+    setupAccountSettingsMocks(mockFetch);
     
     await act(async () => {
       render(<AccountSettings />);
     });
     
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /terminate all sessions/i })).toBeInTheDocument();
+      expect(screen.getByTestId('terminate-sessions-trigger')).toBeInTheDocument();
     });
 
     expect(screen.getByText('Security')).toBeInTheDocument();
   });
 
   it('handles account deletion dialog', async () => {
-    setupSuccessfulMocks();
+    setupAccountSettingsMocks(mockFetch);
     
     await act(async () => {
       render(<AccountSettings />);
     });
     
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /delete account/i })).toBeInTheDocument();
+      expect(screen.getByTestId('delete-account-trigger')).toBeInTheDocument();
     });
 
     expect(screen.getByText('Danger Zone')).toBeInTheDocument();

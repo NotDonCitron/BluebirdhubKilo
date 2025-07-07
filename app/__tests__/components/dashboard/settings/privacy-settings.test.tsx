@@ -1,23 +1,25 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { toast } from 'react-hot-toast';
 import { PrivacySettings } from '@/components/dashboard/settings/privacy-settings';
+import { 
+  setupPrivacySettingsMocks,
+  mockPrivacySettings,
+  createSuccessResponse,
+  createErrorResponse,
+  createToastMocks
+} from '@/__tests__/utils/test-mocks';
+
+// Mock react-hot-toast
+jest.mock('react-hot-toast');
+const mockToast = createToastMocks();
+(toast as any).success = mockToast.success;
+(toast as any).error = mockToast.error;
 
 // Mock fetch responses
 const mockFetch = jest.fn();
 global.fetch = mockFetch;
-
-const mockPrivacySettings = {
-  profileVisibility: 'WORKSPACE_ONLY',
-  showOnlineStatus: true,
-  allowDirectMessages: true,
-  searchableByEmail: false,
-  showActivityStatus: true,
-  dataProcessingConsent: true,
-  marketingEmailsConsent: false,
-  analyticsConsent: true,
-  thirdPartyIntegrationsConsent: false,
-};
 
 // Mock URL.createObjectURL for data export tests
 global.URL.createObjectURL = jest.fn(() => 'mock-blob-url');
@@ -26,11 +28,11 @@ global.URL.revokeObjectURL = jest.fn();
 describe('PrivacySettings', () => {
   beforeEach(() => {
     mockFetch.mockClear();
-    // Mock successful GET request
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockPrivacySettings,
-    });
+    mockToast.success.mockClear();
+    mockToast.error.mockClear();
+    
+    // Mock successful GET request using centralized utility
+    setupPrivacySettingsMocks(mockFetch);
   });
 
   it('renders privacy settings form', async () => {
@@ -81,16 +83,29 @@ describe('PrivacySettings', () => {
 
   it('toggles privacy switches', async () => {
     const user = userEvent.setup();
-    render(<PrivacySettings />);
+    
+    // Mock successful PUT request for the toggle action
+    mockFetch.mockResolvedValueOnce(createSuccessResponse({ message: 'Setting updated' }) as any);
+    
+    await act(async () => {
+      render(<PrivacySettings />);
+    });
     
     await waitFor(() => {
       expect(screen.getByText('Privacy Settings')).toBeInTheDocument();
     });
 
     const onlineStatusToggle = screen.getByTestId('show-online-status-switch');
+    
+    // Check initial state - should be checked (true) based on mock data
+    expect(onlineStatusToggle).toHaveAttribute('aria-checked', 'true');
+    
     await user.click(onlineStatusToggle);
 
-    expect(onlineStatusToggle).not.toBeChecked();
+    // After clicking and successful API response, should toggle to unchecked
+    await waitFor(() => {
+      expect(onlineStatusToggle).toHaveAttribute('aria-checked', 'false');
+    });
   });
 
   it('saves privacy settings when form is submitted', async () => {

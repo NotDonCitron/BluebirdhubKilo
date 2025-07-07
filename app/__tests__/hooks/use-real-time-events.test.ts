@@ -14,6 +14,13 @@ describe('useRealTimeEvents', () => {
     mockEventSource = results[results.length - 1]?.value;
     expect(mockEventSource).toBeDefined();
     
+    // Ensure the connection opens immediately for tests
+    if (mockEventSource && mockEventSource.simulateOpen) {
+      act(() => {
+        mockEventSource.simulateOpen();
+      });
+    }
+    
     return mockEventSource;
   };
 
@@ -42,18 +49,16 @@ describe('useRealTimeEvents', () => {
   it('returns correct initial state after connection', async () => {
     const { result } = renderHook(() => useRealTimeEvents());
 
-    // Wait for EventSource to be created and connection to open
+    // Wait for EventSource to be created and connection state to be connecting
     await waitFor(() => {
       expect(global.EventSource).toHaveBeenCalled();
+      expect(result.current.connectionState).toBe('connecting');
     });
 
-    // Get the mock instance
-    mockEventSource = (global.EventSource as jest.MockedClass<typeof EventSource>).mock.results[0]?.value;
-
-    // Wait for the connection to establish
+    // The mock should auto-open after a short delay, wait for that
     await waitFor(() => {
       expect(result.current.connectionState).toBe('connected');
-    });
+    }, { timeout: 3000 });
 
     expect(result.current.isConnected).toBe(true);
     expect(result.current.lastEvent).toBe(null);
@@ -293,7 +298,10 @@ describe('useRealTimeEvents', () => {
       mockEventSource.close();
     });
 
-    expect(result.current.connectionState).toBe('disconnected');
+    await waitFor(() => {
+      expect(result.current.connectionState).toBe('disconnected');
+    });
+    
     expect(onDisconnect).toHaveBeenCalled();
   });
 

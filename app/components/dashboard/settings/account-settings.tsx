@@ -328,7 +328,7 @@ export function AccountSettings() {
             </div>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="outline">
+                <Button variant="outline" data-testid="terminate-sessions-trigger">
                   <RefreshCw className="mr-2 h-4 w-4" />
                   Terminate All Sessions
                 </Button>
@@ -341,8 +341,8 @@ export function AccountSettings() {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={terminateAllSessions}>
+                  <AlertDialogCancel data-testid="terminate-sessions-cancel">Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={terminateAllSessions} data-testid="terminate-sessions-confirm">
                     Terminate Sessions
                   </AlertDialogAction>
                 </AlertDialogFooter>
@@ -404,7 +404,7 @@ export function AccountSettings() {
             </div>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="destructive">
+                <Button variant="destructive" data-testid="delete-account-trigger">
                   <Trash2 className="mr-2 h-4 w-4" />
                   Delete Account
                 </Button>
@@ -424,10 +424,11 @@ export function AccountSettings() {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel data-testid="delete-account-cancel">Cancel</AlertDialogCancel>
                   <AlertDialogAction 
                     onClick={deleteAccount}
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    data-testid="delete-account-confirm"
                   >
                     Yes, Delete My Account
                   </AlertDialogAction>
