@@ -285,3 +285,6 @@ if (action === "chunk") {
 ## Error Logging Guidelines
 - Write me every error in a markdown file down dont do anythinr moew
 - Capture all errors systematically in a dedicated error log file
+
+## Authentication Errors
+- Invalid email or password when attempting login

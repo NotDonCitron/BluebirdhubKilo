@@ -109,7 +109,11 @@ export default function WorkspacesPage() {
   const handleCreateWorkspace = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('🏢 === FRONTEND WORKSPACE CREATION START ===');
+    console.log('📝 Workspace data:', newWorkspace);
+    
     try {
+      console.log('📡 Sending POST request to /api/workspaces...');
       const response = await fetch('/api/workspaces', {
         method: 'POST',
         headers: {
@@ -118,8 +122,13 @@ export default function WorkspacesPage() {
         body: JSON.stringify(newWorkspace),
       });
 
+      console.log('📊 Response status:', response.status);
+      console.log('📋 Response headers:', Object.fromEntries(response.headers.entries()));
+
       if (response.ok) {
         const workspace = await response.json();
+        console.log('✅ Workspace created successfully:', workspace);
+        
         setWorkspaces([workspace, ...workspaces]);
         setIsCreateDialogOpen(false);
         setNewWorkspace({
@@ -133,16 +142,49 @@ export default function WorkspacesPage() {
           description: 'Workspace created successfully',
         });
       } else {
-        throw new Error('Failed to create workspace');
+        // Get detailed error information
+        const errorText = await response.text();
+        console.log('❌ Response error body:', errorText);
+        
+        let errorData;
+        try {
+          errorData = JSON.parse(errorText);
+        } catch {
+          errorData = { error: errorText };
+        }
+        
+        console.log('💥 Parsed error data:', errorData);
+        
+        const errorMessage = errorData.error || errorData.message || `HTTP ${response.status}`;
+        const errorDetails = errorData.details ? ` (${errorData.details})` : '';
+        
+        toast({
+          title: 'Error',
+          description: `Failed to create workspace: ${errorMessage}${errorDetails}`,
+          variant: 'destructive',
+        });
+        
+        throw new Error(`HTTP ${response.status}: ${errorMessage}${errorDetails}`);
       }
     } catch (error) {
-      console.error('Error creating workspace:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to create workspace',
-        variant: 'destructive',
+      console.error('💥 Frontend workspace creation error:', error);
+      console.error('Error details:', {
+        message: (error as Error).message,
+        stack: (error as Error).stack,
+        name: (error as Error).name
       });
+      
+      // Only show toast if we haven't already shown one
+      if (!(error as Error).message.includes('HTTP')) {
+        toast({
+          title: 'Error',
+          description: 'Network error - failed to create workspace',
+          variant: 'destructive',
+        });
+      }
     }
+    
+    console.log('🏢 === FRONTEND WORKSPACE CREATION END ===');
   };
 
   const handleDeleteWorkspace = async (workspaceId: string) => {
@@ -212,12 +254,12 @@ export default function WorkspacesPage() {
         
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button data-testid="create-workspace-button">
               <Plus className="w-4 h-4 mr-2" />
               New Workspace
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[425px]" data-testid="workspace-modal">
             <form onSubmit={handleCreateWorkspace}>
               <DialogHeader>
                 <DialogTitle>Create New Workspace</DialogTitle>
@@ -230,6 +272,7 @@ export default function WorkspacesPage() {
                   <Label htmlFor="name">Workspace Name</Label>
                   <Input
                     id="name"
+                    data-testid="workspace-name-input"
                     placeholder="Enter workspace name"
                     value={newWorkspace.name}
                     onChange={(e) => setNewWorkspace({ ...newWorkspace, name: e.target.value })}
@@ -240,6 +283,7 @@ export default function WorkspacesPage() {
                   <Label htmlFor="description">Description</Label>
                   <Textarea
                     id="description"
+                    data-testid="workspace-description-input"
                     placeholder="Describe your workspace"
                     value={newWorkspace.description}
                     onChange={(e) => setNewWorkspace({ ...newWorkspace, description: e.target.value })}
@@ -248,11 +292,12 @@ export default function WorkspacesPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Color</Label>
-                    <div className="grid grid-cols-5 gap-2">
+                    <div className="grid grid-cols-5 gap-2" data-testid="color-picker">
                       {colors.map((color) => (
                         <button
                           key={color}
                           type="button"
+                          data-testid={`color-option-${color}`}
                           className={`w-8 h-8 rounded-lg border-2 ${
                             newWorkspace.color === color ? 'border-foreground' : 'border-transparent'
                           }`}
@@ -264,11 +309,12 @@ export default function WorkspacesPage() {
                   </div>
                   <div className="space-y-2">
                     <Label>Icon</Label>
-                    <div className="grid grid-cols-5 gap-2">
+                    <div className="grid grid-cols-5 gap-2" data-testid="icon-picker">
                       {icons.map((icon) => (
                         <button
                           key={icon}
                           type="button"
+                          data-testid={`icon-option-${icon}`}
                           className={`w-8 h-8 rounded-lg border-2 flex items-center justify-center text-sm ${
                             newWorkspace.icon === icon ? 'border-foreground' : 'border-muted'
                           }`}
@@ -282,7 +328,7 @@ export default function WorkspacesPage() {
                 </div>
               </div>
               <DialogFooter>
-                <Button type="submit">Create Workspace</Button>
+                <Button type="submit" data-testid="workspace-submit-button">Create Workspace</Button>
               </DialogFooter>
             </form>
           </DialogContent>

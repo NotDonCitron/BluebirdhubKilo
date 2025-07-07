@@ -141,13 +141,13 @@ export function PrivacySettings() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="privacy-settings">
       {/* Profile Visibility */}
-      <Card>
+      <Card data-testid="profile-visibility-card">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+          <CardTitle className="flex items-center space-x-2" data-testid="privacy-settings-title">
             <Eye className="h-4 w-4" />
-            <span>Profile Visibility</span>
+            <span>Privacy Settings</span>
           </CardTitle>
           <CardDescription>
             Control who can see your profile and activity information.
@@ -162,7 +162,7 @@ export function PrivacySettings() {
                 updateSetting('profileVisibility', value)
               }
             >
-              <SelectTrigger>
+              <SelectTrigger data-testid="profile-visibility-select">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -211,6 +211,7 @@ export function PrivacySettings() {
               </p>
             </div>
             <Switch
+              data-testid="show-activity-status-switch"
               checked={settings.activityVisible}
               onCheckedChange={(checked) => updateSetting('activityVisible', checked)}
             />
@@ -224,6 +225,7 @@ export function PrivacySettings() {
               </p>
             </div>
             <Switch
+              data-testid="show-online-status-switch"
               checked={settings.showOnlineStatus}
               onCheckedChange={(checked) => updateSetting('showOnlineStatus', checked)}
             />
@@ -251,6 +253,7 @@ export function PrivacySettings() {
               </p>
             </div>
             <Switch
+              data-testid="allow-direct-messages-switch"
               checked={settings.allowDirectMessages}
               onCheckedChange={(checked) => updateSetting('allowDirectMessages', checked)}
             />
@@ -294,6 +297,7 @@ export function PrivacySettings() {
               </p>
             </div>
             <Switch
+              data-testid="data-processing-consent-switch"
               checked={settings.dataProcessingConsent}
               onCheckedChange={(checked) => updateSetting('dataProcessingConsent', checked)}
               disabled={true}
@@ -308,6 +312,7 @@ export function PrivacySettings() {
               </p>
             </div>
             <Switch
+              data-testid="analytics-consent-switch"
               checked={settings.analyticsConsent}
               onCheckedChange={(checked) => updateSetting('analyticsConsent', checked)}
             />
@@ -321,6 +326,7 @@ export function PrivacySettings() {
               </p>
             </div>
             <Switch
+              data-testid="marketing-emails-consent-switch"
               checked={settings.marketingConsent}
               onCheckedChange={(checked) => updateSetting('marketingConsent', checked)}
             />
@@ -357,7 +363,7 @@ export function PrivacySettings() {
                 Download a copy of all your data from BlueBirdHub
               </p>
             </div>
-            <Button variant="outline" onClick={exportData}>
+            <Button variant="outline" onClick={exportData} data-testid="export-data-button">
               <Download className="mr-2 h-4 w-4" />
               Export Data
             </Button>
@@ -381,9 +387,9 @@ export function PrivacySettings() {
       </Card>
 
       <div className="flex justify-end">
-        <Button onClick={saveAllSettings} disabled={isSaving}>
+        <Button onClick={saveAllSettings} disabled={isSaving} data-testid="save-settings-button">
           {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Save All Settings
+          Save Settings
         </Button>
       </div>
     </div>

@@ -12,36 +12,63 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
-
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email
-          }
+        console.log('🔐 NextAuth authorize called with:', {
+          email: credentials?.email,
+          hasPassword: !!credentials?.password,
+          timestamp: new Date().toISOString()
         });
 
-        if (!user || !user.password) {
+        if (!credentials?.email || !credentials?.password) {
+          console.log('❌ Missing credentials');
           return null;
         }
 
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
+        try {
+          const user = await prisma.user.findUnique({
+            where: {
+              email: credentials.email
+            }
+          });
 
-        if (!isPasswordValid) {
+          console.log('👤 User lookup result:', {
+            found: !!user,
+            email: user?.email,
+            hasPassword: !!user?.password,
+            role: user?.role
+          });
+
+          if (!user || !user.password) {
+            console.log('❌ User not found or no password');
+            return null;
+          }
+
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          console.log('🔑 Password validation:', {
+            isValid: isPasswordValid,
+            email: user.email
+          });
+
+          if (!isPasswordValid) {
+            console.log('❌ Invalid password');
+            return null;
+          }
+
+          console.log('✅ Authentication successful for:', user.email);
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            role: user.role,
+          };
+        } catch (error) {
+          console.error('💥 Auth error:', error);
           return null;
         }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          image: user.image,
-          role: user.role,
-        };
       }
     })
   ],
@@ -55,8 +82,9 @@ export const authOptions: NextAuthOptions = {
     async redirect({ url, baseUrl }) {
       // Allows relative callback URLs
       if (url.startsWith('/')) return `${baseUrl}${url}`;
-      // Allows callback URLs on the same origin
+      // Allows callback URLs on the same origin  
       if (new URL(url).origin === baseUrl) return url;
+      // Default redirect to dashboard after successful login
       return `${baseUrl}/dashboard`;
     },
     async jwt({ token, user }) {

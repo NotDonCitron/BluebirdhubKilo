@@ -289,12 +289,12 @@ export default function TasksPage() {
         
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button data-testid="create-task">
               <Plus className="w-4 h-4 mr-2" />
               New Task
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent className="sm:max-w-[500px]" data-testid="task-modal">
             <form onSubmit={handleCreateTask}>
               <DialogHeader>
                 <DialogTitle>Create New Task</DialogTitle>
@@ -307,6 +307,8 @@ export default function TasksPage() {
                   <Label htmlFor="title">Task Title</Label>
                   <Input
                     id="title"
+                    name="title"
+                    data-testid="task-title-input"
                     placeholder="Enter task title"
                     value={newTask.title}
                     onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
@@ -317,6 +319,8 @@ export default function TasksPage() {
                   <Label htmlFor="description">Description</Label>
                   <Textarea
                     id="description"
+                    name="description"
+                    data-testid="task-description-input"
                     placeholder="Describe the task"
                     value={newTask.description}
                     onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
@@ -326,7 +330,7 @@ export default function TasksPage() {
                   <div className="space-y-2">
                     <Label>Workspace</Label>
                     <Select value={newTask.workspaceId} onValueChange={(value) => setNewTask({ ...newTask, workspaceId: value })}>
-                      <SelectTrigger>
+                      <SelectTrigger data-testid="task-workspace-select">
                         <SelectValue placeholder="Select workspace" />
                       </SelectTrigger>
                       <SelectContent>
@@ -347,7 +351,7 @@ export default function TasksPage() {
                   <div className="space-y-2">
                     <Label>Priority</Label>
                     <Select value={newTask.priority} onValueChange={(value) => setNewTask({ ...newTask, priority: value })}>
-                      <SelectTrigger>
+                      <SelectTrigger data-testid="task-priority-select">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -363,6 +367,8 @@ export default function TasksPage() {
                   <Label htmlFor="dueDate">Due Date</Label>
                   <Input
                     id="dueDate"
+                    name="dueDate"
+                    data-testid="task-due-date-input"
                     type="date"
                     value={newTask.dueDate}
                     onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
@@ -370,7 +376,7 @@ export default function TasksPage() {
                 </div>
               </div>
               <DialogFooter>
-                <Button type="submit">Create Task</Button>
+                <Button type="submit" data-testid="task-submit-button">Create Task</Button>
               </DialogFooter>
             </form>
           </DialogContent>

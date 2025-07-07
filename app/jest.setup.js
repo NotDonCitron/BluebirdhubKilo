@@ -63,6 +63,99 @@ jest.mock('next-auth/react', () => ({
 // Mock fetch globally
 global.fetch = jest.fn();
 
+// Mock FileReader for file upload tests
+class MockFileReader {
+  constructor() {
+    this.readyState = 0;
+    this.result = null;
+    this.error = null;
+    this.onload = null;
+    this.onerror = null;
+    this.onloadend = null;
+    this.onprogress = null;
+  }
+
+  readAsArrayBuffer(file) {
+    this.readyState = 1;
+    setTimeout(() => {
+      this.readyState = 2;
+      this.result = new ArrayBuffer(file.size || 0);
+      if (this.onload) this.onload({ target: this });
+      if (this.onloadend) this.onloadend({ target: this });
+    }, 0);
+  }
+
+  readAsText(file) {
+    this.readyState = 1;
+    setTimeout(() => {
+      this.readyState = 2;
+      this.result = file.content || '';
+      if (this.onload) this.onload({ target: this });
+      if (this.onloadend) this.onloadend({ target: this });
+    }, 0);
+  }
+
+  readAsDataURL(file) {
+    this.readyState = 1;
+    setTimeout(() => {
+      this.readyState = 2;
+      this.result = `data:${file.type || 'application/octet-stream'};base64,${btoa(file.content || '')}`;
+      if (this.onload) this.onload({ target: this });
+      if (this.onloadend) this.onloadend({ target: this });
+    }, 0);
+  }
+
+  abort() {
+    this.readyState = 2;
+    if (this.onloadend) this.onloadend({ target: this });
+  }
+}
+
+global.FileReader = MockFileReader;
+
+// Mock File constructor
+global.File = class MockFile {
+  constructor(parts, name, options = {}) {
+    this.name = name;
+    this.size = parts.reduce((acc, part) => acc + (part.length || 0), 0);
+    this.type = options.type || '';
+    this.lastModified = options.lastModified || Date.now();
+    this.content = parts.join('');
+  }
+};
+
+// Mock URL methods for file downloads
+global.URL.createObjectURL = jest.fn(() => 'mock-object-url');
+global.URL.revokeObjectURL = jest.fn();
+
+// Mock hasPointerCapture for jsdom compatibility
+Element.prototype.hasPointerCapture = jest.fn(() => false);
+Element.prototype.setPointerCapture = jest.fn();
+Element.prototype.releasePointerCapture = jest.fn();
+
+// Mock resizeObserver
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
+
+// Mock scrollIntoView
+Element.prototype.scrollIntoView = jest.fn();
+
+// Mock getBoundingClientRect
+Element.prototype.getBoundingClientRect = jest.fn(() => ({
+  x: 0,
+  y: 0,
+  width: 0,
+  height: 0,
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+  toJSON: jest.fn(),
+}));
+
 // Mock EventSource for SSE tests
 class MockEventSource {
   constructor(url) {

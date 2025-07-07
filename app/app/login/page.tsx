@@ -41,25 +41,21 @@ export default function LoginPage() {
       const result = await signIn('credentials', {
         email: loginForm.email,
         password: loginForm.password,
+        callbackUrl: '/dashboard',
         redirect: false
       });
 
       if (result?.error) {
         setError('Invalid email or password');
-      } else {
+      } else if (result?.url) {
         toast({
           title: 'Welcome back!',
           description: 'You have been successfully signed in.',
         });
         
-        console.log('Login successful, using NextAuth redirect...');
-        // Use NextAuth's built-in redirect after successful authentication
-        await signIn('credentials', {
-          email: loginForm.email,
-          password: loginForm.password,
-          callbackUrl: '/dashboard',
-          redirect: true
-        });
+        // Redirect using window.location for proper navigation
+        window.location.href = result.url;
+        return;
       }
     } catch (error) {
       setError('An unexpected error occurred');
@@ -90,14 +86,18 @@ export default function LoginPage() {
           description: 'Your account has been created successfully. Please sign in.',
         });
         
-        // Auto sign in after successful signup using NextAuth redirect
-        console.log('Account created, signing in with NextAuth redirect...');
-        await signIn('credentials', {
+        // Auto sign in after successful signup
+        const signInResult = await signIn('credentials', {
           email: signupForm.email,
           password: signupForm.password,
           callbackUrl: '/dashboard',
-          redirect: true
+          redirect: false
         });
+
+        if (signInResult?.url) {
+          window.location.href = signInResult.url;
+          return;
+        }
       } else {
         setError(data.error || 'Failed to create account');
       }
@@ -118,14 +118,20 @@ export default function LoginPage() {
         description: 'Welcome to the demo workspace.',
       });
       
-      console.log('Demo login starting with NextAuth redirect...');
-      // Use NextAuth's built-in redirect for demo login
-      await signIn('credentials', {
+      // Demo login with proper redirect handling
+      const demoResult = await signIn('credentials', {
         email: 'john@doe.com',
         password: 'johndoe123',
         callbackUrl: '/dashboard',
-        redirect: true
+        redirect: false
       });
+
+      if (demoResult?.url) {
+        window.location.href = demoResult.url;
+        return;
+      } else if (demoResult?.error) {
+        setError('Demo login failed');
+      }
     } catch (error) {
       setError('An unexpected error occurred');
     } finally {
@@ -171,6 +177,7 @@ export default function LoginPage() {
               disabled={isLoading}
               className="w-full"
               size="lg"
+              data-testid="demo-login-button"
             >
               {isLoading ? 'Accessing...' : 'Enter Demo Workspace'}
             </Button>
@@ -205,6 +212,7 @@ export default function LoginPage() {
                         value={loginForm.email}
                         onChange={(e) => setLoginForm(prev => ({ ...prev, email: e.target.value }))}
                         className="pl-10"
+                        data-testid="login-email-input"
                         required
                       />
                     </div>
@@ -220,6 +228,7 @@ export default function LoginPage() {
                         value={loginForm.password}
                         onChange={(e) => setLoginForm(prev => ({ ...prev, password: e.target.value }))}
                         className="pl-10 pr-10"
+                        data-testid="login-password-input"
                         required
                       />
                       <Button
@@ -237,7 +246,7 @@ export default function LoginPage() {
                       </Button>
                     </div>
                   </div>
-                  <Button type="submit" disabled={isLoading} className="w-full">
+                  <Button type="submit" disabled={isLoading} className="w-full" data-testid="login-submit-button">
                     {isLoading ? 'Signing in...' : 'Sign In'}
                   </Button>
                 </form>

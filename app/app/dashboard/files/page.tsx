@@ -254,12 +254,12 @@ export default function FilesPage() {
         
         <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button data-testid="upload-button">
               <Upload className="w-4 h-4 mr-2" />
               Upload Files
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent className="sm:max-w-[500px]" data-testid="upload-modal">
             <DialogHeader>
               <DialogTitle>Upload Files</DialogTitle>
               <DialogDescription>
@@ -270,7 +270,7 @@ export default function FilesPage() {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Select Workspace</label>
                 <Select value={selectedWorkspace} onValueChange={setSelectedWorkspace}>
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="file-workspace-select">
                     <SelectValue placeholder="Select workspace" />
                   </SelectTrigger>
                   <SelectContent>
@@ -291,11 +291,12 @@ export default function FilesPage() {
               
               <div
                 {...getRootProps()}
+                data-testid="file-drop-zone"
                 className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer ${
                   isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'
                 } ${!selectedWorkspace ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <input {...getInputProps()} />
+                <input {...getInputProps()} data-testid="file-input" />
                 <Upload className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                 {isDragActive ? (
                   <p className="text-primary">Drop files here...</p>

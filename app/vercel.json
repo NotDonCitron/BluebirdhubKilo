@@ -3,11 +3,8 @@
   "framework": "nextjs",
   "buildCommand": "npx prisma generate && npm run build",
   "regions": ["fra1"],
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/dashboard",
-      "permanent": false
-    }
-  ]
+  "env": {
+    "NEXTAUTH_URL": "https://app-o7ddt78zw-phhttps-projects.vercel.app",
+    "NODE_ENV": "production"
+  }
 }
