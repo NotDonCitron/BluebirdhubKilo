@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { storage } from "@/app/lib/storage";
+import { appLogger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -9,7 +11,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    console.log("Starting cleanup of orphaned chunks...");
+    appLogger.info("Starting cleanup of orphaned chunks...");
     
     // List all files in the temp directory
     const tempFiles = await storage.list("temp/");
@@ -27,10 +29,10 @@ export async function GET(request: NextRequest) {
         if (age > MAX_CHUNK_AGE) {
           await storage.delete(`temp/${file}`);
           cleaned++;
-          console.log(`Deleted orphaned chunk: temp/${file}`);
+          appLogger.info(`Deleted orphaned chunk: temp/${file}`);
         }
       } catch (error) {
-        console.error(`Failed to clean up chunk temp/${file}:`, error);
+        appLogger.error(`Failed to clean up chunk temp/${file}:`, error as Error);
         errors++;
       }
     }
@@ -42,11 +44,11 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString(),
     };
     
-    console.log(`Cleanup complete:`, result);
+    appLogger.info(`Cleanup complete`, result);
     
     return NextResponse.json(result);
   } catch (error) {
-    console.error("Chunk cleanup failed:", error);
+    appLogger.error("Chunk cleanup failed:", error as Error);
     return NextResponse.json(
       { 
         error: "Cleanup failed", 

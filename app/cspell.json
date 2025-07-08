@@ -1,0 +1,35 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "maxsize",
+    "abacushub",
+    "HSTS",
+    "nosniff",
+    "supabase",
+    "NEXTAUTH",
+    "appflowy",
+    "SAMEORIGIN",
+    "INTERACTABLE",
+    "interactable",
+    "networkidle",
+    "clickability",
+    "unclickable",
+    "sels",
+    "scrollability",
+    "Segoe",
+    "wird",
+    "nicht",
+    "richtig",
+    "dargestelt"
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    "coverage/**",
+    "dist/**",
+    "build/**",
+    ".next/**",
+    "*.min.js",
+    "*.min.css"
+  ]
+}

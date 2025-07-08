@@ -1,0 +1,45 @@
+{
+  "timestamp": "2025-07-07T21:01:54.180Z",
+  "url": "https://clineapi-460920.uc.r.appspot.com",
+  "consoleLogs": [
+    "error: Failed to load resource: the server responded with a status of 404 ()",
+    "log: Session timeout monitoring active: false",
+    "verbose: [DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o",
+    "warn: The resource https://clineapi-460920.uc.r.appspot.com/_next/static/media/e4af272ccee01ff0-s.p.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally."
+  ],
+  "networkErrors": [
+    "Failed: https://clineapi-460920.uc.r.appspot.com/_next/static/css/43e74cd85b506d0a.css - net::ERR_ABORTED"
+  ],
+  "performanceMetrics": {
+    "Timestamp": 89167.914703,
+    "Documents": 9,
+    "Frames": 2,
+    "JSEventListeners": 1578,
+    "Nodes": 688,
+    "LayoutCount": 52,
+    "RecalcStyleCount": 292,
+    "LayoutDuration": 0.032305,
+    "RecalcStyleDuration": 0.028145,
+    "ScriptDuration": 0.187106,
+    "TaskDuration": 0.524984,
+    "JSHeapUsedSize": 11979428,
+    "JSHeapTotalSize": 18874368
+  },
+  "assetStatus": {
+    "cssLinks": 1,
+    "scriptTags": 13,
+    "loadedStylesheets": 2,
+    "hasInlineStyles": true,
+    "nextJSLoaded": false,
+    "bodyStyles": {
+      "fontSize": "16px",
+      "color": "rgb(0, 0, 0)",
+      "backgroundColor": "rgba(0, 0, 0, 0)"
+    }
+  },
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  }
+}

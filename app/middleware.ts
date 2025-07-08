@@ -1,21 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
-import { generateCSPHeader } from './lib/validation';
-import { createIPRateLimit } from './lib/rate-limiting';
 
-// Rate limiters for different endpoints
-const generalRateLimit = createIPRateLimit(100, 60 * 1000); // 100 requests per minute
-const authRateLimit = createIPRateLimit(5, 15 * 60 * 1000); // 5 requests per 15 minutes
-const apiRateLimit = createIPRateLimit(200, 60 * 1000); // 200 requests per minute
+import { createIPRateLimit } from './lib/rate-limiting';
+import { generateCSPHeader } from './lib/validation';
+
+// Rate limiters for different endpoints with environment-based limits
+const rateLimitRequests = parseInt(process.env.RATE_LIMIT_REQUESTS || '100', 10);
+const rateLimitWindow = parseInt(process.env.RATE_LIMIT_WINDOW || '60000', 10);
+const disableSSERateLimiting = process.env.DISABLE_SSE_RATE_LIMITING === 'true';
+
+const generalRateLimit = createIPRateLimit(rateLimitRequests, rateLimitWindow);
+const authRateLimit = createIPRateLimit(rateLimitRequests, rateLimitWindow);
+const apiRateLimit = createIPRateLimit(rateLimitRequests, rateLimitWindow);
 
 export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+  
+  // Block debug endpoints in production
+  if (process.env.NODE_ENV === 'production' && pathname.startsWith('/api/debug')) {
+    return new NextResponse('Not Found', { status: 404 });
+  }
+  
   const response = NextResponse.next();
   
   // Security headers
   addSecurityHeaders(response);
   
-  // Rate limiting
-  if (!handleRateLimit(request)) {
+  // Rate limiting (skip if disabled for development)
+  if (!disableSSERateLimiting && !handleRateLimit(request)) {
     return new NextResponse('Too Many Requests', { status: 429 });
   }
   
@@ -36,18 +48,18 @@ export async function middleware(request: NextRequest) {
     }
   }
   
-  // CSRF protection for POST requests (disabled for development)
-  // TODO: Re-enable CSRF protection in production
-  /*
+  // CSRF protection for POST requests
   if (request.method === 'POST' && !request.nextUrl.pathname.startsWith('/api/auth/')) {
     const csrfToken = request.headers.get('x-csrf-token');
     const sessionToken = request.headers.get('x-session-token');
     
-    if (!csrfToken || !sessionToken || csrfToken !== sessionToken) {
-      return new NextResponse('CSRF token validation failed', { status: 403 });
+    // Skip CSRF for upload endpoints as they use multipart/form-data
+    if (!request.nextUrl.pathname.startsWith('/api/upload')) {
+      if (!csrfToken || !sessionToken || csrfToken !== sessionToken) {
+        return new NextResponse('CSRF token validation failed', { status: 403 });
+      }
     }
   }
-  */
   
   return response;
 }
@@ -126,10 +138,14 @@ async function shouldProtectRoute(request: NextRequest): Promise<boolean> {
     '/about',
     '/privacy',
     '/terms',
-    '/test-upload',
-    '/api/upload', // Temporarily public for testing
-    '/api/debug',
+    '/_next',
+    '/favicon.ico',
   ];
+  
+  // Add debug routes only in development
+  if (process.env.NODE_ENV === 'development') {
+    publicRoutes.push('/api/debug');
+  }
   
   // Check if route is explicitly public
   if (publicRoutes.some(route => pathname.startsWith(route))) {

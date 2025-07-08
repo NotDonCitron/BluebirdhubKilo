@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/react';
 
 interface RealTimeEvent {
   type: string;
-  data: any;
+  data: Record<string, unknown>;
   timestamp: string;
 }
 
@@ -33,6 +33,20 @@ export function useRealTimeEvents(options: UseRealTimeEventsOptions = {}) {
     reconnectDelay = 5000,
   } = options;
 
+  // Use refs for callbacks to avoid dependency issues
+  const onEventRef = useRef(onEvent);
+  const onConnectRef = useRef(onConnect);
+  const onDisconnectRef = useRef(onDisconnect);
+  const onErrorRef = useRef(onError);
+
+  // Update refs when callbacks change
+  useEffect(() => {
+    onEventRef.current = onEvent;
+    onConnectRef.current = onConnect;
+    onDisconnectRef.current = onDisconnect;
+    onErrorRef.current = onError;
+  });
+
   const disconnect = useCallback(() => {
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
@@ -51,8 +65,14 @@ export function useRealTimeEvents(options: UseRealTimeEventsOptions = {}) {
       return;
     }
 
+    // Close existing connection first
     if (eventSourceRef.current) {
-      disconnect();
+      eventSourceRef.current.close();
+      eventSourceRef.current = null;
+    }
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
     }
 
     setConnectionState('connecting');
@@ -64,14 +84,14 @@ export function useRealTimeEvents(options: UseRealTimeEventsOptions = {}) {
       eventSource.onopen = () => {
         setIsConnected(true);
         setConnectionState('connected');
-        onConnect?.();
+        onConnectRef.current?.();
       };
 
       eventSource.onmessage = (event) => {
         try {
           const parsedEvent: RealTimeEvent = JSON.parse(event.data);
           setLastEvent(parsedEvent);
-          onEvent?.(parsedEvent);
+          onEventRef.current?.(parsedEvent);
         } catch (error) {
           console.error('Error parsing SSE event:', error);
         }
@@ -81,7 +101,7 @@ export function useRealTimeEvents(options: UseRealTimeEventsOptions = {}) {
         console.error('SSE connection error:', error);
         setIsConnected(false);
         setConnectionState('error');
-        onError?.(error);
+        onErrorRef.current?.(error);
 
         // Auto-reconnect if enabled
         if (autoReconnect && !reconnectTimeoutRef.current) {
@@ -95,35 +115,106 @@ export function useRealTimeEvents(options: UseRealTimeEventsOptions = {}) {
       eventSource.addEventListener('close', () => {
         setIsConnected(false);
         setConnectionState('disconnected');
-        onDisconnect?.();
+        onDisconnectRef.current?.();
       });
 
     } catch (error) {
       console.error('Error creating EventSource:', error);
       setConnectionState('error');
     }
-  }, [session?.user, onConnect, onDisconnect, onError, onEvent, autoReconnect, reconnectDelay, disconnect]);
+  }, [session?.user, autoReconnect, reconnectDelay]);
 
   useEffect(() => {
-    if (session?.user) {
-      connect();
-    } else {
-      disconnect();
+    if (!session?.user) {
+      // Disconnect if no user
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+        eventSourceRef.current = null;
+      }
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+        reconnectTimeoutRef.current = null;
+      }
+      setIsConnected(false);
+      setConnectionState('disconnected');
+      return;
     }
 
-    return () => {
-      disconnect();
-    };
-  }, [session?.user, connect, disconnect]);
+    // Connect logic directly in effect
+    // Close existing connection first
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+      eventSourceRef.current = null;
+    }
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
+    }
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      disconnect();
-    };
-  }, [disconnect]);
+    setConnectionState('connecting');
 
-  const sendEvent = useCallback(async (eventType: string, data: any) => {
+    try {
+      const eventSource = new EventSource('/api/events/stream');
+      eventSourceRef.current = eventSource;
+
+      eventSource.onopen = () => {
+        setIsConnected(true);
+        setConnectionState('connected');
+        onConnectRef.current?.();
+      };
+
+      eventSource.onmessage = (event) => {
+        try {
+          const parsedEvent: RealTimeEvent = JSON.parse(event.data);
+          setLastEvent(parsedEvent);
+          onEventRef.current?.(parsedEvent);
+        } catch (error) {
+          console.error('Error parsing SSE event:', error);
+        }
+      };
+
+      eventSource.onerror = (error) => {
+        console.error('SSE connection error:', error);
+        setIsConnected(false);
+        setConnectionState('error');
+        onErrorRef.current?.(error);
+
+        // Auto-reconnect if enabled
+        if (autoReconnect && !reconnectTimeoutRef.current) {
+          reconnectTimeoutRef.current = setTimeout(() => {
+            reconnectTimeoutRef.current = null;
+            connect();
+          }, reconnectDelay);
+        }
+      };
+
+      eventSource.addEventListener('close', () => {
+        setIsConnected(false);
+        setConnectionState('disconnected');
+        onDisconnectRef.current?.();
+      });
+
+    } catch (error) {
+      console.error('Error creating EventSource:', error);
+      setConnectionState('error');
+    }
+
+    // Cleanup on unmount or session change
+    return () => {
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+        eventSourceRef.current = null;
+      }
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+        reconnectTimeoutRef.current = null;
+      }
+      setIsConnected(false);
+      setConnectionState('disconnected');
+    };
+  }, [session?.user, autoReconnect, reconnectDelay, connect]);
+
+  const sendEvent = useCallback(async (eventType: string, data: Record<string, unknown>) => {
     try {
       const response = await fetch('/api/events/send', {
         method: 'POST',

@@ -1,11 +1,10 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -40,9 +39,40 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { appLogger } from '@/lib/logger';
+
+interface WorkspaceMember {
+  id: string;
+  user: {
+    id: string;
+    name: string;
+    image?: string;
+  };
+  role: string;
+}
+
+interface Workspace {
+  id: string;
+  name: string;
+  description?: string;
+  color: string;
+  icon?: string;
+  updatedAt: string;
+  owner?: {
+    id: string;
+    name?: string;
+    email: string;
+    image?: string;
+  };
+  members?: WorkspaceMember[];
+  _count: {
+    tasks: number;
+    files: number;
+  };
+}
 
 export default function WorkspacesPage() {
-  const [workspaces, setWorkspaces] = useState<any[]>([]);
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -55,17 +85,13 @@ export default function WorkspacesPage() {
     icon: '🚀'
   });
 
-  useEffect(() => {
-    fetchWorkspaces();
-  }, []);
-
-  const fetchWorkspaces = async () => {
+  const fetchWorkspaces = useCallback(async () => {
     try {
       const response = await fetch('/api/workspaces');
       const data = await response.json();
       setWorkspaces(data);
     } catch (error) {
-      console.error('Error fetching workspaces:', error);
+      appLogger.error('Error fetching workspaces:', error);
       toast({
         title: 'Error',
         description: 'Failed to load workspaces',
@@ -74,12 +100,21 @@ export default function WorkspacesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    fetchWorkspaces();
+  }, [fetchWorkspaces]);
+
 
   const handleCreateWorkspace = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    appLogger.info('🏢 === FRONTEND WORKSPACE CREATION START ===');
+    appLogger.info('📝 Workspace data:', newWorkspace);
+    
     try {
+      appLogger.info('📡 Sending POST request to /api/workspaces...');
       const response = await fetch('/api/workspaces', {
         method: 'POST',
         headers: {
@@ -88,8 +123,13 @@ export default function WorkspacesPage() {
         body: JSON.stringify(newWorkspace),
       });
 
+      appLogger.info('📊 Response status:', response.status);
+      appLogger.info('📋 Response headers:', Object.fromEntries(response.headers.entries()));
+
       if (response.ok) {
         const workspace = await response.json();
+        appLogger.info('✅ Workspace created successfully:', workspace);
+        
         setWorkspaces([workspace, ...workspaces]);
         setIsCreateDialogOpen(false);
         setNewWorkspace({
@@ -103,16 +143,47 @@ export default function WorkspacesPage() {
           description: 'Workspace created successfully',
         });
       } else {
-        throw new Error('Failed to create workspace');
+        // Get detailed error information
+        const errorText = await response.text();
+        appLogger.info('❌ Response error body:', errorText);
+        
+        let errorData;
+        try {
+          errorData = JSON.parse(errorText);
+        } catch {
+          errorData = { error: errorText };
+        }
+        
+        appLogger.info('💥 Parsed error data:', errorData);
+        
+        const errorMessage = errorData.error || errorData.message || `HTTP ${response.status}`;
+        const errorDetails = errorData.details ? ` (${errorData.details})` : '';
+        
+        toast({
+          title: 'Error',
+          description: `Failed to create workspace: ${errorMessage}${errorDetails}`,
+          variant: 'destructive',
+        });
+        
+        throw new Error(`HTTP ${response.status}: ${errorMessage}${errorDetails}`);
       }
     } catch (error) {
-      console.error('Error creating workspace:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to create workspace',
-        variant: 'destructive',
+      appLogger.error('💥 Frontend workspace creation error:', error);
+      appLogger.error('Workspace creation error', error as Error, {
+        operation: 'create_workspace'
       });
+      
+      // Only show toast if we haven't already shown one
+      if (!(error as Error).message.includes('HTTP')) {
+        toast({
+          title: 'Error',
+          description: 'Network error - failed to create workspace',
+          variant: 'destructive',
+        });
+      }
     }
+    
+    appLogger.info('🏢 === FRONTEND WORKSPACE CREATION END ===');
   };
 
   const handleDeleteWorkspace = async (workspaceId: string) => {
@@ -126,7 +197,7 @@ export default function WorkspacesPage() {
       });
 
       if (response.ok) {
-        setWorkspaces(workspaces.filter((w: any) => w.id !== workspaceId));
+        setWorkspaces(workspaces.filter((w: Workspace) => w.id !== workspaceId));
         toast({
           title: 'Success',
           description: 'Workspace deleted successfully',
@@ -135,7 +206,7 @@ export default function WorkspacesPage() {
         throw new Error('Failed to delete workspace');
       }
     } catch (error) {
-      console.error('Error deleting workspace:', error);
+      appLogger.error('Error deleting workspace:', error);
       toast({
         title: 'Error',
         description: 'Failed to delete workspace',
@@ -144,7 +215,7 @@ export default function WorkspacesPage() {
     }
   };
 
-  const filteredWorkspaces = workspaces.filter((workspace: any) =>
+  const filteredWorkspaces = workspaces.filter((workspace: Workspace) =>
     workspace.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     workspace.description?.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -182,12 +253,12 @@ export default function WorkspacesPage() {
         
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button data-testid="create-workspace-button">
               <Plus className="w-4 h-4 mr-2" />
               New Workspace
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[425px]" data-testid="workspace-modal">
             <form onSubmit={handleCreateWorkspace}>
               <DialogHeader>
                 <DialogTitle>Create New Workspace</DialogTitle>
@@ -200,6 +271,7 @@ export default function WorkspacesPage() {
                   <Label htmlFor="name">Workspace Name</Label>
                   <Input
                     id="name"
+                    data-testid="workspace-name-input"
                     placeholder="Enter workspace name"
                     value={newWorkspace.name}
                     onChange={(e) => setNewWorkspace({ ...newWorkspace, name: e.target.value })}
@@ -210,6 +282,7 @@ export default function WorkspacesPage() {
                   <Label htmlFor="description">Description</Label>
                   <Textarea
                     id="description"
+                    data-testid="workspace-description-input"
                     placeholder="Describe your workspace"
                     value={newWorkspace.description}
                     onChange={(e) => setNewWorkspace({ ...newWorkspace, description: e.target.value })}
@@ -218,11 +291,12 @@ export default function WorkspacesPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Color</Label>
-                    <div className="grid grid-cols-5 gap-2">
+                    <div className="grid grid-cols-5 gap-2" data-testid="color-picker">
                       {colors.map((color) => (
                         <button
                           key={color}
                           type="button"
+                          data-testid={`color-option-${color}`}
                           className={`w-8 h-8 rounded-lg border-2 ${
                             newWorkspace.color === color ? 'border-foreground' : 'border-transparent'
                           }`}
@@ -234,11 +308,12 @@ export default function WorkspacesPage() {
                   </div>
                   <div className="space-y-2">
                     <Label>Icon</Label>
-                    <div className="grid grid-cols-5 gap-2">
+                    <div className="grid grid-cols-5 gap-2" data-testid="icon-picker">
                       {icons.map((icon) => (
                         <button
                           key={icon}
                           type="button"
+                          data-testid={`icon-option-${icon}`}
                           className={`w-8 h-8 rounded-lg border-2 flex items-center justify-center text-sm ${
                             newWorkspace.icon === icon ? 'border-foreground' : 'border-muted'
                           }`}
@@ -252,7 +327,7 @@ export default function WorkspacesPage() {
                 </div>
               </div>
               <DialogFooter>
-                <Button type="submit">Create Workspace</Button>
+                <Button type="submit" data-testid="workspace-submit-button">Create Workspace</Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -283,7 +358,7 @@ export default function WorkspacesPage() {
         className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
         {filteredWorkspaces.length > 0 ? (
-          filteredWorkspaces.map((workspace: any, index: number) => (
+          filteredWorkspaces.map((workspace: Workspace, index: number) => (
             <motion.div
               key={workspace.id}
               initial={{ opacity: 0, y: 20 }}
@@ -360,12 +435,12 @@ export default function WorkspacesPage() {
                       <div className="flex items-center justify-center">
                         <Users className="w-4 h-4 text-muted-foreground" />
                       </div>
-                      <div className="text-sm font-medium">{(workspace.members?.length || 0) + 1}</div>
+                      <div className="text-sm font-medium">{(workspace.members && workspace.members.length || 0) + 1}</div>
                       <div className="text-xs text-muted-foreground">Members</div>
                     </div>
                   </div>
 
-                  {workspace.members?.length > 0 && (
+                  {workspace.members && workspace.members.length > 0 && (
                     <div className="flex items-center space-x-2">
                       <div className="flex -space-x-2">
                         <Avatar className="w-6 h-6 border-2 border-background">
@@ -374,7 +449,7 @@ export default function WorkspacesPage() {
                             {workspace.owner?.name?.charAt(0) || 'O'}
                           </AvatarFallback>
                         </Avatar>
-                        {workspace.members?.slice(0, 3).map((member: any) => (
+                        {workspace.members && workspace.members.slice(0, 3).map((member: WorkspaceMember) => (
                           <Avatar key={member.id} className="w-6 h-6 border-2 border-background">
                             <AvatarImage src={member.user?.image} />
                             <AvatarFallback className="text-xs">
@@ -382,7 +457,7 @@ export default function WorkspacesPage() {
                             </AvatarFallback>
                           </Avatar>
                         ))}
-                        {workspace.members?.length > 3 && (
+                        {workspace.members && workspace.members.length > 3 && (
                           <div className="w-6 h-6 rounded-full bg-muted border-2 border-background flex items-center justify-center">
                             <span className="text-xs text-muted-foreground">
                               +{workspace.members.length - 3}

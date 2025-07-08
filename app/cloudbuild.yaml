@@ -1,0 +1,124 @@
+# Cloud Build configuration for AbacusHub
+# Enhanced CI/CD pipeline with testing and quality gates
+
+steps:
+  # Step 1: Install dependencies with caching
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['ci', '--cache', '.npm']
+    dir: 'app'
+    env:
+      - 'NPM_CONFIG_CACHE=.npm'
+
+  # Step 2: Generate Prisma client
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'db:generate']
+    dir: 'app'
+    env:
+      - 'DATABASE_URL=${_DATABASE_URL}'
+
+  # Step 3: Run format checking
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'format:check']
+    dir: 'app'
+
+  # Step 4: Run linting
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'lint']
+    dir: 'app'
+
+  # Step 5: Run type checking
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'type-check']
+    dir: 'app'
+
+  # Step 6: Run unit tests with coverage
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'test', '--', '--coverage', '--watchAll=false']
+    dir: 'app'
+    env:
+      - 'CI=true'
+
+  # Step 7: Build the application
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'build']
+    dir: 'app'
+    env:
+      - 'NODE_ENV=production'
+      - 'NEXTAUTH_URL=${_NEXTAUTH_URL}'
+      - 'NEXTAUTH_SECRET=${_NEXTAUTH_SECRET}'
+      - 'DATABASE_URL=${_DATABASE_URL}'
+
+  # Step 8: Security audit
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['audit', '--audit-level=high']
+    dir: 'app'
+
+  # Step 9: Run database migrations (production)
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'db:migrate']
+    dir: 'app'
+    env:
+      - 'DATABASE_URL=${_DATABASE_URL}'
+
+  # Step 10: Deploy to App Engine
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'app'
+      - 'deploy'
+      - 'app/app.yaml'
+      - '--quiet'
+      - '--project=${PROJECT_ID}'
+
+  # Step 11: Health check after deployment
+  - name: 'node:18'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Waiting for deployment to be ready..."
+        sleep 30
+        curl -f ${_NEXTAUTH_URL}/api/health || exit 1
+        echo "Health check passed!"
+
+# Substitution variables (define in Cloud Build trigger or use default values)
+substitutions:
+  _DATABASE_URL: 'postgresql://user:password@/database?host=/cloudsql/project:region:instance'
+  _NEXTAUTH_URL: 'https://abacushub-dot-${PROJECT_ID}.uw.r.appspot.com'
+  _NEXTAUTH_SECRET: 'your-secret-key-here'
+
+# Build configuration
+options:
+  # Machine type for builds
+  machineType: 'E2_HIGHCPU_8'
+  
+  # Disk size
+  diskSizeGb: 100
+  
+  # Logging options
+  logging: CLOUD_LOGGING_ONLY
+
+# Timeout for the entire build
+timeout: '1200s'
+
+# Tags for organizing builds
+tags:
+  - 'abacushub'
+  - 'nextjs'
+  - 'production'
+
+# Artifacts (if needed)
+# artifacts:
+#   objects:
+#     location: 'gs://${PROJECT_ID}-build-artifacts'
+#     paths:
+#       - 'app/.next/**/*'

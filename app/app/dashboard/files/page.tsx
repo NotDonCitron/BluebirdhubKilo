@@ -4,7 +4,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -26,7 +26,6 @@ import {
 import {
   Upload,
   Search,
-  Filter,
   MoreVertical,
   FileText,
   Image,
@@ -40,6 +39,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useDropzone } from 'react-dropzone';
+import { appLogger } from '@/lib/logger';
 
 interface FileData {
   id: string;
@@ -69,9 +69,15 @@ interface FileData {
   };
 }
 
+interface WorkspaceData {
+  id: string;
+  name: string;
+  color: string;
+}
+
 export default function FilesPage() {
   const [files, setFiles] = useState<FileData[]>([]);
-  const [workspaces, setWorkspaces] = useState([]);
+  const [workspaces, setWorkspaces] = useState<WorkspaceData[]>([]);
   const [loading, setLoading] = useState(true);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -79,11 +85,7 @@ export default function FilesPage() {
   const [selectedWorkspace, setSelectedWorkspace] = useState('');
   const { toast } = useToast();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [filesRes, workspacesRes] = await Promise.all([
         fetch('/api/files'),
@@ -98,7 +100,7 @@ export default function FilesPage() {
       setFiles(filesData);
       setWorkspaces(workspacesData);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      appLogger.error('Error fetching data:', error);
       toast({
         title: 'Error',
         description: 'Failed to load data',
@@ -107,7 +109,12 @@ export default function FilesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (!selectedWorkspace) {
@@ -141,7 +148,7 @@ export default function FilesPage() {
           throw new Error('Upload failed');
         }
       } catch (error) {
-        console.error('Error uploading file:', error);
+        appLogger.error('Error uploading file:', error);
         toast({
           title: 'Error',
           description: `Failed to upload ${file.name}`,
@@ -176,7 +183,7 @@ export default function FilesPage() {
         });
       }
     } catch (error) {
-      console.error('Error deleting file:', error);
+      appLogger.error('Error deleting file:', error);
       toast({
         title: 'Error',
         description: 'Failed to delete file',
@@ -199,6 +206,7 @@ export default function FilesPage() {
 
   const getFileIcon = (mimeType: string) => {
     if (mimeType.startsWith('image/')) {
+      // eslint-disable-next-line jsx-a11y/alt-text
       return <Image className="w-8 h-8 text-blue-500" />;
     } else if (mimeType.includes('pdf')) {
       return <FileText className="w-8 h-8 text-red-500" />;
@@ -247,12 +255,12 @@ export default function FilesPage() {
         
         <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button data-testid="upload-button">
               <Upload className="w-4 h-4 mr-2" />
               Upload Files
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent className="sm:max-w-[500px]" data-testid="upload-modal">
             <DialogHeader>
               <DialogTitle>Upload Files</DialogTitle>
               <DialogDescription>
@@ -263,11 +271,11 @@ export default function FilesPage() {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Select Workspace</label>
                 <Select value={selectedWorkspace} onValueChange={setSelectedWorkspace}>
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="file-workspace-select">
                     <SelectValue placeholder="Select workspace" />
                   </SelectTrigger>
                   <SelectContent>
-                    {workspaces.map((workspace: any) => (
+                    {workspaces.map((workspace: WorkspaceData) => (
                       <SelectItem key={workspace.id} value={workspace.id}>
                         <div className="flex items-center gap-2">
                           <div
@@ -284,11 +292,12 @@ export default function FilesPage() {
               
               <div
                 {...getRootProps()}
+                data-testid="file-drop-zone"
                 className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer ${
                   isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'
                 } ${!selectedWorkspace ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <input {...getInputProps()} />
+                <input {...getInputProps()} data-testid="file-input" />
                 <Upload className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                 {isDragActive ? (
                   <p className="text-primary">Drop files here...</p>
@@ -330,7 +339,7 @@ export default function FilesPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Workspaces</SelectItem>
-            {workspaces.map((workspace: any) => (
+            {workspaces.map((workspace: WorkspaceData) => (
               <SelectItem key={workspace.id} value={workspace.id}>
                 {workspace.name}
               </SelectItem>

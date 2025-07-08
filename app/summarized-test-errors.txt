@@ -1,0 +1,1222 @@
+FAIL __tests__/hooks/use-real-time-events.test.ts
+  ● useRealTimeEvents › initializes EventSource connection
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "message", Any<Function>
+    Received
+--
+  ● useRealTimeEvents › returns correct initial state
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+--
+  ● useRealTimeEvents › handles connection state changes
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+--
+  ● useRealTimeEvents › handles incoming messages
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: {"data": {"message": "Test message", "taskId": "123"}, "type": "task_assigned"}
+    Received: undefined
+--
+  ● useRealTimeEvents › handles malformed JSON messages
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: null
+    Received: undefined
+--
+  ● useRealTimeEvents › calls event handlers when provided
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: {"data": {"message": "Test"}, "type": "test"}
+
+--
+  ● useRealTimeEvents › handles connection errors
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "error"
+    Received: "connecting"
+--
+  ● useRealTimeEvents › does not reconnect when disabled
+
+    expect(jest.fn()).toHaveBeenCalledTimes(expected)
+
+    Expected number of calls: 1
+    Received number of calls: 2
+--
+  ● useRealTimeEvents › filters messages by type when specified
+
+    expect(jest.fn()).toHaveBeenCalledTimes(expected)
+
+    Expected number of calls: 1
+    Received number of calls: 0
+--
+  ● useRealTimeEvents › handles connection state transitions correctly
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "connected"
+    Received: "connecting"
+--
+FAIL __tests__/components/dashboard/test-real-time.test.tsx
+  ● TestRealTime › renders test component with all elements
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+  ● TestRealTime › displays correct connection status when connected
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+  ● TestRealTime › displays correct connection status when disconnected
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+  ● TestRealTime › allows selecting different event types
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+  ● TestRealTime › triggers test event when button is clicked
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+  ● TestRealTime › triggers test event with selected event type
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+  ● TestRealTime › shows loading state while triggering event
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+  ● TestRealTime › disables button when not connected
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+  ● TestRealTime › handles API errors gracefully
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+  ● TestRealTime › handles network errors
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+  ● TestRealTime › handles sendEvent errors gracefully
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+  ● TestRealTime › displays helpful instructions
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+  ● TestRealTime › shows connection status with proper icons
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+  ● TestRealTime › shows disconnected status with proper icons
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+  ● TestRealTime › maintains selected event type across re-renders
+
+    TypeError: mockUseRealTime.mockReturnValue is not a function
+
+      31 |   beforeEach(() => {
+      32 |     jest.clearAllMocks();
+    > 33 |     mockUseRealTime.mockReturnValue(mockRealTimeContext);
+         |                     ^
+--
+FAIL __tests__/api/events/stream.test.ts
+  ● Console
+
+    console.error
+      SSE connection error: Error: Session error
+          at Object.<anonymous> (/Users/phhtttps/BluebirdhubKilo/app/__tests__/api/events/stream.test.ts:97:46)
+          at Promise.finally.completed (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jest-circus/build/jestAdapterInit.js:1559:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jest-circus/build/jestAdapterInit.js:1499:10)
+          at _callCircusTest (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jest-circus/build/jestAdapterInit.js:1009:40)
+--
+  ● /api/events/stream › GET › returns 401 for unauthenticated requests
+
+    SyntaxError: Unexpected token 'U', "Unauthorized" is not valid JSON
+        at JSON.parse (<anonymous>)
+
+
+
+  ● /api/events/stream › GET › sends initial connection message
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: MockReadableStream
+    Received constructor: ReadableStream
+--
+  ● /api/events/stream › GET › handles connection errors gracefully
+
+    SyntaxError: Unexpected token 'I', "Internal S"... is not valid JSON
+        at JSON.parse (<anonymous>)
+
+
+
+  ● /api/events/stream › SSE Stream Behavior › sends heartbeat messages
+
+    TypeError: Cannot read properties of undefined (reading 'enqueue')
+
+      131 |       jest.advanceTimersByTime(30000); // 30 seconds
+      132 |
+    > 133 |       expect(mockController.enqueue).toHaveBeenCalledWith(
+          |                             ^
+--
+  ● /api/events/stream › SSE Stream Behavior › encodes messages correctly
+
+    TypeError: Cannot read properties of undefined (reading 'enqueue')
+
+      143 |
+      144 |       // Verify that messages are properly encoded
+    > 145 |       expect(mockController.enqueue).toHaveBeenCalled();
+          |                             ^
+--
+FAIL __tests__/api/settings/notifications.test.ts
+  ● Test suite failed to run
+
+    ReferenceError: db is not defined
+
+      10 |
+      11 | const mockGetServerSession = getServerSession as jest.MockedFunction<typeof getServerSession>;
+    > 12 | const mockDb = db as jest.Mocked<typeof db>;
+         |                ^
+--
+FAIL __tests__/api/settings/privacy.test.ts
+  ● Test suite failed to run
+
+    ReferenceError: Request is not defined
+
+       6 | // Mock dependencies
+       7 | jest.mock('next-auth');
+    >  8 | jest.mock('@/lib/db');
+         |                 ^
+--
+FAIL __tests__/components/providers/real-time-provider.test.tsx
+  ● RealTimeProvider › provides real-time context to children
+
+    expect(element).toHaveTextContent()
+
+    Expected element to have text content:
+      Connected
+--
+  ● RealTimeProvider › handles incoming real-time events
+
+    expect(jest.fn()).toHaveBeenCalled()
+
+    Expected number of calls: >= 1
+    Received number of calls:    0
+--
+  ● RealTimeProvider › respects notification settings for different event types
+
+    expect(jest.fn()).toHaveBeenCalled()
+
+    Expected number of calls: >= 1
+    Received number of calls:    0
+--
+  ● RealTimeProvider › plays sound for notifications when enabled
+
+    expect(jest.fn()).toHaveBeenCalled()
+
+    Expected number of calls: >= 1
+    Received number of calls:    0
+--
+  ● RealTimeProvider › shows desktop notifications when enabled
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "BlueBirdHub", ObjectContaining {"body": "Task assigned", "icon": "/favicon.ico"}
+
+--
+FAIL __tests__/components/dashboard/settings/notification-settings.test.tsx (9.674 s)
+  ● Console
+
+    console.error
+      Warning: An update to NotificationSettings inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+--
+  ● NotificationSettings › renders notification settings form
+
+    Unable to find an element with the text: Notification Preferences. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● NotificationSettings › loads existing settings on mount
+
+    Unable to find role="switch" and name `/email notifications/i`
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● NotificationSettings › toggles notification settings
+
+    Unable to find an element with the text: Notification Preferences. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● NotificationSettings › updates notification frequency
+
+    Unable to find an element with the text: Notification Preferences. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● NotificationSettings › saves settings when form is submitted
+
+    Unable to find an element with the text: Notification Preferences. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● NotificationSettings › handles save errors gracefully
+
+    Unable to find an element with the text: Notification Preferences. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● NotificationSettings › toggles quiet hours settings
+
+    Unable to find an element with the text: Notification Preferences. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● NotificationSettings › validates time inputs for quiet hours
+
+    Unable to find an element with the text: Notification Preferences. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● NotificationSettings › shows loading state while fetching settings
+
+    TestingLibraryElementError: Unable to find an element with the text: /loading/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+--
+  ● NotificationSettings › toggles specific notification types
+
+    Unable to find an element with the text: Notification Preferences. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+FAIL __tests__/integration/real-time-notifications.test.tsx (10.796 s)
+  ● Real-time Notifications Integration › integrates real-time provider with test component
+
+    Unable to find an element with the text: Connected. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● Real-time Notifications Integration › triggers and handles real-time events end-to-end
+
+    Unable to find an element with the text: Connected. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● Real-time Notifications Integration › handles different event types with proper notifications
+
+    Unable to find an element with the text: Connected. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● Real-time Notifications Integration › respects notification settings for different event types
+
+    Unable to find an element with the text: Connected. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● Real-time Notifications Integration › handles connection state changes
+
+    Unable to find an element with the text: Connected. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● Real-time Notifications Integration › plays sound notifications when enabled
+
+    Unable to find an element with the text: Connected. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● Real-time Notifications Integration › shows desktop notifications when enabled
+
+    Unable to find an element with the text: Connected. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● Real-time Notifications Integration › handles malformed SSE messages gracefully
+
+    Unable to find an element with the text: Connected. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● Real-time Notifications Integration › handles network failures during event triggering
+
+    Unable to find an element with the text: Connected. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● Real-time Notifications Integration › maintains state across component re-renders
+
+    Unable to find an element with the text: Connected. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+FAIL __tests__/components/dashboard/settings/privacy-settings.test.tsx (11.599 s)
+  ● Console
+
+    console.error
+      Error fetching privacy settings: TypeError: response.json is not a function
+          at json (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/privacy-settings.tsx:40:37)
+
+      44 |       }
+      45 |     } catch (error) {
+    > 46 |       console.error('Error fetching privacy settings:', error);
+--
+  ● PrivacySettings › renders privacy settings form
+
+    Unable to find an element with the text: Privacy Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● PrivacySettings › loads existing privacy settings on mount
+
+    Unable to find role="switch" and name `/show online status/i`
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● PrivacySettings › updates profile visibility setting
+
+    Unable to find an element with the text: Privacy Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● PrivacySettings › toggles privacy switches
+
+    Unable to find an element with the text: Privacy Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● PrivacySettings › saves privacy settings when form is submitted
+
+    Unable to find an element with the text: Privacy Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● PrivacySettings › handles data export functionality
+
+    Unable to find an element with the text: Privacy Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● PrivacySettings › handles export data errors
+
+    Unable to find an element with the text: Privacy Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● PrivacySettings › shows loading state during data export
+
+    Unable to find an element with the text: Privacy Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● PrivacySettings › toggles consent settings
+
+    Unable to find an element with the text: Privacy Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● PrivacySettings › validates required consent fields
+
+    Unable to find an element with the text: Privacy Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● PrivacySettings › shows confirmation dialog for sensitive changes
+
+    Unable to find an element with the text: Privacy Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+FAIL __tests__/components/dashboard/settings/account-settings.test.tsx (12.696 s)
+  ● Console
+
+    console.error
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at Timeout.task [as _onTimeout] (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/browser/Window.js:584:9)
+          at listOnTimeout (node:internal/timers:608:17)
+          at processTimers (node:internal/timers:543:7) {
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at Timeout.task [as _onTimeout] (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/browser/Window.js:584:9)
+          at listOnTimeout (node:internal/timers:608:17)
+          at processTimers (node:internal/timers:543:7) {
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at Timeout.task [as _onTimeout] (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/browser/Window.js:584:9)
+          at listOnTimeout (node:internal/timers:608:17)
+          at processTimers (node:internal/timers:543:7) {
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at Timeout.task [as _onTimeout] (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/browser/Window.js:584:9)
+          at listOnTimeout (node:internal/timers:608:17)
+          at processTimers (node:internal/timers:543:7) {
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error fetching account data: TypeError: activityData.slice is not a function
+          at slice (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:77:38)
+
+      78 |       }
+      79 |     } catch (error) {
+    > 80 |       console.error('Error fetching account data:', error);
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at Timeout.task [as _onTimeout] (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/browser/Window.js:584:9)
+          at listOnTimeout (node:internal/timers:608:17)
+          at processTimers (node:internal/timers:543:7) {
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error fetching account data: TypeError: activityData.slice is not a function
+          at slice (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:77:38)
+
+      78 |       }
+      79 |     } catch (error) {
+    > 80 |       console.error('Error fetching account data:', error);
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at Timeout.task [as _onTimeout] (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/browser/Window.js:584:9)
+          at listOnTimeout (node:internal/timers:608:17)
+          at processTimers (node:internal/timers:543:7) {
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error fetching account data: TypeError: activityData.slice is not a function
+          at slice (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:77:38)
+
+      78 |       }
+      79 |     } catch (error) {
+    > 80 |       console.error('Error fetching account data:', error);
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at Timeout.task [as _onTimeout] (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/browser/Window.js:584:9)
+          at listOnTimeout (node:internal/timers:608:17)
+          at processTimers (node:internal/timers:543:7) {
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at Timeout.task [as _onTimeout] (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/browser/Window.js:584:9)
+          at listOnTimeout (node:internal/timers:608:17)
+          at processTimers (node:internal/timers:543:7) {
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at Timeout.task [as _onTimeout] (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/browser/Window.js:584:9)
+          at listOnTimeout (node:internal/timers:608:17)
+          at processTimers (node:internal/timers:543:7) {
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at Timeout.task [as _onTimeout] (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/browser/Window.js:584:9)
+          at listOnTimeout (node:internal/timers:608:17)
+          at processTimers (node:internal/timers:543:7) {
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at innerInvokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+          at invokeEventListeners (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+          at HTMLUnknownElementImpl._dispatch (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+          at HTMLUnknownElementImpl.dispatchEvent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+--
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error: Uncaught [RangeError: Invalid time value]
+          at reportException (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+          at Timeout.task [as _onTimeout] (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jsdom/lib/jsdom/browser/Window.js:584:9)
+          at listOnTimeout (node:internal/timers:608:17)
+          at processTimers (node:internal/timers:543:7) {
+        detail: RangeError: Invalid time value
+            at format (/Users/phhtttps/BluebirdhubKilo/app/node_modules/date-fns/format.js:361:11)
+            at AccountSettings (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:210:32)
+            at renderWithHooks (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
+            at updateFunctionComponent (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
+            at beginWork (/Users/phhtttps/BluebirdhubKilo/app/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
+--
+      Error fetching account data: TypeError: activityData.slice is not a function
+          at slice (/Users/phhtttps/BluebirdhubKilo/app/components/dashboard/settings/account-settings.tsx:77:38)
+
+      78 |       }
+      79 |     } catch (error) {
+    > 80 |       console.error('Error fetching account data:', error);
+--
+      Error fetching account data: Error: Network error
+          at Object.<anonymous> (/Users/phhtttps/BluebirdhubKilo/app/__tests__/components/dashboard/settings/account-settings.test.tsx:338:33)
+          at Promise.finally.completed (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jest-circus/build/jestAdapterInit.js:1559:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jest-circus/build/jestAdapterInit.js:1499:10)
+          at _callCircusTest (/Users/phhtttps/BluebirdhubKilo/app/node_modules/jest-circus/build/jestAdapterInit.js:1009:40)
+--
+  ● AccountSettings › renders account settings form
+
+    RangeError: Invalid time value
+
+      208 |                 <div className="flex items-center space-x-2">
+      209 |                   <Calendar className="h-4 w-4" />
+    > 210 |                   <span>{format(new Date(accountInfo.createdAt), 'MMM d, yyyy')}</span>
+          |                                ^
+--
+  ● AccountSettings › renders account settings form
+
+    Unable to find an element with the text: Account Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● AccountSettings › loads existing account data on mount
+
+    RangeError: Invalid time value
+
+      208 |                 <div className="flex items-center space-x-2">
+      209 |                   <Calendar className="h-4 w-4" />
+    > 210 |                   <span>{format(new Date(accountInfo.createdAt), 'MMM d, yyyy')}</span>
+          |                                ^
+--
+  ● AccountSettings › loads existing account data on mount
+
+    Unable to find an element with the display value: John Doe.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● AccountSettings › updates basic account information
+
+    RangeError: Invalid time value
+
+      208 |                 <div className="flex items-center space-x-2">
+      209 |                   <Calendar className="h-4 w-4" />
+    > 210 |                   <span>{format(new Date(accountInfo.createdAt), 'MMM d, yyyy')}</span>
+          |                                ^
+--
+  ● AccountSettings › updates basic account information
+
+    Unable to find an element with the text: Account Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● AccountSettings › handles password change
+
+    RangeError: Invalid time value
+
+      208 |                 <div className="flex items-center space-x-2">
+      209 |                   <Calendar className="h-4 w-4" />
+    > 210 |                   <span>{format(new Date(accountInfo.createdAt), 'MMM d, yyyy')}</span>
+          |                                ^
+--
+  ● AccountSettings › handles password change
+
+    Unable to find an element with the text: Account Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● AccountSettings › validates password confirmation
+
+    RangeError: Invalid time value
+
+      208 |                 <div className="flex items-center space-x-2">
+      209 |                   <Calendar className="h-4 w-4" />
+    > 210 |                   <span>{format(new Date(accountInfo.createdAt), 'MMM d, yyyy')}</span>
+          |                                ^
+--
+  ● AccountSettings › validates password confirmation
+
+    Unable to find an element with the text: Account Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● AccountSettings › toggles two-factor authentication
+
+    RangeError: Invalid time value
+
+      208 |                 <div className="flex items-center space-x-2">
+      209 |                   <Calendar className="h-4 w-4" />
+    > 210 |                   <span>{format(new Date(accountInfo.createdAt), 'MMM d, yyyy')}</span>
+          |                                ^
+--
+  ● AccountSettings › toggles two-factor authentication
+
+    Unable to find an element with the text: Account Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● AccountSettings › displays activity log
+
+    RangeError: Invalid time value
+
+      208 |                 <div className="flex items-center space-x-2">
+      209 |                   <Calendar className="h-4 w-4" />
+    > 210 |                   <span>{format(new Date(accountInfo.createdAt), 'MMM d, yyyy')}</span>
+          |                                ^
+--
+  ● AccountSettings › displays activity log
+
+    Unable to find an element with the text: Activity Log. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● AccountSettings › displays active sessions
+
+    RangeError: Invalid time value
+
+      208 |                 <div className="flex items-center space-x-2">
+      209 |                   <Calendar className="h-4 w-4" />
+    > 210 |                   <span>{format(new Date(accountInfo.createdAt), 'MMM d, yyyy')}</span>
+          |                                ^
+--
+  ● AccountSettings › displays active sessions
+
+    Unable to find an element with the text: Active Sessions. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● AccountSettings › terminates a session
+
+    RangeError: Invalid time value
+
+      208 |                 <div className="flex items-center space-x-2">
+      209 |                   <Calendar className="h-4 w-4" />
+    > 210 |                   <span>{format(new Date(accountInfo.createdAt), 'MMM d, yyyy')}</span>
+          |                                ^
+--
+  ● AccountSettings › terminates a session
+
+    Unable to find an element with the text: Active Sessions. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● AccountSettings › handles account deletion
+
+    RangeError: Invalid time value
+
+      208 |                 <div className="flex items-center space-x-2">
+      209 |                   <Calendar className="h-4 w-4" />
+    > 210 |                   <span>{format(new Date(accountInfo.createdAt), 'MMM d, yyyy')}</span>
+          |                                ^
+--
+  ● AccountSettings › handles account deletion
+
+    Unable to find an element with the text: Account Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● AccountSettings › handles account deletion cancellation
+
+    RangeError: Invalid time value
+
+      208 |                 <div className="flex items-center space-x-2">
+      209 |                   <Calendar className="h-4 w-4" />
+    > 210 |                   <span>{format(new Date(accountInfo.createdAt), 'MMM d, yyyy')}</span>
+          |                                ^
+--
+  ● AccountSettings › handles account deletion cancellation
+
+    Unable to find an element with the text: Account Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+--
+  ● AccountSettings › shows loading states appropriately
+
+    TestingLibraryElementError: Unable to find an element with the text: /loading/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+--
+  ● AccountSettings › handles API errors gracefully
+
+    Unable to find an element with the text: /error loading/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m

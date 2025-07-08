@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
+import { appLogger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -65,7 +66,6 @@ export async function GET(
               select: { id: true, name: true, email: true, image: true }
             },
             folder: true,
-            aiMetadata: true,
             tags: true,
             _count: {
               select: { comments: true }
@@ -88,7 +88,7 @@ export async function GET(
 
     return NextResponse.json(workspace);
   } catch (error) {
-    console.error('Error fetching workspace:', error);
+    appLogger.error('Error fetching workspace:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -142,7 +142,7 @@ export async function PUT(
 
     return NextResponse.json(updatedWorkspace);
   } catch (error) {
-    console.error('Error updating workspace:', error);
+    appLogger.error('Error updating workspace:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -180,7 +180,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: 'Workspace deleted successfully' });
   } catch (error) {
-    console.error('Error deleting workspace:', error);
+    appLogger.error('Error deleting workspace:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

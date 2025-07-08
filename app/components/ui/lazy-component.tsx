@@ -4,10 +4,15 @@ import React, { Suspense, lazy } from 'react';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { LoadingSpinner } from '@/components/ui/loading-states';
 
+interface ErrorFallbackProps {
+  error?: Error;
+  resetErrorBoundary: () => void;
+}
+
 interface LazyComponentProps {
   children: React.ReactNode;
   fallback?: React.ReactNode;
-  errorFallback?: React.ComponentType<any>;
+  errorFallback?: React.ComponentType<ErrorFallbackProps>;
 }
 
 // Generic lazy component wrapper
@@ -29,24 +34,25 @@ export function LazyComponent({
 export function withLazyLoading<P extends object>(
   Component: React.ComponentType<P>,
   loadingComponent?: React.ComponentType,
-  errorComponent?: React.ComponentType<any>
+  errorComponent?: React.ComponentType<ErrorFallbackProps>
 ) {
   const LazyLoadedComponent = lazy(() => Promise.resolve({ default: Component }));
 
   return function WrappedComponent(props: P) {
     return (
       <LazyComponent
-        fallback={loadingComponent ? <loadingComponent /> : <LoadingSpinner />}
+        fallback={loadingComponent ? React.createElement(loadingComponent) : <LoadingSpinner />}
         errorFallback={errorComponent}
       >
-        <LazyLoadedComponent {...props} />
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <LazyLoadedComponent {...(props as any)} />
       </LazyComponent>
     );
   };
 }
 
 // Hook for dynamic imports with loading state
-export function useLazyImport<T = any>(
+export function useLazyImport<T = React.ComponentType>(
   importFunc: () => Promise<{ default: T }>,
   deps: React.DependencyList = []
 ) {
@@ -82,7 +88,8 @@ export function useLazyImport<T = any>(
     return () => {
       mounted = false;
     };
-  }, deps);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [importFunc, ...deps]);
 
   return { component, loading, error };
 }
@@ -99,7 +106,7 @@ export function useIntersectionObserver(
     if (!element) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => setIsIntersecting(entry.isIntersecting),
+      ([entry]) => setIsIntersecting(entry?.isIntersecting || false),
       {
         threshold: 0.1,
         rootMargin: '50px',

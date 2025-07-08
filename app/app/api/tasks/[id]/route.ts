@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
+import { appLogger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,9 +54,6 @@ export async function GET(
             }
           },
           orderBy: { createdAt: 'desc' }
-        },
-        aiSuggestions: {
-          orderBy: { createdAt: 'desc' }
         }
       }
     });
@@ -69,7 +67,7 @@ export async function GET(
 
     return NextResponse.json(task);
   } catch (error) {
-    console.error('Error fetching task:', error);
+    appLogger.error('Error fetching task:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -161,7 +159,7 @@ export async function PUT(
 
     return NextResponse.json(updatedTask);
   } catch (error) {
-    console.error('Error updating task:', error);
+    appLogger.error('Error updating task:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -210,7 +208,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: 'Task deleted successfully' });
   } catch (error) {
-    console.error('Error deleting task:', error);
+    appLogger.error('Error deleting task:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

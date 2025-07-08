@@ -1,0 +1,122 @@
+# Cloud Build configuration for staging deployment
+# Triggered on commits to develop branch
+
+steps:
+  # Step 1: Install dependencies with caching
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['ci', '--cache', '.npm']
+    dir: 'app'
+    env:
+      - 'NPM_CONFIG_CACHE=.npm'
+
+  # Step 2: Generate Prisma client
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'db:generate']
+    dir: 'app'
+    env:
+      - 'DATABASE_URL=${_STAGING_DATABASE_URL}'
+
+  # Step 3: Run format checking
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'format:check']
+    dir: 'app'
+
+  # Step 4: Run linting
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'lint']
+    dir: 'app'
+
+  # Step 5: Run type checking
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'type-check']
+    dir: 'app'
+
+  # Step 6: Run unit tests
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'test', '--', '--coverage', '--watchAll=false']
+    dir: 'app'
+    env:
+      - 'CI=true'
+
+  # Step 7: Build the application
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'build']
+    dir: 'app'
+    env:
+      - 'NODE_ENV=staging'
+      - 'NEXTAUTH_URL=${_STAGING_NEXTAUTH_URL}'
+      - 'NEXTAUTH_SECRET=${_STAGING_NEXTAUTH_SECRET}'
+      - 'DATABASE_URL=${_STAGING_DATABASE_URL}'
+
+  # Step 8: Security audit
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['audit', '--audit-level=high']
+    dir: 'app'
+
+  # Step 9: Run database migrations (staging)
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'db:migrate']
+    dir: 'app'
+    env:
+      - 'DATABASE_URL=${_STAGING_DATABASE_URL}'
+
+  # Step 10: Deploy to staging service
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'app'
+      - 'deploy'
+      - 'app/app.staging.yaml'
+      - '--quiet'
+      - '--project=${PROJECT_ID}'
+
+  # Step 11: Health check after deployment
+  - name: 'node:18'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Waiting for staging deployment to be ready..."
+        sleep 30
+        curl -f ${_STAGING_NEXTAUTH_URL}/api/health || exit 1
+        echo "Staging health check passed!"
+
+  # Step 12: Run smoke tests on staging
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'test:e2e:auth']
+    dir: 'app'
+    env:
+      - 'BASE_URL=${_STAGING_NEXTAUTH_URL}'
+      - 'HEADLESS=true'
+      - 'CI=true'
+
+# Substitution variables for staging
+substitutions:
+  _STAGING_DATABASE_URL: 'postgresql://staging_user:password@/staging_db?host=/cloudsql/project:region:staging-instance'
+  _STAGING_NEXTAUTH_URL: 'https://staging-dot-${PROJECT_ID}.uc.r.appspot.com'
+  _STAGING_NEXTAUTH_SECRET: 'staging-secret-key-here'
+
+# Build configuration
+options:
+  machineType: 'E2_HIGHCPU_8'
+  diskSizeGb: 100
+  logging: CLOUD_LOGGING_ONLY
+
+# Timeout for staging builds
+timeout: '1800s'
+
+# Tags for staging builds
+tags:
+  - 'abacushub'
+  - 'staging'
+  - 'nextjs'

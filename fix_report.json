@@ -1,0 +1,2488 @@
+{
+  "timestamp": "2025-07-04T20:19:34.284180",
+  "dry_run": false,
+  "files_processed": 388,
+  "files_fixed": 179,
+  "fixes_applied": [
+    {
+      "file": "app/__tests__/basic-notification-settings.test.tsx",
+      "changes": [
+        "Added afterEach cleanup",
+        "Wrapped async assertion in waitFor"
+      ],
+      "timestamp": "2025-07-04T20:19:33.754727"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/YearsDropdown/YearsDropdown.test.tsx",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setSystemTime in act()",
+        "Wrapped setup in act()",
+        "Added waitFor import",
+        "Wrapped async assertion in waitFor"
+      ],
+      "timestamp": "2025-07-04T20:19:33.757771"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/Month/Month.test.tsx",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setSystemTime in act()",
+        "Wrapped setup in act()",
+        "Added waitFor import"
+      ],
+      "timestamp": "2025-07-04T20:19:33.759953"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/Caption/Caption.test.tsx",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setSystemTime in act()",
+        "Wrapped setup in act()",
+        "Added waitFor import"
+      ],
+      "timestamp": "2025-07-04T20:19:33.761059"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/Dropdown/Dropdown.test.tsx",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped fireEvent.change(combobox) in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setSystemTime in act()",
+        "Wrapped setup in act()",
+        "Added waitFor import"
+      ],
+      "timestamp": "2025-07-04T20:19:33.762607"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/Footer/Footer.test.tsx",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.763414"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/DayContent/DayContent.test.tsx",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setup in act()",
+        "Wrapped setSystemTime in act()",
+        "Wrapped setup in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.764424"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/CaptionNavigation/CaptionNavigation.test.tsx",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.766338"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/HeadRow/HeadRow.test.tsx",
+      "changes": [
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Added waitFor import",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.767037"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/Navigation/Navigation.test.tsx",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setSystemTime in act()",
+        "Wrapped setup in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.768075"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/WeekNumber/WeekNumber.test.tsx",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setSystemTime in act()",
+        "Wrapped setup in act()",
+        "Added waitFor import"
+      ],
+      "timestamp": "2025-07-04T20:19:33.768859"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/Head/Head.test.tsx",
+      "changes": [
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Added waitFor import",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.769474"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/Row/Row.test.tsx",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setSystemTime in act()",
+        "Wrapped setup in act()",
+        "Added waitFor import"
+      ],
+      "timestamp": "2025-07-04T20:19:33.770484"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/MonthsDropdown/MonthsDropdown.test.tsx",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setSystemTime in act()",
+        "Wrapped setup in act()",
+        "Added waitFor import"
+      ],
+      "timestamp": "2025-07-04T20:19:33.771253"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/Button/Button.test.tsx",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.771812"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/Table/Table.test.tsx",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setSystemTime in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.772810"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/Root/Root.test.tsx",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()",
+        "Added waitFor import"
+      ],
+      "timestamp": "2025-07-04T20:19:33.773974"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/Day/Day.test.tsx",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()",
+        "Added waitFor import"
+      ],
+      "timestamp": "2025-07-04T20:19:33.774875"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/CaptionDropdowns/CaptionDropdowns.test.tsx",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setYear in act()",
+        "Wrapped setMonth in act()",
+        "Wrapped setup in act()",
+        "Wrapped setSystemTime in act()",
+        "Wrapped setup in act()",
+        "Added waitFor import"
+      ],
+      "timestamp": "2025-07-04T20:19:33.775955"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/hooks/useDayEventHandlers/useDayEventHandlers.test.tsx",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.777328"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/hooks/useActiveModifiers/useActiveModifiers.test.tsx",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.777831"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/hooks/useDayRender/useDayRender.test.tsx",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.779633"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/useMutationState.test.tsx",
+      "changes": [
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped setActTimeout in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.781048"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/ssr-hydration.test.tsx",
+      "changes": [
+        "Wrapped setIsServer in act()",
+        "Wrapped setIsServer in act()",
+        "Wrapped setIsServer in act()",
+        "Wrapped setIsServer in act()",
+        "Wrapped setIsServer in act()",
+        "Wrapped setIsServer in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.782528"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/infiniteQueryOptions.types.test.tsx",
+      "changes": [
+        "Wrapped setQueryData in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.783342"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/HydrationBoundary.test.tsx",
+      "changes": [
+        "Wrapped setTimeout in act()",
+        "Added waitFor import",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.785093"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/queryOptions.types.test.tsx",
+      "changes": [
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.786683"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/useQueries.test.tsx",
+      "changes": [
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /refetch/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /refetch/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /refetch/i }) in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.790708"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/fine-grained-persister.test.tsx",
+      "changes": [
+        "Wrapped setRef in act()",
+        "Wrapped setRef in act()",
+        "Wrapped setItem in act()",
+        "Wrapped setRef in act()",
+        "Wrapped setItem in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.792537"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/useMutation.test.tsx",
+      "changes": [
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /mutate2/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /mutate1/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /hide/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped fireEvent.click(getByText('error') in act()",
+        "Wrapped fireEvent.click(getByText('succeed') in act()",
+        "Wrapped fireEvent.click(getByText('mutate') in act()",
+        "Wrapped fireEvent.click(getByText('mutate') in act()",
+        "Wrapped fireEvent.click(getByText('mutate') in act()",
+        "Wrapped fireEvent.click(getByText('unmount') in act()",
+        "Wrapped fireEvent.click(getByText('mutate') in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped fireEvent.click(getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped fireEvent.click(getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped fireEvent.click(getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped fireEvent.click(getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped fireEvent.click(getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped fireEvent.click(getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped fireEvent.click(getByRole('button', { name: /reset/i }) in act()",
+        "Wrapped fireEvent.click(getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped fireEvent.click(getByRole('button', { name: /reset/i }) in act()",
+        "Wrapped fireEvent.click(getByRole('button', { name: /mutate/i }) in act()",
+        "Wrapped setShow in act()",
+        "Wrapped setMounted in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setMutationDefaults in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.796679"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/QueryClientProvider.test.tsx",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.797700"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/ssr.test.tsx",
+      "changes": [
+        "Wrapped setPage in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.799177"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/suspense.test.tsx",
+      "changes": [
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'refetch' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByLabelText('fail') in act()",
+        "Wrapped fireEvent.click(rendered.getByLabelText('fail') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('retry') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('switch') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('retry') in act()",
+        "Wrapped fireEvent.click(rendered.getByLabelText('toggle') in act()",
+        "Wrapped fireEvent.click(rendered.getByLabelText('toggle') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('next') in act()",
+        "Wrapped setKey in act()",
+        "Wrapped setShow in act()",
+        "Wrapped setShow in act()",
+        "Wrapped setMultiplier in act()",
+        "Wrapped setStateKey in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.801712"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/QueryResetErrorBoundary.test.tsx",
+      "changes": [
+        "Wrapped fireEvent.click(rendered.getByText('retry') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('retry') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('retry') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('retry') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('retry') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('retry') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('retry') in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /refetch/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByText('retry') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('retry') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('retry') in act()",
+        "Wrapped setEnabled in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.803978"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/useQuery.test.tsx",
+      "changes": [
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /2/ }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /1/ }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /2/ }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /2/ }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /1/ }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /2/ }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /setQueryData/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /hide/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /invalidate/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /cancel/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /hide/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /invalidate/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /invalidate/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /invalidate/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /invalidate/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /invalidate/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByLabelText('change') in act()",
+        "Wrapped fireEvent.click(rendered.getByLabelText('change') in act()",
+        "Wrapped fireEvent.click(rendered.getByLabelText('change') in act()",
+        "Wrapped fireEvent.click(rendered.getByLabelText('change') in act()",
+        "Wrapped fireEvent.click(rendered.getByLabelText('retry') in act()",
+        "Wrapped fireEvent.click(rendered.getByLabelText('retry') in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /refetch/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /forceUpdate/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /forceUpdate/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /inc/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /inc/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByText('enable') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('refetch') in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /enable/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /all/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /high/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByText('fetch') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('setKey') in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /show/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /cancel/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /hide/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /show/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /hide/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'refetch' }) in act()",
+        "Wrapped fireEvent.click(\n          rendered.getByRole('button', { name: 'enableTracking' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'refetch' }) in act()",
+        "Wrapped fireEvent.click(\n          rendered.getByRole('button', { name: 'disableTracking' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'refetch' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'refetch' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'refetch' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'refetch' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'setCount' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'refetch' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'inc' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'setCount' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'setCount' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'setCount' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'setCount' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /invalidate/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /refetch/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /refetch/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /refetch/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /rerender/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'refetch' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'rerender' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: 'remove' }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /toggle/i }) in act()",
+        "Wrapped setRef in act()",
+        "Wrapped setId in act()",
+        "Wrapped setId in act()",
+        "Wrapped setId in act()",
+        "Wrapped setId in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setShow in act()",
+        "Wrapped setShow in act()",
+        "Wrapped setQueries in act()",
+        "Wrapped setQueries in act()",
+        "Wrapped setHasChanged in act()",
+        "Wrapped setId in act()",
+        "Wrapped setCount in act()",
+        "Wrapped setEnabled in act()",
+        "Wrapped setInt in act()",
+        "Wrapped setShouldFetch in act()",
+        "Wrapped setFilter in act()",
+        "Wrapped setFilter in act()",
+        "Wrapped setShouldFetch in act()",
+        "Wrapped setEnabled in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setCount in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setNewState in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setCount in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setCount in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setCount in act()",
+        "Wrapped setCount in act()",
+        "Wrapped setCount in act()",
+        "Wrapped setCount in act()",
+        "Wrapped setCount in act()",
+        "Wrapped setCount in act()",
+        "Wrapped setCount in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setToggle in act()",
+        "Wrapped setQueryDefaults in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.827863"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/useInfiniteQuery.test.tsx",
+      "changes": [
+        "Wrapped fireEvent.click(rendered.getByText('Refetch') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('Remove Last Page') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('Load More') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('Load More') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('Remove item') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('Refetch') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('Load More') in act()",
+        "Wrapped fireEvent.click(rendered.getByText('Load More') in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /fetchNextPage/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /refetch/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /refetch/i }) in act()",
+        "Wrapped fireEvent.click(\n      rendered.getByRole('button', { name: /fetchPreviousPage/i }) in act()",
+        "Wrapped fireEvent.click(\n      rendered.getByRole('button', { name: /fetch previous page/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /order/i }) in act()",
+        "Wrapped fireEvent.click(rendered.getByRole('button', { name: /fetchNextPage/i }) in act()",
+        "Wrapped setIsVisible in act()",
+        "Wrapped setIsRemovedLastPage in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setFirstPage in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setShow in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setOrder in act()",
+        "Wrapped setActTimeout in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.836843"
+    },
+    {
+      "file": "app/node_modules/@tanstack/react-query/src/__tests__/useIsFetching.test.tsx",
+      "changes": [
+        "Wrapped fireEvent.click(getByRole('button', { name: /setStarted/i }) in act()",
+        "Wrapped fireEvent.click(getByRole('button', { name: /setReady/i }) in act()",
+        "Wrapped setStarted in act()",
+        "Wrapped setRenderSecond in act()",
+        "Wrapped setActTimeout in act()",
+        "Wrapped setReady in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.837816"
+    },
+    {
+      "file": "app/node_modules/@tanstack/query-core/src/tests/queryObserver.test.tsx",
+      "changes": [
+        "Wrapped setOptions in act()",
+        "Wrapped setOptions in act()",
+        "Wrapped setOptions in act()",
+        "Wrapped setOptions in act()",
+        "Wrapped setOptions in act()",
+        "Wrapped setOptions in act()",
+        "Wrapped setOptions in act()",
+        "Wrapped setOptions in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setOptions in act()",
+        "Wrapped setOptions in act()",
+        "Wrapped setOptions in act()",
+        "Wrapped setOptions in act()",
+        "Wrapped setOptions in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.844089"
+    },
+    {
+      "file": "app/node_modules/@tanstack/query-core/src/tests/query.test.tsx",
+      "changes": [
+        "Wrapped setTimeout in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryDefaults in act()",
+        "Wrapped setIsServer in act()",
+        "Wrapped setQueryDefaults in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setOnline in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.851995"
+    },
+    {
+      "file": "app/node_modules/@tanstack/query-core/src/tests/queryClient.types.test.tsx",
+      "changes": [
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.853713"
+    },
+    {
+      "file": "app/node_modules/@tanstack/query-core/src/tests/queriesObserver.test.tsx",
+      "changes": [
+        "Wrapped setQueries in act()",
+        "Wrapped setQueries in act()",
+        "Wrapped setQueries in act()",
+        "Wrapped setQueryData in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.855714"
+    },
+    {
+      "file": "app/node_modules/@tanstack/query-core/src/tests/queryClient.test.tsx",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setMutationDefaults in act()",
+        "Wrapped setMutationDefaults in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setQueries in act()",
+        "Wrapped setQueries in act()",
+        "Wrapped setQueries in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setQueryDefaults in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setDefaultOptions in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setDefaultOptions in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryData in act()",
+        "Wrapped setQueryDefaults in act()",
+        "Wrapped setQueryDefaults in act()",
+        "Wrapped setQueryDefaults in act()",
+        "Wrapped setQueryDefaults in act()",
+        "Wrapped setQueryDefaults in act()",
+        "Wrapped setQueryDefaults in act()",
+        "Wrapped setQueryDefaults in act()",
+        "Wrapped setQueryDefaults in act()",
+        "Wrapped setQueryDefaults in act()",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.866602"
+    },
+    {
+      "file": "app/node_modules/@tanstack/query-core/src/tests/hydration.test.tsx",
+      "changes": [
+        "Wrapped setMutationDefaults in act()",
+        "Wrapped setMutationDefaults in act()",
+        "Wrapped setMutationDefaults in act()",
+        "Wrapped setMutationDefaults in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.870312"
+    },
+    {
+      "file": "app/node_modules/@tanstack/query-core/src/tests/queryCache.test.tsx",
+      "changes": [
+        "Wrapped setQueryData in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.872338"
+    },
+    {
+      "file": "app/node_modules/@tanstack/query-core/src/tests/mutations.test.tsx",
+      "changes": [
+        "Wrapped setOptions in act()",
+        "Wrapped setMutationDefaults in act()",
+        "Wrapped setMutationDefaults in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.876039"
+    },
+    {
+      "file": "app/node_modules/@tanstack/query-core/src/tests/utils.test.tsx",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.881276"
+    },
+    {
+      "file": "app/node_modules/@tanstack/query-core/src/tests/notifyManager.test.tsx",
+      "changes": [
+        "Wrapped setNotifyFunction in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.881967"
+    },
+    {
+      "file": "app/node_modules/@tanstack/query-core/src/tests/focusManager.test.tsx",
+      "changes": [
+        "Wrapped setFocused in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setEventListener in act()",
+        "Wrapped setEventListener in act()",
+        "Wrapped setIsServer in act()",
+        "Wrapped setEventListener in act()",
+        "Wrapped setFocused in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setEventListener in act()",
+        "Wrapped setEventListener in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.883201"
+    },
+    {
+      "file": "app/node_modules/@tanstack/query-core/src/tests/onlineManager.test.tsx",
+      "changes": [
+        "Wrapped setOnline in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setEventListener in act()",
+        "Wrapped setEventListener in act()",
+        "Wrapped setIsServer in act()",
+        "Wrapped setEventListener in act()",
+        "Wrapped setEventListener in act()",
+        "Wrapped setEventListener in act()",
+        "Wrapped setOnline in act()",
+        "Wrapped setTimeout in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.884145"
+    },
+    {
+      "file": "app/node_modules/react-resizable-panels/src/PanelResizeHandle.test.tsx",
+      "changes": [
+        "Wrapped setupMockedGroup in act()",
+        "Wrapped setupMockedGroup in act()",
+        "Wrapped setupMockedGroup in act()",
+        "Wrapped setupMockedGroup in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.887433"
+    },
+    {
+      "file": "app/node_modules/@radix-ui/react-alert-dialog/src/AlertDialog.test.tsx",
+      "changes": [
+        "Wrapped fireEvent.click(trigger) in act()",
+        "Added waitFor import",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.907164"
+    },
+    {
+      "file": "app/__tests__/integration/real-time-notifications.test.tsx",
+      "changes": [
+        "Added next-auth/react mock"
+      ],
+      "timestamp": "2025-07-04T20:19:33.910474"
+    },
+    {
+      "file": "app/__tests__/components/ui/button.test.tsx",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.911387"
+    },
+    {
+      "file": "app/__tests__/components/providers/real-time-provider.test.tsx",
+      "changes": [
+        "Added afterEach cleanup",
+        "Added next-auth/react mock"
+      ],
+      "timestamp": "2025-07-04T20:19:33.917060"
+    },
+    {
+      "file": "app/__tests__/components/dashboard/test-real-time.test.tsx",
+      "changes": [
+        "Wrapped setTimeout in act()",
+        "Added afterEach cleanup",
+        "Added await to render in test 'triggers test event when button is clicked'",
+        "Added await to render in test 'handles network errors'",
+        "Added await to render in test 'handles sendEvent errors gracefully'",
+        "Wrapped async assertion in waitFor",
+        "Wrapped async assertion in waitFor",
+        "Check if mock exists for @/components/providers/real-time-provider"
+      ],
+      "timestamp": "2025-07-04T20:19:33.927338"
+    },
+    {
+      "file": "app/__tests__/components/dashboard/settings/privacy-settings.test.tsx",
+      "changes": [
+        "Wrapped setTimeout in act()",
+        "Added afterEach cleanup",
+        "Wrapped async assertion in waitFor",
+        "Wrapped async assertion in waitFor",
+        "Wrapped async assertion in waitFor"
+      ],
+      "timestamp": "2025-07-04T20:19:33.929307"
+    },
+    {
+      "file": "app/__tests__/components/dashboard/settings/account-settings.test.tsx",
+      "changes": [
+        "Wrapped setSystemTime in act()",
+        "Added next-auth/react mock"
+      ],
+      "timestamp": "2025-07-04T20:19:33.940754"
+    },
+    {
+      "file": "app/__tests__/hooks-basic.test.ts",
+      "changes": [
+        "Wrapped setConnectionState in act()",
+        "Wrapped setIsConnected in act()",
+        "Wrapped setError in act()",
+        "Wrapped setLastMessage in act()",
+        "Added waitFor import",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.942988"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/DayPicker/DayPickerContext.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.945388"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/Modifiers/ModifiersContext.test.ts",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.946270"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/Navigation/useNavigationState.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()",
+        "Added waitFor import"
+      ],
+      "timestamp": "2025-07-04T20:19:33.946995"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/Navigation/NavigationContext.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()",
+        "Added waitFor import"
+      ],
+      "timestamp": "2025-07-04T20:19:33.948009"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/Focus/FocusContext.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()",
+        "Added waitFor import"
+      ],
+      "timestamp": "2025-07-04T20:19:33.949100"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/SelectSingle/SelectSingleContext.test.ts",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.949816"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/SelectMultiple/SelectMultipleContext.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.950984"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/SelectRange/SelectRangeContext.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.952380"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/DayPicker/labels/labelWeekday.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.954261"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/DayPicker/formatters/formatMonthCaption.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.955544"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/DayPicker/formatters/formatCaption.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.957555"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/DayPicker/formatters/formatWeekdayName.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.958827"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/DayPicker/utils/parseFromToProps.test.ts",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.959644"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/Modifiers/utils/getCustomModifiers.test.ts",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.960309"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/Modifiers/utils/isDateInRange.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.961227"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/Modifiers/utils/getActiveModifiers.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.961941"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/Modifiers/utils/isMatch.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.963177"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/Modifiers/utils/getInternalModifiers.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.964716"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/Navigation/utils/getNextMonth.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.967281"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/Navigation/utils/getPreviousMonth.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.969165"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/Navigation/utils/getInitialMonth.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.970143"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/Focus/utils/getInitialFocusTarget.test.ts",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.970822"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/Focus/utils/getNextFocus.test.ts",
+      "changes": [
+        "Fixed invalid date pattern: [\\'\"]202\\d-\\d{1,2}-\\d{1,2}[\\'\"]",
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.971995"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/contexts/SelectRange/utils/addToRange.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.972958"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/HeadRow/utils/getWeekdays.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.974518"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/components/Table/utils/getMonthWeeks.test.ts",
+      "changes": [
+        "Added date-fns mocking",
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.975415"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/hooks/useSelectedDays/useSelectedDays.test.ts",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.976155"
+    },
+    {
+      "file": "app/node_modules/react-day-picker/src/hooks/useControlledValue/useControlledValue.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.976729"
+    },
+    {
+      "file": "app/node_modules/@jest/pattern/src/__tests__/TestPathPatterns.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:33.983578"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/popup.test.ts",
+      "changes": [
+        "Wrapped setOffset in act()",
+        "Wrapped setSubpixelPositioning in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setOffset in act()",
+        "Wrapped setSubpixelPositioning in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setHTML in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setHTML in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setHTML in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setHTML in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setHTML in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setHTML in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setText in act()",
+        "Wrapped setText in act()",
+        "Wrapped setText in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setOffset in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setDOMContent in act()",
+        "Wrapped setHTML in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setDOMContent in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setMaxWidth in act()",
+        "Wrapped setHTML in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setHTML in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setHTML in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setHTML in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:33.992477"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/camera.test.ts",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setPadding in act()",
+        "Wrapped setPadding in act()",
+        "Wrapped setPadding in act()",
+        "Wrapped setPadding in act()",
+        "Wrapped setPadding in act()",
+        "Wrapped setBearing in act()",
+        "Wrapped setBearing in act()",
+        "Wrapped setBearing in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.003319"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/hash.test.ts",
+      "changes": [
+        "Wrapped setCenter in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setBearing in act()",
+        "Wrapped setPitch in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setBearing in act()",
+        "Wrapped setPitch in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setZoom in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.005318"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/marker.test.ts",
+      "changes": [
+        "Wrapped setLngLat in act()",
+        "Wrapped setSubpixelPositioning in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setOpacity in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setOpacity in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setOffset in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setPitchAlignment in act()",
+        "Wrapped setRotationAlignment in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setPitch in act()",
+        "Wrapped setPitch in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setBearing in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setRotation in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setDraggable in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setDraggable in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setText in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setAttribute in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setPopup in act()",
+        "Wrapped setOffset in act()",
+        "Wrapped setOffset in act()",
+        "Wrapped setOffset in act()",
+        "Wrapped setOffset in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.010830"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/util/actor.test.ts",
+      "changes": [
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setGlobalWorker in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.015669"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/util/color_ramp.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.018451"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/util/evented.test.ts",
+      "changes": [
+        "Wrapped setEventedParent in act()",
+        "Wrapped setEventedParent in act()",
+        "Wrapped setEventedParent in act()",
+        "Wrapped setEventedParent in act()",
+        "Wrapped setEventedParent in act()",
+        "Wrapped setEventedParent in act()",
+        "Wrapped setEventedParent in act()",
+        "Wrapped setEventedParent in act()",
+        "Wrapped setEventedParent in act()",
+        "Wrapped setEventedParent in act()",
+        "Wrapped setEventedParent in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.031580"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/video_source.test.ts",
+      "changes": [
+        "Wrapped setCoordinates in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.034114"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/vector_tile_source.test.ts",
+      "changes": [
+        "Wrapped setTiles in act()",
+        "Wrapped setTiles in act()",
+        "Wrapped setUrl in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.036030"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/geojson_source.test.ts",
+      "changes": [
+        "Wrapped setData in act()",
+        "Wrapped setData in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setData in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setClusterOptions in act()",
+        "Wrapped setLocationAtPoint in act()",
+        "Wrapped setData in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setData in act()",
+        "Wrapped setData in act()",
+        "Wrapped setData in act()",
+        "Wrapped setData in act()",
+        "Wrapped setData in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setData in act()",
+        "Wrapped setData in act()",
+        "Wrapped setTimeout in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.040034"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/vector_tile_worker_source.test.ts",
+      "changes": [
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.043094"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/canvas_source.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.046214"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/query_features.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.048055"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/raster_tile_source.test.ts",
+      "changes": [
+        "Wrapped setUrl in act()",
+        "Wrapped setTiles in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.049063"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/image_source.test.ts",
+      "changes": [
+        "Wrapped setCoordinates in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.050199"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/worker.test.ts",
+      "changes": [
+        "Wrapped setState in act()",
+        "Wrapped setState in act()",
+        "Wrapped setState in act()",
+        "Wrapped setMethods in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.051398"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/rtl_text_plugin_main_thread.test.ts",
+      "changes": [
+        "Wrapped setRTLTextPlugin in act()",
+        "Wrapped setRTLTextPlugin in act()",
+        "Wrapped setRTLTextPlugin in act()",
+        "Wrapped setRTLTextPlugin in act()",
+        "Wrapped setRTLTextPlugin in act()",
+        "Wrapped setRTLTextPlugin in act()",
+        "Wrapped setRTLTextPlugin in act()",
+        "Wrapped setRTLTextPlugin in act()",
+        "Wrapped setRTLTextPlugin in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.052476"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/source_cache.test.ts",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setMilliseconds in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTileReloadTimer in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setSeconds in act()",
+        "Wrapped setSystemTime in act()",
+        "Wrapped setExpiryData in act()",
+        "Wrapped setEventedParent in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.060262"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/terrain_source_cache.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.061676"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/tile.test.ts",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setExpiryData in act()",
+        "Wrapped setExpiryData in act()",
+        "Wrapped setExpiryData in act()",
+        "Wrapped setExpiryData in act()",
+        "Wrapped setSeconds in act()",
+        "Wrapped setExpiryData in act()",
+        "Wrapped setExpiryData in act()",
+        "Wrapped setMilliseconds in act()",
+        "Wrapped setMinutes in act()",
+        "Wrapped setExpiryData in act()",
+        "Wrapped setSystemTime in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.064480"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/worker_tile.test.ts",
+      "changes": [
+        "Wrapped setTimeout in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.066808"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/source/tile_cache.test.ts",
+      "changes": [
+        "Wrapped setMaxSize in act()",
+        "Wrapped setMaxSize in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.067550"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/geo/transform.test.ts",
+      "changes": [
+        "Wrapped setLocationAtPoint in act()",
+        "Wrapped setLocationAtPoint in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.069914"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/geo/edge_insets.test.ts",
+      "changes": [
+        "Wrapped sets in act()",
+        "Wrapped sets in act()",
+        "Wrapped sets in act()",
+        "Wrapped sets in act()",
+        "Wrapped sets in act()",
+        "Wrapped sets in act()",
+        "Wrapped sets in act()",
+        "Wrapped sets in act()",
+        "Wrapped sets in act()",
+        "Wrapped sets in act()",
+        "Wrapped sets in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.073487"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/render/draw_custom.test.ts",
+      "changes": [
+        "Added afterEach cleanup",
+        "Check if mock exists for ./painter",
+        "Check if mock exists for ./program",
+        "Check if mock exists for ../source/source_cache",
+        "Check if mock exists for ../source/tile",
+        "Check if mock exists for ../data/bucket/symbol_bucket",
+        "Check if mock exists for ../symbol/projection"
+      ],
+      "timestamp": "2025-07-04T20:19:34.074105"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/render/painter.test.ts",
+      "changes": [
+        "Wrapped setTerrain in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.074977"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/render/glyph_manager.test.ts",
+      "changes": [
+        "Wrapped setURL in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.075946"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/render/draw_debug.test.ts",
+      "changes": [
+        "Check if mock exists for ../style/style"
+      ],
+      "timestamp": "2025-07-04T20:19:34.076712"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/render/draw_symbol.test.ts",
+      "changes": [
+        "Added afterEach cleanup",
+        "Check if mock exists for ./painter",
+        "Check if mock exists for ./program",
+        "Check if mock exists for ../source/source_cache",
+        "Check if mock exists for ../source/tile",
+        "Check if mock exists for ../data/bucket/symbol_bucket",
+        "Check if mock exists for ../symbol/projection"
+      ],
+      "timestamp": "2025-07-04T20:19:34.078229"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/render/render_to_texture.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.079120"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/render/draw_fill.test.ts",
+      "changes": [
+        "Added afterEach cleanup",
+        "Check if mock exists for ./painter",
+        "Check if mock exists for ./program",
+        "Check if mock exists for ../source/source_cache",
+        "Check if mock exists for ../source/tile",
+        "Check if mock exists for ../data/bucket/symbol_bucket",
+        "Check if mock exists for ../symbol/projection"
+      ],
+      "timestamp": "2025-07-04T20:19:34.079870"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/render/terrain.test.ts",
+      "changes": [
+        "Wrapped setupMercatorOverflow in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.081531"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/style/light.test.ts",
+      "changes": [
+        "Wrapped setLight in act()",
+        "Wrapped setLight in act()",
+        "Wrapped setLight in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.083185"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/style/query_utils.test.ts",
+      "changes": [
+        "Wrapped setLine in act()",
+        "Wrapped setLine in act()",
+        "Wrapped setLine in act()",
+        "Wrapped setLine in act()",
+        "Wrapped setLine in act()",
+        "Wrapped setLine in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.085439"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/style/style_layer.test.ts",
+      "changes": [
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.086931"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/style/style.test.ts",
+      "changes": [
+        "Wrapped setSky in act()",
+        "Wrapped setSky in act()",
+        "Wrapped setSky in act()",
+        "Wrapped setSky in act()",
+        "Wrapped setSky in act()",
+        "Wrapped setSky in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setLayerZoomRange in act()",
+        "Wrapped setLayerZoomRange in act()",
+        "Wrapped setLayerZoomRange in act()",
+        "Wrapped setLayerZoomRange in act()",
+        "Wrapped setFilter in act()",
+        "Wrapped setFilter in act()",
+        "Wrapped setFilter in act()",
+        "Wrapped setFilter in act()",
+        "Wrapped setFilter in act()",
+        "Wrapped setFilter in act()",
+        "Wrapped setFilter in act()",
+        "Wrapped setFilter in act()",
+        "Wrapped setFilter in act()",
+        "Wrapped setFilter in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setData in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setGeoJSONSourceData in act()",
+        "Wrapped setGeoJSONSourceData in act()",
+        "Wrapped setState in act()",
+        "Wrapped setState in act()",
+        "Wrapped setState in act()",
+        "Wrapped setState in act()",
+        "Wrapped setState in act()",
+        "Wrapped setState in act()",
+        "Wrapped setState in act()",
+        "Wrapped setState in act()",
+        "Wrapped setState in act()",
+        "Wrapped setTerrain in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.097101"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/symbol/quads.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.098619"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/symbol/projection.test.ts",
+      "changes": [
+        "Wrapped setIntersectionPoint in act()",
+        "Wrapped setIntersectionPoint in act()",
+        "Wrapped setNormal in act()",
+        "Wrapped setIntersectionPoint in act()",
+        "Wrapped setNormal in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.100351"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/symbol/shaping.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.104440"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/gl/vertex_buffer.test.ts",
+      "changes": [
+        "Wrapped setVertexAttribPointers in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.106961"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/gl/render_pool.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.108116"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/handler/mouse_rotate.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.110612"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/handler/box_zoom.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.112443"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/handler/drag_pan.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.114559"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/handler/scroll_zoom.test.ts",
+      "changes": [
+        "Wrapped setPitch in act()",
+        "Wrapped setMaxPitch in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setPitch in act()",
+        "Wrapped setMaxPitch in act()",
+        "Wrapped setZoom in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.116008"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/handler/drag_rotate.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.119412"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/handler/keyboard.test.ts",
+      "changes": [
+        "Wrapped setZoom in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setPitch in act()",
+        "Wrapped setPitch in act()",
+        "Wrapped setBearing in act()",
+        "Wrapped setBearing in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.120743"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/handler/map_event.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.121728"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/handler/dblclick_zoom.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.122540"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/handler/two_fingers_touch.test.ts",
+      "changes": [
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Wrapped setLngLat in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.125020"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/handler/tap_drag_zoom.test.ts",
+      "changes": [
+        "Wrapped setupEvents in act()",
+        "Wrapped setupEvents in act()",
+        "Wrapped setupEvents in act()",
+        "Wrapped setupEvents in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.125820"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/handler/cooperative_gestures.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.127443"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_basic.test.ts",
+      "changes": [
+        "Wrapped setTransformRequest in act()",
+        "Wrapped setTransformRequest in act()",
+        "Wrapped setTransformRequest in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.129420"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_layer.test.ts",
+      "changes": [
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()",
+        "Wrapped setLayoutProperty in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.132216"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_style.test.ts",
+      "changes": [
+        "Wrapped setLight in act()",
+        "Wrapped setSky in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()",
+        "Wrapped setStyle in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.134483"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_world_copies.test.ts",
+      "changes": [
+        "Wrapped setCenter in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setCenter in act()",
+        "Wrapped setRenderWorldCopies in act()",
+        "Wrapped setRenderWorldCopies in act()",
+        "Wrapped setRenderWorldCopies in act()",
+        "Wrapped setRenderWorldCopies in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.135289"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_is_zooming.test.ts",
+      "changes": [
+        "Wrapped setTimeout in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.136248"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_render.test.ts",
+      "changes": [
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.136933"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_is_moving.test.ts",
+      "changes": [
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()",
+        "Wrapped setTimeout in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.138389"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_request_render_frame.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.143091"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_events.test.ts",
+      "changes": [
+        "Wrapped setStyle in act()",
+        "Wrapped setTimeout in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.146935"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_feature_state.test.ts",
+      "changes": [
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()",
+        "Wrapped setFeatureState in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.149293"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_terrian.test.ts",
+      "changes": [
+        "Wrapped setTerrain in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.150207"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_pitch.test.ts",
+      "changes": [
+        "Wrapped setPitch in act()",
+        "Wrapped setMaxPitch in act()",
+        "Wrapped setMaxPitch in act()",
+        "Wrapped setPitch in act()",
+        "Wrapped setMaxPitch in act()",
+        "Wrapped setPitch in act()",
+        "Wrapped setMaxPitch in act()",
+        "Wrapped setPitch in act()",
+        "Wrapped setMinPitch in act()",
+        "Wrapped setMinPitch in act()",
+        "Wrapped setPitch in act()",
+        "Wrapped setMinPitch in act()",
+        "Wrapped setPitch in act()",
+        "Wrapped setMinPitch in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.151024"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_bounds.test.ts",
+      "changes": [
+        "Wrapped setMaxBounds in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setMaxBounds in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setMaxBounds in act()",
+        "Wrapped setMaxBounds in act()",
+        "Wrapped setMaxBounds in act()",
+        "Wrapped setBearing in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.151755"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_zoom.test.ts",
+      "changes": [
+        "Wrapped setZoom in act()",
+        "Wrapped setMaxZoom in act()",
+        "Wrapped setMaxZoom in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setMaxZoom in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setMaxZoom in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setMinZoom in act()",
+        "Wrapped setMinZoom in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setMinZoom in act()",
+        "Wrapped setZoom in act()",
+        "Wrapped setMinZoom in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.152594"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_pixel_ratio.test.ts",
+      "changes": [
+        "Wrapped setPixelRatio in act()",
+        "Wrapped setPixelRatio in act()",
+        "Wrapped setPixelRatio in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.153257"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_calculate_camera_options.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.154628"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_canvas.test.ts",
+      "changes": [
+        "Wrapped setPixelRatio in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.155394"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/map_tests/map_resize.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.156889"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/control/geolocate_control.test.ts",
+      "changes": [
+        "Wrapped setBearing in act()",
+        "Wrapped setMaxBounds in act()",
+        "Wrapped setMaxBounds in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.160704"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/control/fullscreen_control.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.161576"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/control/navigation_control.test.ts",
+      "changes": [
+        "Wrapped setBearing in act()",
+        "Wrapped setPitch in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.163433"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/control/attribution_control.test.ts",
+      "changes": [
+        "Wrapped setZoom in act()",
+        "Wrapped setTerrain in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.167099"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/ui/control/scale_control.test.ts",
+      "changes": [
+        "Wrapped setZoom in act()",
+        "Wrapped setUnit in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.169276"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/style/style_layer/line_style_layer.test.ts",
+      "changes": [
+        "Wrapped setPaintProperty in act()",
+        "Wrapped setPaintProperty in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.169893"
+    },
+    {
+      "file": "app/node_modules/maplibre-gl/src/data/bucket/symbol_bucket.test.ts",
+      "changes": [
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.173962"
+    },
+    {
+      "file": "app/node_modules/@maplibre/maplibre-gl-style-spec/src/validate/validate_variable_anchor_offset_collection.test.ts",
+      "changes": [
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.195044"
+    },
+    {
+      "file": "app/node_modules/@maplibre/maplibre-gl-style-spec/src/util/variable_anchor_offset_collection.test.ts",
+      "changes": [
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()",
+        "Wrapped setCollection in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.201937"
+    },
+    {
+      "file": "app/node_modules/@maplibre/maplibre-gl-style-spec/src/expression/expression.test.ts",
+      "changes": [
+        "Wrapped setCollection in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.212537"
+    },
+    {
+      "file": "app/__tests__/api/settings/notifications.test.ts",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()",
+        "Check if mock exists for @/lib/db"
+      ],
+      "timestamp": "2025-07-04T20:19:34.230832"
+    },
+    {
+      "file": "app/__tests__/api/settings/privacy.test.ts",
+      "changes": [
+        "Added jest.useFakeTimers() setup",
+        "Wrapped setSystemTime in act()",
+        "Check if mock exists for @/lib/db"
+      ],
+      "timestamp": "2025-07-04T20:19:34.231875"
+    },
+    {
+      "file": "app/node_modules/next/dist/trace/trace.test.js",
+      "changes": [
+        "Wrapped setTimeout in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.235455"
+    },
+    {
+      "file": "app/node_modules/goober/global/src/__tests__/integration.test.js",
+      "changes": [
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.249379"
+    },
+    {
+      "file": "app/node_modules/goober/src/__tests__/integrations.test.js",
+      "changes": [
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.250878"
+    },
+    {
+      "file": "app/node_modules/goober/src/__tests__/styled.test.js",
+      "changes": [
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Wrapped setup in act()",
+        "Added afterEach cleanup"
+      ],
+      "timestamp": "2025-07-04T20:19:34.251917"
+    },
+    {
+      "file": "app/node_modules/next-auth/src/client/__tests__/sign-out.test.js",
+      "changes": [
+        "Wrapped setResponse in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.265102"
+    },
+    {
+      "file": "app/node_modules/next-auth/src/client/__tests__/csrf.test.js",
+      "changes": [
+        "Wrapped setResponse in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.266445"
+    },
+    {
+      "file": "app/node_modules/next-auth/src/client/__tests__/providers.test.js",
+      "changes": [
+        "Wrapped setResponse in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.267094"
+    },
+    {
+      "file": "app/node_modules/next-auth/src/client/__tests__/session.test.js",
+      "changes": [
+        "Wrapped setSession in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.268511"
+    },
+    {
+      "file": "app/node_modules/next-auth/src/client/__tests__/sign-in.test.js",
+      "changes": [
+        "Wrapped setResponse in act()"
+      ],
+      "timestamp": "2025-07-04T20:19:34.269873"
+    },
+    {
+      "file": "app/node_modules/next-auth/src/client/__tests__/client-provider.test.js",
+      "changes": [
+        "Added await to render in test 'fetches the session once and re-uses it for different consumers'"
+      ],
+      "timestamp": "2025-07-04T20:19:34.271159"
+    }
+  ],
+  "errors": []
+}

@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
+import { appLogger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -91,7 +92,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(users);
   } catch (error) {
-    console.error('Error fetching users:', error);
+    appLogger.error('Error fetching users:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

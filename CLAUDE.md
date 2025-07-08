@@ -40,12 +40,30 @@ npm run start
 # Lint code
 npm run lint
 
+# Type checking
+npm run type-check
+
+# Testing
+npm run test            # Run all tests
+npm run test:watch      # Run tests in watch mode
+npm run test:coverage   # Generate coverage report
+
 # Database commands
-npx prisma generate       # Generate Prisma client
-npx prisma db push       # Push schema changes
-npx prisma migrate dev   # Create migration
-npx prisma db seed      # Seed with demo data (john@doe.com / johndoe123)
-npx prisma studio       # Open database GUI
+npm run db:generate     # Generate Prisma client
+npm run db:push        # Push schema changes
+npm run db:migrate     # Deploy migrations
+npm run db:seed        # Seed with demo data (john@doe.com / johndoe123)
+npm run db:studio      # Open database GUI
+npm run db:reset       # Reset database
+
+# Deployment
+npm run vercel:build   # Build for Vercel
+npm run vercel:deploy  # Deploy to Vercel
+
+# MCP (Model Context Protocol)
+npm run mcp:build      # Build MCP server
+npm run mcp:dev        # Run MCP server in development
+npm run mcp:start      # Start MCP server
 ```
 
 ## Architecture
@@ -71,6 +89,9 @@ npx prisma studio       # Open database GUI
 - **Auth**: NextAuth.js with database sessions
 - **UI**: shadcn/ui (Radix UI based components)
 - **File Upload**: Chunked uploads with resume capability
+- **Testing**: Jest with React Testing Library, jsdom environment
+- **State Management**: React hooks, SWR, Context API, Zustand
+- **Validation**: Zod schemas for API and form validation
 
 ### API Structure
 All API routes follow RESTful patterns:
@@ -90,6 +111,8 @@ Main entities (see `prisma/schema.prisma`):
 - `Task` - Tasks with status, priority, assignments
 - `File` - Files with tagging system
 - `Folder` - Hierarchical file organization
+- `Settings` - User preferences, notifications, privacy
+- `ActivityLog` - Comprehensive audit trail
 
 ### Authentication
 - Email/password and OAuth support
@@ -181,6 +204,7 @@ const body = await request.json();
 - Use React hooks for local state
 - SWR or Tanstack Query for server state
 - Context API for global app state (theme, session)
+- Zustand for complex state management
 
 ### File Upload Pattern
 ```typescript
@@ -198,6 +222,26 @@ if (action === "chunk") {
 }
 ```
 
+## Testing Strategy
+
+### Test Architecture
+- **Framework**: Jest with React Testing Library
+- **Environment**: jsdom for components, Node.js for API tests
+- **Coverage**: Components, API routes, hooks, integration tests
+- **Mocking**: Comprehensive mocking of Next.js, NextAuth, fetch, EventSource
+
+### Running Tests
+- **Single test file**: `npm run test -- ComponentName.test.tsx`
+- **Watch mode**: `npm run test:watch`
+- **Coverage**: `npm run test:coverage`
+- **Specific pattern**: `npm run test -- --testNamePattern="should render"`
+
+### Test Patterns
+- **API Routes**: Mock database and session, test error handling
+- **Components**: Test props, events, accessibility, loading states
+- **Hooks**: Use `renderHook` for custom hook testing
+- **Integration**: Test real-time features, file uploads, notifications
+
 ## Performance Targets
 - Initial page load: < 3s
 - File upload speed: > 10MB/s
@@ -212,7 +256,35 @@ if (action === "chunk") {
 - [ ] Add comprehensive E2E tests
 - [ ] Implement file preview generation
 
+## Security & Configuration
+
+### Security Features
+- **Rate Limiting**: IP-based rate limiting per endpoint type
+- **Input Validation**: Zod schemas for all API inputs
+- **CORS**: Configured for API endpoints
+- **CSP**: Content Security Policy headers
+- **Authentication**: NextAuth.js with database sessions
+
+### Configuration Files
+- **TypeScript**: Strict mode with path mapping (`@/*` aliases)
+- **Tailwind**: CSS custom properties, dark mode support
+- **Next.js**: Standalone build, security headers, image optimization
+- **Vercel**: Deployment configuration with environment management
+
+## Real-time Features
+- **Server-Sent Events**: Real-time notifications and updates
+- **Connection Management**: Automatic reconnection handling
+- **Event Filtering**: Type-based event filtering
+- **State Synchronization**: Real-time state updates across clients
+
 ## Current Known Issues
 - Browser console shows GCM registration errors (can be ignored)
 - Large file uploads may timeout on slow connections
 - PDF preview not yet implemented
+
+## Error Logging Guidelines
+- Write me every error in a markdown file down dont do anythinr moew
+- Capture all errors systematically in a dedicated error log file
+
+## Authentication Errors
+- Invalid email or password when attempting login

@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth-config";
 import { prisma } from "@/lib/db";
 import { storage } from "@/app/lib/storage";
+import { appLogger } from '@/lib/logger';
 
 export async function GET(
   request: NextRequest,
@@ -57,7 +58,7 @@ export async function GET(
     // Check if file exists in storage
     const exists = await storage.exists(storageKey);
     if (!exists) {
-      console.error("File not found in storage:", storageKey);
+      appLogger.error("File not found in storage:", storageKey);
       return NextResponse.json(
         { error: "File not found in storage" },
         { status: 404 }
@@ -73,7 +74,7 @@ export async function GET(
     if (range) {
       // Handle range requests for video/audio streaming
       const parts = range.replace(/bytes=/, "").split("-");
-      const start = parseInt(parts[0], 10);
+      const start = parseInt(parts[0] || '0', 10);
       const end = parts[1] ? parseInt(parts[1], 10) : metadata.size - 1;
       const chunkSize = end - start + 1;
 
@@ -108,7 +109,7 @@ export async function GET(
       });
     }
   } catch (error) {
-    console.error("Error serving file:", error);
+    appLogger.error("Error serving file:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

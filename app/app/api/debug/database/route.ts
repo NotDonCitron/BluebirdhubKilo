@@ -1,7 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+import { prisma } from "@/lib/db";
+import { appLogger } from '@/lib/logger';
+
+export async function GET() {
   try {
     // Check database connection
     await prisma.$connect();
@@ -33,7 +35,7 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-    console.error('Database debug error:', error);
+    appLogger.error('Database debug error:', error as Error);
     return NextResponse.json({
       status: 'error',
       error: error instanceof Error ? error.message : 'Unknown error',

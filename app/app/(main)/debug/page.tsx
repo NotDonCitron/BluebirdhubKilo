@@ -4,10 +4,36 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { appLogger } from '@/lib/logger';
+
+interface DatabaseStatus {
+  status: string;
+  counts?: {
+    users: number;
+    files: number;
+    workspaces: number;
+  };
+  recentFiles?: unknown[];
+  timestamp: string;
+  error?: string;
+}
+
+interface StorageStatus {
+  status: string;
+  type: string;
+  testPassed?: boolean;
+  config?: {
+    supabaseUrl: string;
+    supabaseKey: string;
+    bucket: string;
+  };
+  timestamp: string;
+  error?: string;
+}
 
 export default function DebugPage() {
-  const [dbStatus, setDbStatus] = useState<any>(null);
-  const [storageStatus, setStorageStatus] = useState<any>(null);
+  const [dbStatus, setDbStatus] = useState<DatabaseStatus | null>(null);
+  const [storageStatus, setStorageStatus] = useState<StorageStatus | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,7 +52,7 @@ export default function DebugPage() {
       const storageData = await storageResponse.json();
       setStorageStatus(storageData);
     } catch (error) {
-      console.error('Error checking status:', error);
+      appLogger.error('Error checking status', error as Error);
     } finally {
       setLoading(false);
     }

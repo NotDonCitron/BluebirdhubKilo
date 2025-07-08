@@ -3,19 +3,20 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
 import { z } from 'zod';
+import { appLogger } from '@/lib/logger';
 
 // Import the functions from the stream route
 // Note: This is a workaround since we can't import directly from route files
 // In a real app, these would be in a separate service file
 const eventSchema = z.object({
   type: z.string().min(1),
-  data: z.any(),
+  data: z.record(z.unknown()),
   targetUserId: z.string().optional(),
   workspaceId: z.string().optional(),
 });
 
 // Store for active connections (this would typically be in a shared service)
-const activeConnections = new Map<string, any>();
+const activeConnections = new Map<string, unknown>();
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = eventSchema.parse(body);
 
-    const { type, data, targetUserId, workspaceId } = validatedData;
+    const { type, data, workspaceId } = validatedData;
 
     // Log the event to the database for audit purposes
     await prisma.activityLog.create({
@@ -55,7 +56,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Log for debugging
-    console.log(`Event sent: ${type}`, eventPayload);
+    appLogger.info(`Event sent: ${type}`, eventPayload);
 
     return NextResponse.json({ 
       success: true, 
@@ -70,7 +71,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.error('Error sending event:', error);
+    appLogger.error('Error sending event:', error);
     return NextResponse.json(
       { error: 'Failed to send event' },
       { status: 500 }
@@ -92,7 +93,7 @@ export async function GET() {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Error getting event status:', error);
+    appLogger.error('Error getting event status:', error);
     return NextResponse.json(
       { error: 'Failed to get event status' },
       { status: 500 }

@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { appLogger } from '@/lib/logger';
 
 export default function TestDebugPage() {
-  const [dbStatus, setDbStatus] = useState<any>(null);
-  const [storageStatus, setStorageStatus] = useState<any>(null);
+  const [dbStatus, setDbStatus] = useState<Record<string, unknown> | null>(null);
+  const [storageStatus, setStorageStatus] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export default function TestDebugPage() {
       const storageData = await storageResponse.json();
       setStorageStatus(storageData);
     } catch (error) {
-      console.error('Error checking status:', error);
+      appLogger.error('Error checking status:', error);
     } finally {
       setLoading(false);
     }

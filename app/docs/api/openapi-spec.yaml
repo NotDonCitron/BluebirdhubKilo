@@ -1,0 +1,910 @@
+openapi: 3.0.3
+info:
+  title: AbacusHub File Upload API
+  description: |
+    Comprehensive file upload API with chunked uploads, resume capability, and real-time progress tracking.
+    
+    ## Features
+    - Chunked file uploads for large files
+    - Resume capability for interrupted uploads
+    - Real-time progress tracking
+    - Network resilience and automatic retry
+    - Comprehensive error handling
+    - File type validation and security
+    - Workspace-based access control
+    
+    ## Authentication
+    All endpoints require authentication via NextAuth.js session tokens.
+    
+    ## Rate Limiting
+    - Upload endpoints: 100 requests per 15 minutes
+    - File endpoints: 200 requests per 15 minutes
+    
+  version: 1.2.0
+  contact:
+    name: AbacusHub Support
+    email: support@abacushub.com
+    url: https://docs.abacushub.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.abacushub.com
+    description: Production server
+  - url: https://staging-api.abacushub.com
+    description: Staging server
+  - url: http://localhost:3000
+    description: Development server
+
+security:
+  - sessionAuth: []
+  - bearerAuth: []
+
+paths:
+  /api/upload:
+    post:
+      summary: Handle file upload operations
+      description: |
+        Main upload endpoint that handles different upload actions:
+        - `chunk`: Upload individual file chunks
+        - `complete`: Finalize upload after all chunks received
+        - `status`: Get upload status and missing chunks
+        - `cancel`: Cancel active upload session
+      operationId: handleUpload
+      tags:
+        - Upload
+      parameters:
+        - name: action
+          in: query
+          required: true
+          description: The upload action to perform
+          schema:
+            type: string
+            enum: [chunk, complete, status, cancel]
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/ChunkUploadRequest'
+                - $ref: '#/components/schemas/CompleteUploadRequest'
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/StatusRequest'
+                - $ref: '#/components/schemas/CancelRequest'
+      responses:
+        '200':
+          description: Upload operation successful
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ChunkUploadResponse'
+                  - $ref: '#/components/schemas/CompleteUploadResponse'
+                  - $ref: '#/components/schemas/StatusResponse'
+                  - $ref: '#/components/schemas/CancelResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/files:
+    get:
+      summary: List files
+      description: Retrieve a list of files with optional filtering and search
+      operationId: listFiles
+      tags:
+        - Files
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Filter files by workspace ID
+          schema:
+            type: string
+            format: uuid
+        - name: category
+          in: query
+          description: Filter files by AI-generated category
+          schema:
+            type: string
+        - name: search
+          in: query
+          description: Search in file names and metadata
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Maximum number of files to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          description: Number of files to skip
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: List of files
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      summary: Upload file (legacy endpoint)
+      description: |
+        Legacy single-file upload endpoint. 
+        For new applications, use the chunked upload endpoint `/api/upload`.
+      operationId: uploadFile
+      tags:
+        - Files
+      deprecated: true
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to upload
+                workspaceId:
+                  type: string
+                  format: uuid
+                  description: Workspace ID where file will be stored
+                folderId:
+                  type: string
+                  format: uuid
+                  description: Optional folder ID for organization
+              required:
+                - file
+                - workspaceId
+      responses:
+        '200':
+          description: File uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/files/{id}:
+    get:
+      summary: Get file content
+      description: |
+        Retrieve file content with support for range requests.
+        Includes proper caching headers and content disposition.
+      operationId: getFile
+      tags:
+        - Files
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: File ID
+          schema:
+            type: string
+            format: uuid
+        - name: Range
+          in: header
+          description: Byte range for partial content requests
+          schema:
+            type: string
+            pattern: '^bytes=\d+-\d*$'
+            example: 'bytes=0-1023'
+      responses:
+        '200':
+          description: File content
+          headers:
+            Content-Length:
+              description: File size in bytes
+              schema:
+                type: integer
+            Content-Type:
+              description: MIME type of the file
+              schema:
+                type: string
+            Content-Disposition:
+              description: How the file should be handled
+              schema:
+                type: string
+                example: 'inline; filename="document.pdf"'
+            Accept-Ranges:
+              description: Indicates support for range requests
+              schema:
+                type: string
+                example: 'bytes'
+            Cache-Control:
+              description: Caching directives
+              schema:
+                type: string
+                example: 'private, max-age=3600'
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '206':
+          description: Partial content (range request)
+          headers:
+            Content-Range:
+              description: Range of bytes being returned
+              schema:
+                type: string
+                example: 'bytes 0-1023/2048'
+            Content-Length:
+              description: Size of the returned chunk
+              schema:
+                type: integer
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      summary: Delete file
+      description: Permanently delete a file and its metadata
+      operationId: deleteFile
+      tags:
+        - Files
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: File ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: File deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: next-auth.session-token
+      description: NextAuth.js session cookie
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token for API access
+
+  schemas:
+    ChunkUploadRequest:
+      type: object
+      properties:
+        chunk:
+          type: string
+          format: binary
+          description: The file chunk data
+        fileName:
+          type: string
+          description: Original file name
+          maxLength: 255
+        fileId:
+          type: string
+          description: Unique identifier for the upload session
+        chunkIndex:
+          type: integer
+          minimum: 0
+          description: Zero-based index of the chunk
+        totalChunks:
+          type: integer
+          minimum: 1
+          description: Total number of chunks for the file
+        fileSize:
+          type: integer
+          minimum: 1
+          description: Total size of the file in bytes
+        workspaceId:
+          type: string
+          format: uuid
+          description: Workspace ID where file will be stored
+      required:
+        - chunk
+        - fileName
+        - fileId
+        - chunkIndex
+        - totalChunks
+        - fileSize
+
+    CompleteUploadRequest:
+      type: object
+      properties:
+        uploadId:
+          type: string
+          description: Upload session ID
+      required:
+        - uploadId
+
+    StatusRequest:
+      type: object
+      properties:
+        uploadId:
+          type: string
+          description: Upload session ID
+      required:
+        - uploadId
+
+    CancelRequest:
+      type: object
+      properties:
+        uploadId:
+          type: string
+          description: Upload session ID
+      required:
+        - uploadId
+
+    ChunkUploadResponse:
+      type: object
+      properties:
+        uploadId:
+          type: string
+          description: Upload session ID
+        chunkIndex:
+          type: integer
+          description: Index of the uploaded chunk
+        received:
+          type: integer
+          description: Number of chunks received so far
+        total:
+          type: integer
+          description: Total number of chunks expected
+      required:
+        - uploadId
+        - chunkIndex
+        - received
+        - total
+
+    CompleteUploadResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: File ID
+        name:
+          type: string
+          description: File name
+        size:
+          type: integer
+          description: File size in bytes
+        mimeType:
+          type: string
+          description: MIME type of the file
+        uploadedAt:
+          type: string
+          format: date-time
+          description: Upload completion timestamp
+      required:
+        - id
+        - name
+        - size
+        - mimeType
+        - uploadedAt
+
+    StatusResponse:
+      type: object
+      properties:
+        uploadId:
+          type: string
+          description: Upload session ID
+        filename:
+          type: string
+          description: Original file name
+        totalChunks:
+          type: integer
+          description: Total number of chunks expected
+        receivedChunks:
+          type: integer
+          description: Number of chunks received
+        missingChunks:
+          type: array
+          items:
+            type: integer
+          description: List of missing chunk indices
+        createdAt:
+          type: string
+          format: date-time
+          description: Upload session creation time
+        lastActivity:
+          type: string
+          format: date-time
+          description: Last activity timestamp
+      required:
+        - uploadId
+        - filename
+        - totalChunks
+        - receivedChunks
+        - missingChunks
+        - createdAt
+        - lastActivity
+
+    CancelResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Upload cancelled successfully"
+      required:
+        - success
+        - message
+
+    DeleteResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "File deleted successfully"
+      required:
+        - success
+        - message
+
+    File:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique file identifier
+        name:
+          type: string
+          description: File name (may be sanitized)
+        originalName:
+          type: string
+          description: Original file name as uploaded
+        size:
+          type: integer
+          description: File size in bytes
+        mimeType:
+          type: string
+          description: MIME type of the file
+        url:
+          type: string
+          description: Internal storage path
+        workspaceId:
+          type: string
+          format: uuid
+          description: Workspace ID where file is stored
+        folderId:
+          type: string
+          format: uuid
+          nullable: true
+          description: Folder ID for organization
+        uploadedBy:
+          $ref: '#/components/schemas/User'
+        workspace:
+          $ref: '#/components/schemas/Workspace'
+        folder:
+          $ref: '#/components/schemas/Folder'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+        createdAt:
+          type: string
+          format: date-time
+          description: File creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: File last update timestamp
+        _count:
+          type: object
+          properties:
+            comments:
+              type: integer
+              description: Number of comments on the file
+      required:
+        - id
+        - name
+        - originalName
+        - size
+        - mimeType
+        - url
+        - workspaceId
+        - uploadedBy
+        - workspace
+        - createdAt
+        - updatedAt
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: User ID
+        name:
+          type: string
+          description: User's full name
+        email:
+          type: string
+          format: email
+          description: User's email address
+        image:
+          type: string
+          format: uri
+          nullable: true
+          description: User's profile image URL
+      required:
+        - id
+        - name
+        - email
+
+    Workspace:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Workspace ID
+        name:
+          type: string
+          description: Workspace name
+        color:
+          type: string
+          description: Workspace color (hex code)
+        icon:
+          type: string
+          nullable: true
+          description: Workspace icon
+      required:
+        - id
+        - name
+        - color
+
+    Folder:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Folder ID
+        name:
+          type: string
+          description: Folder name
+        parentId:
+          type: string
+          format: uuid
+          nullable: true
+          description: Parent folder ID
+        workspaceId:
+          type: string
+          format: uuid
+          description: Workspace ID
+        createdAt:
+          type: string
+          format: date-time
+          description: Folder creation timestamp
+      required:
+        - id
+        - name
+        - workspaceId
+        - createdAt
+
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Tag ID
+        name:
+          type: string
+          description: Tag name
+        color:
+          type: string
+          description: Tag color (hex code)
+      required:
+        - id
+        - name
+        - color
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        details:
+          type: object
+          description: Additional error details
+        status:
+          type: string
+          enum: [error]
+          description: Response status
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+      required:
+        - error
+        - status
+        - timestamp
+
+    UploadProgress:
+      type: object
+      description: Client-side upload progress object
+      properties:
+        fileId:
+          type: string
+          description: Unique file identifier
+        fileName:
+          type: string
+          description: Original file name
+        fileSize:
+          type: integer
+          description: Total file size in bytes
+        uploadedBytes:
+          type: integer
+          description: Number of bytes uploaded
+        progress:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Upload progress percentage
+        status:
+          type: string
+          enum: [pending, uploading, paused, failed, completed]
+          description: Current upload status
+        error:
+          type: string
+          nullable: true
+          description: Error message if failed
+        retryCount:
+          type: integer
+          minimum: 0
+          description: Number of retry attempts
+        chunkSize:
+          type: integer
+          description: Size of each chunk in bytes
+        totalChunks:
+          type: integer
+          description: Total number of chunks
+        uploadedChunks:
+          type: array
+          items:
+            type: integer
+          description: List of successfully uploaded chunk indices
+        startTime:
+          type: integer
+          description: Upload start timestamp (milliseconds)
+        pausedAt:
+          type: integer
+          nullable: true
+          description: Timestamp when upload was paused
+        workspaceId:
+          type: string
+          format: uuid
+          nullable: true
+          description: Workspace ID
+        fileType:
+          type: string
+          nullable: true
+          description: File MIME type
+        lastModified:
+          type: integer
+          nullable: true
+          description: File last modified timestamp
+      required:
+        - fileId
+        - fileName
+        - fileSize
+        - uploadedBytes
+        - progress
+        - status
+        - retryCount
+        - chunkSize
+        - totalChunks
+        - uploadedChunks
+        - startTime
+
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters or request format
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            missingParameters:
+              summary: Missing required parameters
+              value:
+                error: "Missing required upload parameters"
+                status: "error"
+                timestamp: "2025-07-08T10:30:00Z"
+            invalidChunk:
+              summary: Invalid chunk data
+              value:
+                error: "Invalid chunk data or metadata"
+                status: "error"
+                timestamp: "2025-07-08T10:30:00Z"
+
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Authentication required"
+            status: "error"
+            timestamp: "2025-07-08T10:30:00Z"
+
+    Forbidden:
+      description: Access denied - insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            workspaceAccess:
+              summary: Workspace access denied
+              value:
+                error: "Workspace not found or access denied"
+                status: "error"
+                timestamp: "2025-07-08T10:30:00Z"
+            fileAccess:
+              summary: File access denied
+              value:
+                error: "You don't have permission to access this file"
+                status: "error"
+                timestamp: "2025-07-08T10:30:00Z"
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            uploadSession:
+              summary: Upload session not found
+              value:
+                error: "Upload session not found"
+                status: "error"
+                timestamp: "2025-07-08T10:30:00Z"
+            file:
+              summary: File not found
+              value:
+                error: "File not found"
+                status: "error"
+                timestamp: "2025-07-08T10:30:00Z"
+
+    PayloadTooLarge:
+      description: File or chunk size exceeds limits
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            fileSize:
+              summary: File too large
+              value:
+                error: "File too large. Maximum size is 500MB"
+                status: "error"
+                timestamp: "2025-07-08T10:30:00Z"
+            chunkSize:
+              summary: Chunk too large
+              value:
+                error: "Chunk too large: Request Entity Too Large"
+                status: "error"
+                timestamp: "2025-07-08T10:30:00Z"
+
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Too many requests. Please try again later."
+            status: "error"
+            timestamp: "2025-07-08T10:30:00Z"
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Internal server error"
+            status: "error"
+            timestamp: "2025-07-08T10:30:00Z"
+
+  examples:
+    ChunkUploadExample:
+      summary: Example chunk upload request
+      description: Uploading the first chunk of a PDF file
+      value:
+        fileName: "document.pdf"
+        fileId: "doc-123-1720436400000"
+        chunkIndex: 0
+        totalChunks: 10
+        fileSize: 10485760
+        workspaceId: "workspace-uuid"
+
+    CompleteUploadExample:
+      summary: Example complete upload request
+      description: Finalizing upload after all chunks received
+      value:
+        uploadId: "doc-123-1720436400000"
+
+    StatusCheckExample:
+      summary: Example status check request
+      description: Checking upload status to identify missing chunks
+      value:
+        uploadId: "doc-123-1720436400000"
+
+tags:
+  - name: Upload
+    description: File upload operations with chunked upload support
+  - name: Files
+    description: File management and retrieval operations
+
+externalDocs:
+  description: Find more info about AbacusHub File Upload API
+  url: https://docs.abacushub.com/api/upload

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useCallback } from "react";
-import { useFileUpload } from "./use-file-upload";
+import { useFileUpload, UploadProgress } from "./use-file-upload";
 
 interface EnhancedUploadProgress {
   // Bestehende Eigenschaften aus UploadProgress
@@ -29,10 +29,16 @@ interface EnhancedUploadProgress {
   timeRemaining?: number;        // Verbleibende Zeit (sekunden)
   currentChunk: number;          // Aktueller Chunk-Index
   maxRetries: number;            // Maximale Wiederholungen
-  response?: any;                // Server-Antwort
+  response?: {                   // Server-Antwort
+    url?: string;
+    fileName?: string;
+    id?: string;
+    [key: string]: unknown;
+  };
   uploadSession?: string;        // Upload-Session-ID
   averageSpeed?: number;         // Durchschnittliche Geschwindigkeit
   estimatedCompletion?: Date;    // Geschätzte Fertigstellung
+  speedHistory?: number[];       // Geschwindigkeitsverlauf für Durchschnittsberechnung
 }
 
 interface EnhancedUploadOptions {
@@ -42,7 +48,7 @@ interface EnhancedUploadOptions {
   maxRetries?: number;
   retryDelay?: number;
   onProgress?: (progress: EnhancedUploadProgress) => void;
-  onComplete?: (fileId: string, response: any) => void;
+  onComplete?: (fileId: string, response: Record<string, unknown>) => void;
   onError?: (fileId: string, error: Error) => void;
   workspaceId?: string;
 }
@@ -58,7 +64,7 @@ const DEFAULT_UPLOAD_CONFIG = {
 };
 
 // Performance-Berechnungen
-const calculateSpeed = (upload: any): number => {
+const calculateSpeed = (upload: EnhancedUploadProgress): number => {
   if (!upload.startTime || upload.uploadedBytes === 0) return 0;
   
   const elapsedTime = (Date.now() - upload.startTime) / 1000; // in Sekunden
@@ -67,14 +73,14 @@ const calculateSpeed = (upload: any): number => {
   return upload.uploadedBytes / elapsedTime; // bytes/s
 };
 
-const calculateTimeRemaining = (upload: any, speed: number): number => {
+const calculateTimeRemaining = (upload: EnhancedUploadProgress, speed: number): number => {
   if (speed === 0 || upload.uploadedBytes >= upload.fileSize) return 0;
   
   const remainingBytes = upload.fileSize - upload.uploadedBytes;
   return remainingBytes / speed; // Sekunden
 };
 
-const calculateAverageSpeed = (upload: any): number => {
+const calculateAverageSpeed = (upload: EnhancedUploadProgress): number => {
   // Einfache gleitende Durchschnittsberechnung über die letzten 10 Chunks
   if (!upload.speedHistory || upload.speedHistory.length === 0) return 0;
   
@@ -92,15 +98,17 @@ export function useEnhancedFileUpload() {
   // Erweiterte Upload-Daten mit Performance-Metriken
   const enhancedUploads = useMemo(() => {
     return Array.from(baseHook.uploads.values()).map((upload): EnhancedUploadProgress => {
-      const speed = calculateSpeed(upload);
-      const timeRemaining = calculateTimeRemaining(upload, speed);
-      const averageSpeed = calculateAverageSpeed(upload);
+      // Create temporary enhanced upload for calculations
+      const tempEnhanced = { ...upload, id: upload.fileId, currentChunk: 0, maxRetries: 3 } as EnhancedUploadProgress;
+      const speed = calculateSpeed(tempEnhanced);
+      const timeRemaining = calculateTimeRemaining(tempEnhanced, speed);
+      const averageSpeed = calculateAverageSpeed(tempEnhanced);
       
       // Get the file from uploadQueues using the baseHook's internal reference
       // We need to access the file from the base hook's uploadQueues
       const file = (baseHook as any).uploadQueues?.current?.get?.(upload.fileId);
       
-      return {
+      const enhancedProgress: EnhancedUploadProgress = {
         ...upload,
         id: upload.fileId,
         file: file || {
@@ -110,7 +118,7 @@ export function useEnhancedFileUpload() {
           lastModified: upload.lastModified || Date.now()
         } as File,
         currentChunk: upload.uploadedChunks.length,
-        maxRetries: 3, // Standard-Wert
+        maxRetries: 3,
         speed,
         timeRemaining,
         averageSpeed,
@@ -118,6 +126,7 @@ export function useEnhancedFileUpload() {
         estimatedCompletion: timeRemaining > 0 ? new Date(Date.now() + timeRemaining * 1000) : undefined,
         status: upload.status === "failed" ? "error" : upload.status as any,
       };
+      return enhancedProgress;
     });
   }, [baseHook.uploads, baseHook]);
   
@@ -132,8 +141,21 @@ export function useEnhancedFileUpload() {
     const mergedOptions = {
       ...DEFAULT_UPLOAD_CONFIG,
       ...restOptions,
-      // Convert callbacks to base types
-      onProgress: onProgress ? (progress: any) => onProgress(progress) : undefined,
+      // Convert callbacks to base types - need to transform UploadProgress to EnhancedUploadProgress
+      onProgress: onProgress ? (progress: UploadProgress) => {
+        const enhancedProgress: EnhancedUploadProgress = {
+          ...progress,
+          id: progress.fileId,
+          currentChunk: Math.floor(progress.uploadedBytes / progress.chunkSize),
+          maxRetries: 3, // default value
+          file: undefined, // will be populated in the main mapping
+          speed: calculateSpeed(progress as EnhancedUploadProgress),
+          timeRemaining: calculateTimeRemaining(progress as EnhancedUploadProgress, calculateSpeed(progress as EnhancedUploadProgress)),
+          averageSpeed: calculateAverageSpeed(progress as EnhancedUploadProgress),
+          speedHistory: []
+        };
+        onProgress(enhancedProgress);
+      } : undefined,
       onComplete,
       onError
     };
@@ -146,8 +168,21 @@ export function useEnhancedFileUpload() {
     const mergedOptions = {
       ...DEFAULT_UPLOAD_CONFIG,
       ...restOptions,
-      // Convert callbacks to base types
-      onProgress: onProgress ? (progress: any) => onProgress(progress) : undefined,
+      // Convert callbacks to base types - need to transform UploadProgress to EnhancedUploadProgress
+      onProgress: onProgress ? (progress: UploadProgress) => {
+        const enhancedProgress: EnhancedUploadProgress = {
+          ...progress,
+          id: progress.fileId,
+          currentChunk: Math.floor(progress.uploadedBytes / progress.chunkSize),
+          maxRetries: 3, // default value
+          file: undefined, // will be populated in the main mapping
+          speed: calculateSpeed(progress as EnhancedUploadProgress),
+          timeRemaining: calculateTimeRemaining(progress as EnhancedUploadProgress, calculateSpeed(progress as EnhancedUploadProgress)),
+          averageSpeed: calculateAverageSpeed(progress as EnhancedUploadProgress),
+          speedHistory: []
+        };
+        onProgress(enhancedProgress);
+      } : undefined,
       onComplete,
       onError
     };
@@ -160,8 +195,21 @@ export function useEnhancedFileUpload() {
     const mergedOptions = {
       ...DEFAULT_UPLOAD_CONFIG,
       ...restOptions,
-      // Convert callbacks to base types
-      onProgress: onProgress ? (progress: any) => onProgress(progress) : undefined,
+      // Convert callbacks to base types - need to transform UploadProgress to EnhancedUploadProgress
+      onProgress: onProgress ? (progress: UploadProgress) => {
+        const enhancedProgress: EnhancedUploadProgress = {
+          ...progress,
+          id: progress.fileId,
+          currentChunk: Math.floor(progress.uploadedBytes / progress.chunkSize),
+          maxRetries: 3, // default value
+          file: undefined, // will be populated in the main mapping
+          speed: calculateSpeed(progress as EnhancedUploadProgress),
+          timeRemaining: calculateTimeRemaining(progress as EnhancedUploadProgress, calculateSpeed(progress as EnhancedUploadProgress)),
+          averageSpeed: calculateAverageSpeed(progress as EnhancedUploadProgress),
+          speedHistory: []
+        };
+        onProgress(enhancedProgress);
+      } : undefined,
       onComplete,
       onError
     };

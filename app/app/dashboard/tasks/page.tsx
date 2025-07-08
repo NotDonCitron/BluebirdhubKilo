@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,24 +24,21 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
   Plus,
   Search,
-  Filter,
   MoreVertical,
   Calendar,
   User,
   CheckCircle2,
-  Clock,
-  AlertCircle,
   MessageSquare,
   Edit,
   Trash2
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { appLogger } from '@/lib/logger';
 
 interface Task {
   id: string;
@@ -73,10 +70,16 @@ interface Task {
   };
 }
 
+interface Workspace {
+  id: string;
+  name: string;
+  color: string;
+}
+
 export default function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [workspaces, setWorkspaces] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
+  // const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -95,29 +98,23 @@ export default function TasksPage() {
     assignedUserIds: [] as string[]
   });
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
-      const [tasksRes, workspacesRes, usersRes] = await Promise.all([
+      const [tasksRes, workspacesRes] = await Promise.all([
         fetch('/api/tasks'),
-        fetch('/api/workspaces'),
-        fetch('/api/users')
+        fetch('/api/workspaces')
       ]);
 
-      const [tasksData, workspacesData, usersData] = await Promise.all([
+      const [tasksData, workspacesData] = await Promise.all([
         tasksRes.json(),
-        workspacesRes.json(),
-        usersRes.json()
+        workspacesRes.json()
       ]);
 
       setTasks(tasksData);
       setWorkspaces(workspacesData);
-      setUsers(usersData);
+      // setUsers(usersData);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      appLogger.error('Error fetching data:', error);
       toast({
         title: 'Error',
         description: 'Failed to load data',
@@ -126,7 +123,11 @@ export default function TasksPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleCreateTask = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -164,7 +165,7 @@ export default function TasksPage() {
         throw new Error('Failed to create task');
       }
     } catch (error) {
-      console.error('Error creating task:', error);
+      appLogger.error('Error creating task:', error);
       toast({
         title: 'Error',
         description: 'Failed to create task',
@@ -192,7 +193,7 @@ export default function TasksPage() {
         });
       }
     } catch (error) {
-      console.error('Error updating task:', error);
+      appLogger.error('Error updating task:', error);
       toast({
         title: 'Error',
         description: 'Failed to update task',
@@ -219,7 +220,7 @@ export default function TasksPage() {
         });
       }
     } catch (error) {
-      console.error('Error deleting task:', error);
+      appLogger.error('Error deleting task:', error);
       toast({
         title: 'Error',
         description: 'Failed to delete task',
@@ -289,12 +290,12 @@ export default function TasksPage() {
         
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button data-testid="create-task">
               <Plus className="w-4 h-4 mr-2" />
               New Task
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent className="sm:max-w-[500px]" data-testid="task-modal">
             <form onSubmit={handleCreateTask}>
               <DialogHeader>
                 <DialogTitle>Create New Task</DialogTitle>
@@ -307,6 +308,8 @@ export default function TasksPage() {
                   <Label htmlFor="title">Task Title</Label>
                   <Input
                     id="title"
+                    name="title"
+                    data-testid="task-title-input"
                     placeholder="Enter task title"
                     value={newTask.title}
                     onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
@@ -317,6 +320,8 @@ export default function TasksPage() {
                   <Label htmlFor="description">Description</Label>
                   <Textarea
                     id="description"
+                    name="description"
+                    data-testid="task-description-input"
                     placeholder="Describe the task"
                     value={newTask.description}
                     onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
@@ -326,11 +331,11 @@ export default function TasksPage() {
                   <div className="space-y-2">
                     <Label>Workspace</Label>
                     <Select value={newTask.workspaceId} onValueChange={(value) => setNewTask({ ...newTask, workspaceId: value })}>
-                      <SelectTrigger>
+                      <SelectTrigger data-testid="task-workspace-select">
                         <SelectValue placeholder="Select workspace" />
                       </SelectTrigger>
                       <SelectContent>
-                        {workspaces.map((workspace: any) => (
+                        {workspaces.map((workspace: Workspace) => (
                           <SelectItem key={workspace.id} value={workspace.id}>
                             <div className="flex items-center gap-2">
                               <div
@@ -347,7 +352,7 @@ export default function TasksPage() {
                   <div className="space-y-2">
                     <Label>Priority</Label>
                     <Select value={newTask.priority} onValueChange={(value) => setNewTask({ ...newTask, priority: value })}>
-                      <SelectTrigger>
+                      <SelectTrigger data-testid="task-priority-select">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -363,6 +368,8 @@ export default function TasksPage() {
                   <Label htmlFor="dueDate">Due Date</Label>
                   <Input
                     id="dueDate"
+                    name="dueDate"
+                    data-testid="task-due-date-input"
                     type="date"
                     value={newTask.dueDate}
                     onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
@@ -370,7 +377,7 @@ export default function TasksPage() {
                 </div>
               </div>
               <DialogFooter>
-                <Button type="submit">Create Task</Button>
+                <Button type="submit" data-testid="task-submit-button">Create Task</Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -423,7 +430,7 @@ export default function TasksPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Workspaces</SelectItem>
-            {workspaces.map((workspace: any) => (
+            {workspaces.map((workspace: Workspace) => (
               <SelectItem key={workspace.id} value={workspace.id}>
                 {workspace.name}
               </SelectItem>

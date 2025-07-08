@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
 import { z } from 'zod';
+import { appLogger } from '@/lib/logger';
 
 const securityUpdateSchema = z.object({
   twoFactorEnabled: z.boolean().optional(),
@@ -45,7 +46,7 @@ export async function GET() {
       suspiciousActivityAlerts: userSettings.suspiciousActivityAlerts ?? true,
     });
   } catch (error) {
-    console.error('Error fetching security settings:', error);
+    appLogger.error('Error fetching security settings:', error);
     return NextResponse.json(
       { error: 'Failed to fetch security settings' },
       { status: 500 }
@@ -95,7 +96,7 @@ export async function PUT(request: NextRequest) {
       );
     }
     
-    console.error('Error updating security settings:', error);
+    appLogger.error('Error updating security settings:', error);
     return NextResponse.json(
       { error: 'Failed to update security settings' },
       { status: 500 }

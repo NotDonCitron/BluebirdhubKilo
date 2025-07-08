@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { RealTimeProvider, useRealTime } from '@/components/providers/real-time-provider';
 import { useSession } from 'next-auth/react';
 
@@ -15,18 +15,23 @@ jest.mock('react-hot-toast', () => ({
 
 const mockUseSession = useSession as jest.MockedFunction<typeof useSession>;
 
-// Mock EventSource
+// Create a mock EventSource instance that we can access in tests
 const mockEventSource = {
   addEventListener: jest.fn(),
   removeEventListener: jest.fn(),
   close: jest.fn(),
-  readyState: 1,
-  CONNECTING: 0,
-  OPEN: 1,
-  CLOSED: 2,
+  readyState: 0,
+  url: '',
+  simulateMessage: jest.fn(),
+  simulateError: jest.fn(),
 };
 
-global.EventSource = jest.fn(() => mockEventSource) as any;
+// Override the global EventSource mock to return our controllable instance
+const MockEventSourceConstructor = jest.fn(() => mockEventSource);
+MockEventSourceConstructor.CONNECTING = 0;
+MockEventSourceConstructor.OPEN = 1;
+MockEventSourceConstructor.CLOSED = 2;
+global.EventSource = MockEventSourceConstructor as any;
 
 // Mock fetch for settings
 global.fetch = jest.fn();
@@ -78,6 +83,12 @@ describe('RealTimeProvider', () => {
       status: 'authenticated',
     } as any);
 
+    // Clear the EventSource mock calls
+    (global.EventSource as jest.Mock).mockClear();
+    mockEventSource.addEventListener.mockClear();
+    mockEventSource.removeEventListener.mockClear();
+    mockEventSource.close.mockClear();
+
     // Mock notification settings fetch
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
@@ -91,6 +102,21 @@ describe('RealTimeProvider', () => {
         <TestComponent />
       </RealTimeProvider>
     );
+
+    // Wait for EventSource to be created
+    await waitFor(() => {
+      expect(global.EventSource).toHaveBeenCalledWith('/api/events/stream');
+    });
+
+    // Get the mock EventSource instance
+    const mockInstance = (global.EventSource as jest.MockedClass<typeof EventSource>).mock.results[0]?.value;
+    
+    if (mockInstance && mockInstance.simulateOpen) {
+      // Trigger the connection to open
+      act(() => {
+        mockInstance.simulateOpen();
+      });
+    }
 
     await waitFor(() => {
       expect(screen.getByTestId('connection-status')).toHaveTextContent('Connected');
@@ -291,7 +317,11 @@ describe('RealTimeProvider', () => {
     // Mock Notification API
     const mockNotificationConstructor = jest.fn();
     global.Notification = mockNotificationConstructor as any;
-    global.Notification.permission = 'granted';
+    Object.defineProperty(global.Notification, 'permission', {
+      value: 'granted',
+      writable: true,
+      configurable: true
+    });
     global.Notification.requestPermission = jest.fn().mockResolvedValue('granted');
 
     render(

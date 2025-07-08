@@ -2,7 +2,7 @@
 const connections = new Map<string, WritableStreamDefaultWriter>();
 
 // Function to send events to specific user
-export function sendEventToUser(userId: string, eventType: string, data: any) {
+export function sendEventToUser(userId: string, eventType: string, data: Record<string, unknown>) {
   const connection = connections.get(userId);
   if (connection) {
     try {
@@ -13,7 +13,7 @@ export function sendEventToUser(userId: string, eventType: string, data: any) {
         timestamp: new Date().toISOString(),
       };
       
-      connection.enqueue(
+      connection.write(
         encoder.encode(`data: ${JSON.stringify(event)}\n\n`)
       );
     } catch (error) {
@@ -24,7 +24,7 @@ export function sendEventToUser(userId: string, eventType: string, data: any) {
 }
 
 // Function to broadcast events to all connected users
-export function broadcastEvent(eventType: string, data: any) {
+export function broadcastEvent(eventType: string, data: Record<string, unknown>) {
   const encoder = new TextEncoder();
   const event = {
     type: eventType,
@@ -36,7 +36,7 @@ export function broadcastEvent(eventType: string, data: any) {
   
   connections.forEach((connection, userId) => {
     try {
-      connection.enqueue(eventData);
+      connection.write(eventData);
     } catch (error) {
       console.error(`Error broadcasting to user ${userId}:`, error);
       connections.delete(userId);

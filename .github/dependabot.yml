@@ -1,0 +1,72 @@
+version: 2
+updates:
+  # Enable version updates for npm (app directory)
+  - package-ecosystem: "npm"
+    directory: "/app"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "phhtttps"
+    assignees:
+      - "phhtttps"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+        update-type: "security"
+    ignore:
+      # Ignore major version updates for core framework dependencies
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+    groups:
+      # Group testing dependencies
+      testing:
+        patterns:
+          - "jest*"
+          - "@testing-library/*"
+          - "puppeteer*"
+        update-types:
+          - "minor"
+          - "patch"
+      # Group ESLint and TypeScript dependencies
+      linting:
+        patterns:
+          - "eslint*"
+          - "@typescript-eslint/*"
+          - "prettier*"
+        update-types:
+          - "minor"
+          - "patch"
+      # Group Prisma dependencies
+      database:
+        patterns:
+          - "prisma*"
+          - "@prisma/*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "github-actions"
+      - "dependencies"

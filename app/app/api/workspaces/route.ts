@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
+import { appLogger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -46,7 +47,9 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(workspaces);
   } catch (error) {
-    console.error('Error fetching workspaces:', error);
+    appLogger.error('Error fetching workspaces', error as Error, {
+      userId: session?.user?.id
+    });
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -55,15 +58,34 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const start = Date.now();
+  
   try {
     const session = await getServerSession(authOptions);
+    
     if (!session?.user?.id) {
+      appLogger.warn('Unauthorized workspace creation attempt', {
+        hasSession: !!session,
+        hasUser: !!session?.user,
+        hasUserId: !!session?.user?.id
+      });
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { name, description, color, icon } = await request.json();
+    
+    appLogger.info('Workspace creation request', {
+      userId: session.user.id,
+      hasName: !!name,
+      hasDescription: !!description,
+      hasColor: !!color,
+      hasIcon: !!icon
+    });
 
     if (!name) {
+      appLogger.warn('Workspace creation failed - missing name', {
+        userId: session.user.id
+      });
       return NextResponse.json(
         { error: 'Workspace name is required' },
         { status: 400 }
@@ -88,9 +110,22 @@ export async function POST(request: NextRequest) {
       }
     });
 
+    const duration = Date.now() - start;
+    appLogger.info('Workspace created successfully', {
+      workspaceId: workspace.id,
+      workspaceName: workspace.name,
+      ownerId: workspace.ownerId,
+      duration
+    });
+
     return NextResponse.json(workspace);
   } catch (error) {
-    console.error('Error creating workspace:', error);
+    const duration = Date.now() - start;
+    appLogger.error('Workspace creation failed', error as Error, {
+      userId: session?.user?.id,
+      duration
+    });
+    
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

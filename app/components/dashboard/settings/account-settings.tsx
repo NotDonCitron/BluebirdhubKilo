@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -11,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { toast } from 'react-hot-toast';
-import { Loader2, Shield, Key, Trash2, AlertTriangle, Download, RefreshCw, Calendar } from 'lucide-react';
+import { Loader2, Shield, Trash2, AlertTriangle, RefreshCw, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface SecuritySettings {
@@ -40,12 +39,10 @@ interface ActivityLog {
 }
 
 export function AccountSettings() {
-  const { data: session } = useSession();
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [securitySettings, setSecuritySettings] = useState<SecuritySettings | null>(null);
   const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [isChangingEmail, setIsChangingEmail] = useState(false);
 
@@ -84,7 +81,7 @@ export function AccountSettings() {
     }
   };
 
-  const updateSecuritySetting = async (key: keyof SecuritySettings, value: any) => {
+  const updateSecuritySetting = async (key: keyof SecuritySettings, value: string | boolean) => {
     if (!securitySettings) return;
 
     const updatedSettings = { ...securitySettings, [key]: value };
@@ -254,7 +251,7 @@ export function AccountSettings() {
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                You'll receive a confirmation email to verify the new address.
+                You&apos;ll receive a confirmation email to verify the new address.
               </p>
             </div>
           </div>
@@ -331,7 +328,7 @@ export function AccountSettings() {
             </div>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="outline">
+                <Button variant="outline" data-testid="terminate-sessions-trigger">
                   <RefreshCw className="mr-2 h-4 w-4" />
                   Terminate All Sessions
                 </Button>
@@ -340,12 +337,12 @@ export function AccountSettings() {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Terminate All Sessions?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This will log you out from all devices and browsers. You'll need to log in again.
+                    This will log you out from all devices and browsers. You&apos;ll need to log in again.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={terminateAllSessions}>
+                  <AlertDialogCancel data-testid="terminate-sessions-cancel">Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={terminateAllSessions} data-testid="terminate-sessions-confirm">
                     Terminate Sessions
                   </AlertDialogAction>
                 </AlertDialogFooter>
@@ -407,7 +404,7 @@ export function AccountSettings() {
             </div>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="destructive">
+                <Button variant="destructive" data-testid="delete-account-trigger">
                   <Trash2 className="mr-2 h-4 w-4" />
                   Delete Account
                 </Button>
@@ -427,10 +424,11 @@ export function AccountSettings() {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel data-testid="delete-account-cancel">Cancel</AlertDialogCancel>
                   <AlertDialogAction 
                     onClick={deleteAccount}
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    data-testid="delete-account-confirm"
                   >
                     Yes, Delete My Account
                   </AlertDialogAction>

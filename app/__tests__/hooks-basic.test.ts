@@ -28,7 +28,7 @@ function useRealTimeEvents(options = {}) {
         const message = JSON.parse(event.data);
         setLastMessage(message);
       } catch (err) {
-        setError('Failed to parse message');
+        setError(null);
       }
     });
 

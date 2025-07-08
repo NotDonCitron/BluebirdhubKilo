@@ -1,0 +1,42 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "noEmit": true,
+    "isolatedModules": false,
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "declaration": false,
+    "noUncheckedIndexedAccess": false,
+    "types": ["jest", "@testing-library/jest-dom", "node", "jsdom"],
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "paths": {
+      "@/*": ["./*"],
+      "@/components/*": ["./components/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/hooks/*": ["./hooks/*"],
+      "@/app/*": ["./app/*"],
+      "@/prisma/*": ["./prisma/*"]
+    }
+  },
+  "include": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "__tests__/**/*",
+    "tests/**/*",
+    "jest.setup.js",
+    "jest.config.js",
+    "jest.e2e.config.js",
+    "node_modules/@jest/globals/build/index.d.ts"
+  ],
+  "exclude": ["node_modules", ".next", "coverage", "dist"]
+}

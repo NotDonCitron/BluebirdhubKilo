@@ -34,7 +34,7 @@ export async function sanitizeHtml(input: string): Promise<string> {
       ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'ol', 'ul', 'li'],
       ALLOWED_ATTR: [],
     });
-  } catch (error) {
+  } catch {
     // Fallback to basic text sanitization if DOMPurify fails
     return sanitizeText(input);
   }
@@ -190,7 +190,10 @@ export function validateRequest<T>(schema: z.ZodSchema<T>) {
           if (!fields[path]) {
             fields[path] = [];
           }
-          fields[path].push(err.message);
+          const fieldArray = fields[path];
+          if (fieldArray) {
+            fieldArray.push(err.message);
+          }
         });
         throw new ValidationError('Validation failed', fields);
       }
@@ -200,7 +203,8 @@ export function validateRequest<T>(schema: z.ZodSchema<T>) {
 }
 
 // Rate limiting validation
-export function validateRateLimit(identifier: string, maxRequests: number, windowMs: number): boolean {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function validateRateLimit(_identifier: string, _maxRequests: number, _windowMs: number): boolean {
   // Implement rate limiting logic here
   // This is a placeholder - in production, use Redis or similar
   return true;
@@ -209,18 +213,32 @@ export function validateRateLimit(identifier: string, maxRequests: number, windo
 // Content Security Policy helpers
 export const CSP_DIRECTIVES = {
   'default-src': ["'self'"],
-  'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-  'style-src': ["'self'", "'unsafe-inline'"],
-  'img-src': ["'self'", 'data:', 'https:'],
-  'connect-src': ["'self'"],
-  'font-src': ["'self'"],
+  'script-src': process.env.NODE_ENV === 'development'
+    ? ["'self'", "'unsafe-eval'", "'unsafe-inline'", "'wasm-unsafe-eval'"]
+    : ["'self'", "'wasm-unsafe-eval'"], // Allow eval and inline scripts in development
+  'style-src': ["'self'", "'unsafe-inline'"], // Required for CSS-in-JS and Tailwind
+  'img-src': ["'self'", 'data:', 'https:', 'blob:'],
+  'connect-src': ["'self'", 'https:', 'wss:', 'ws:'], // Allow HTTPS and WebSocket connections
+  'font-src': ["'self'", 'data:', 'https:'],
   'object-src': ["'none'"],
-  'media-src': ["'self'"],
-  'frame-src': ["'none'"],
+  'base-uri': ["'self'"],
+  'form-action': ["'self'"],
+  'frame-ancestors': ["'none'"],
+  'media-src': ["'self'", 'blob:', 'data:'],
+  'worker-src': ["'self'", 'blob:'],
+  'child-src': ["'self'"],
+  'manifest-src': ["'self'"],
+  'upgrade-insecure-requests': process.env.NODE_ENV === 'production' ? [] : undefined
 };
 
 export function generateCSPHeader(): string {
   return Object.entries(CSP_DIRECTIVES)
-    .map(([directive, sources]) => `${directive} ${sources.join(' ')}`)
+    .filter(([, sources]) => sources !== undefined)
+    .map(([directive, sources]) => {
+      if (!sources || sources.length === 0) {
+        return directive;
+      }
+      return `${directive} ${sources.join(' ')}`;
+    })
     .join('; ');
 }

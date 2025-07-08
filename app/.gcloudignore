@@ -1,0 +1,68 @@
+# Exclude files from GCP deployment
+.git
+.gitignore
+node_modules
+tests/
+coverage/
+docs/
+*.md
+*.log
+*.png
+*.jpg
+*.jpeg
+*.gif
+.env.local
+.env.development
+.eslintrc.json
+jest.config.js
+jest.e2e.config.js
+jest.setup.js
+jest.setup.api.js
+postcss.config.js
+tailwind.config.ts
+tsconfig.tsbuildinfo
+.next/cache
+
+# Test files
+__tests__/
+*.test.ts
+*.test.tsx
+*.test.js
+*.test.jsx
+
+# Development scripts
+scripts/create-test-user.js
+debug-*.js
+test-*.js
+validate-*.js
+run-integration-tests*.js
+generate-test-report.js
+comprehensive-login-test.js
+enhanced-test.js
+fix-test-selectors*.js
+
+# Reports and analysis
+test-errors*.md
+e2e-test*.md
+integration-test*.md
+fix-errors.md
+eslint-*.md
+switch-testing-errors.md
+
+# MCP server
+mcp-server/
+
+# Uploads directory
+uploads/
+
+# Development database
+prisma/dev.db
+prisma/prisma/
+
+# Problematic directories
+app/(main)/debug/
+app/(main)/files/
+app/(main)/test-upload/
+app/test-auth/
+app/test-debug/
+app/test/

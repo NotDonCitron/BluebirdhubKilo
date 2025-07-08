@@ -1,67 +1,10 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "installCommand": "npm install",
-  "devCommand": "npm run dev",
+  "buildCommand": "npx prisma generate && npm run build",
   "regions": ["fra1"],
-  "functions": {
-    "app/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "env": {
-    "DATABASE_URL": "@database-url",
-    "DIRECT_URL": "@direct-url",
-    "NEXTAUTH_SECRET": "@nextauth-secret",
-    "NEXTAUTH_URL": "@nextauth-url",
-    "SUPABASE_URL": "@supabase-url",
-    "SUPABASE_SERVICE_ROLE_KEY": "@supabase-service-role-key",
-    "BLOB_READ_WRITE_TOKEN": "@blob-read-write-token"
-  },
-  "build": {
-    "env": {
-      "DATABASE_URL": "@database-url",
-      "DIRECT_URL": "@direct-url",
-      "NEXTAUTH_SECRET": "@nextauth-secret",
-      "NEXTAUTH_URL": "@nextauth-url",
-      "SUPABASE_URL": "@supabase-url",
-      "SUPABASE_SERVICE_ROLE_KEY": "@supabase-service-role-key",
-      "BLOB_READ_WRITE_TOKEN": "@blob-read-write-token"
-    }
-  },
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, POST, PUT, DELETE, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization"
-        }
-      ]
-    }
-  ],
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/dashboard",
-      "permanent": false
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api/upload",
-      "destination": "/api/upload"
-    }
-  ],
-  "crons": []
+    "NEXTAUTH_URL": "https://app-o7ddt78zw-phhttps-projects.vercel.app",
+    "NODE_ENV": "production"
+  }
 }

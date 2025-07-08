@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import { useDropzone, FileRejection } from "react-dropzone";
 import { useFileUpload } from "@/hooks/use-file-upload";
 import {
   Upload,
@@ -12,17 +12,35 @@ import {
   RotateCcw,
   CheckCircle,
   AlertCircle,
-  Trash2,
 } from "lucide-react";
 import { formatBytes } from "@/lib/utils";
 import { toast } from "react-hot-toast";
+
+interface UploadResponse {
+  fileId: string;
+  fileName: string;
+  url?: string;
+  [key: string]: unknown;
+}
+
+interface UploadItem {
+  fileId: string;
+  fileName: string;
+  fileSize: number;
+  uploadedBytes: number;
+  progress: number;
+  status: string;
+  error?: string;
+  retryCount: number;
+  startTime: number;
+}
 
 interface FileUploadProps {
   uploadUrl: string;
   maxFiles?: number;
   maxFileSize?: number;
   acceptedFileTypes?: string[];
-  onUploadComplete?: (fileId: string, response: any) => void;
+  onUploadComplete?: (fileId: string, response: UploadResponse) => void;
   onUploadError?: (fileId: string, error: Error) => void;
   headers?: HeadersInit;
 }
@@ -48,10 +66,10 @@ export function FileUpload({
   } = useFileUpload();
 
   const onDrop = useCallback(
-    (acceptedFiles: File[], rejectedFiles: any[]) => {
+    (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       // Handle rejected files
       rejectedFiles.forEach((file) => {
-        const errors = file.errors.map((e: any) => e.message).join(", ");
+        const errors = file.errors.map((e) => e.message).join(", ");
         toast.error(`${file.file.name}: ${errors}`);
       });
 
@@ -60,7 +78,9 @@ export function FileUpload({
         uploadFile(file, {
           url: uploadUrl,
           headers,
-          onComplete: onUploadComplete,
+          onComplete: onUploadComplete ? (fileId: string, response: Record<string, unknown>) => {
+            onUploadComplete(fileId, response as UploadResponse);
+          } : undefined,
           onError: onUploadError,
         });
       });
@@ -97,7 +117,7 @@ export function FileUpload({
     }
   };
 
-  const getActionButton = (upload: any) => {
+  const getActionButton = (upload: UploadItem) => {
     switch (upload.status) {
       case "uploading":
         return (
@@ -116,7 +136,9 @@ export function FileUpload({
               resumeUpload(upload.fileId, {
                 url: uploadUrl,
                 headers,
-                onComplete: onUploadComplete,
+                onComplete: onUploadComplete ? (fileId: string, response: Record<string, unknown>) => {
+                  onUploadComplete(fileId, response as UploadResponse);
+                } : undefined,
                 onError: onUploadError,
               })
             }
@@ -133,7 +155,9 @@ export function FileUpload({
               retryUpload(upload.fileId, {
                 url: uploadUrl,
                 headers,
-                onComplete: onUploadComplete,
+                onComplete: onUploadComplete ? (fileId: string, response: Record<string, unknown>) => {
+                  onUploadComplete(fileId, response as UploadResponse);
+                } : undefined,
                 onError: onUploadError,
               })
             }
@@ -148,7 +172,7 @@ export function FileUpload({
     }
   };
 
-  const formatTimeRemaining = (upload: any) => {
+  const formatTimeRemaining = (upload: UploadItem) => {
     if (upload.status !== "uploading" || upload.progress === 0) {
       return "";
     }

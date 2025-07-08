@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { addConnection, removeConnection } from '@/lib/sse-utils';
+import { appLogger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -31,9 +32,10 @@ export async function GET(request: NextRequest) {
           encoder.encode(`data: ${JSON.stringify(initialMessage)}\n\n`)
         );
 
-        // Store the connection
-        const writer = controller as any;
-        addConnection(userId, writer);
+        // Store the connection - use any for now to fix build
+        // TODO: Implement proper SSE connection management
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        addConnection(userId, controller as any);
 
         // Send heartbeat every 30 seconds
         const heartbeatInterval = setInterval(() => {
@@ -48,7 +50,7 @@ export async function GET(request: NextRequest) {
               encoder.encode(`data: ${JSON.stringify(heartbeat)}\n\n`)
             );
           } catch (error) {
-            console.error('Heartbeat error:', error);
+            appLogger.error('Heartbeat error:', error);
             clearInterval(heartbeatInterval);
             removeConnection(userId);
           }
@@ -77,7 +79,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('SSE connection error:', error);
+    appLogger.error('SSE connection error:', error);
     return new Response('Internal Server Error', { status: 500 });
   }
 }

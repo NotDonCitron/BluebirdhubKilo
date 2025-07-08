@@ -17,8 +17,6 @@ import {
   Shield, 
   Trash2,
   Palette,
-  Globe,
-  Clock
 } from 'lucide-react';
 
 export default function SettingsPage() {

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { prisma } from "@/lib/db";
+import { appLogger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -9,7 +11,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    console.log("Starting cleanup of expired sessions...");
+    appLogger.info("Starting cleanup of expired sessions...");
     
     // Delete expired sessions
     const result = await prisma.session.deleteMany({
@@ -46,11 +48,11 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString(),
     };
     
-    console.log("Session cleanup complete:", cleanupResult);
+    appLogger.info("Session cleanup complete", cleanupResult);
     
     return NextResponse.json(cleanupResult);
   } catch (error) {
-    console.error("Session cleanup failed:", error);
+    appLogger.error("Session cleanup failed:", error as Error);
     return NextResponse.json(
       { 
         error: "Cleanup failed", 

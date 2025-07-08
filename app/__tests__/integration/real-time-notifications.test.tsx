@@ -1,9 +1,18 @@
 import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor, act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RealTimeProvider } from '@/components/providers/real-time-provider';
 import { TestRealTime } from '@/components/dashboard/test-real-time';
 import { useSession } from 'next-auth/react';
+
+
+jest.mock('next-auth/react', () => ({
+  useSession: jest.fn(() => ({
+    data: { user: { id: '1', name: 'Test User' } },
+    status: 'authenticated'
+  })),
+  SessionProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
 
 // Mock dependencies
 jest.mock('next-auth/react');
@@ -41,7 +50,11 @@ global.Audio = jest.fn().mockImplementation(() => ({
 })) as any;
 
 global.Notification = jest.fn() as any;
-global.Notification.permission = 'granted';
+Object.defineProperty(global.Notification, 'permission', {
+  value: 'granted',
+  writable: true,
+  configurable: true
+});
 global.Notification.requestPermission = jest.fn().mockResolvedValue('granted');
 
 const mockSession = {
@@ -64,6 +77,10 @@ const mockNotificationSettings = {
 };
 
 describe('Real-time Notifications Integration', () => {
+  afterEach(() => {
+    cleanup();
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
     mockUseSession.mockReturnValue({
@@ -331,7 +348,11 @@ describe('Real-time Notifications Integration', () => {
   it('shows desktop notifications when enabled', async () => {
     const mockNotificationConstructor = jest.fn();
     global.Notification = mockNotificationConstructor as any;
-    global.Notification.permission = 'granted';
+    Object.defineProperty(global.Notification, 'permission', {
+      value: 'granted',
+      writable: true,
+      configurable: true
+    });
 
     render(
       <RealTimeProvider>

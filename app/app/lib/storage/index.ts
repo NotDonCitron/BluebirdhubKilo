@@ -98,8 +98,9 @@ export class LocalFileSystemProvider implements StorageProvider {
     const filePath = this.getFilePath(key);
     try {
       await fs.unlink(filePath);
-    } catch (error: any) {
-      if (error.code !== "ENOENT") {
+    } catch (error: unknown) {
+      const err = error as NodeJS.ErrnoException | Error;
+      if ((err as NodeJS.ErrnoException).code !== "ENOENT") {
         throw error;
       }
     }
@@ -153,8 +154,9 @@ export class LocalFileSystemProvider implements StorageProvider {
     
     try {
       await walk(searchPath);
-    } catch (error: any) {
-      if (error.code !== "ENOENT") {
+    } catch (error: unknown) {
+      const err = error as NodeJS.ErrnoException | Error;
+      if ((err as NodeJS.ErrnoException).code !== "ENOENT") {
         throw error;
       }
     }
@@ -177,7 +179,8 @@ export class LocalFileSystemProvider implements StorageProvider {
  * S3-Compatible Storage Provider (Stub for future implementation)
  */
 export class S3StorageProvider implements StorageProvider {
-  constructor(config: {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  constructor(_config: {
     endpoint?: string;
     region: string;
     bucket: string;
@@ -188,23 +191,28 @@ export class S3StorageProvider implements StorageProvider {
     throw new Error("S3 storage provider not yet implemented");
   }
   
-  async write(key: string, buffer: Buffer): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async write(_key: string, _buffer: Buffer): Promise<void> {
     throw new Error("Not implemented");
   }
   
-  async read(key: string): Promise<Buffer> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async read(_key: string): Promise<Buffer> {
     throw new Error("Not implemented");
   }
   
-  async delete(key: string): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async delete(_key: string): Promise<void> {
     throw new Error("Not implemented");
   }
   
-  async exists(key: string): Promise<boolean> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async exists(_key: string): Promise<boolean> {
     throw new Error("Not implemented");
   }
   
-  async getMetadata(key: string): Promise<{
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getMetadata(_key: string): Promise<{
     size: number;
     lastModified: Date;
     contentType?: string;
@@ -212,11 +220,13 @@ export class S3StorageProvider implements StorageProvider {
     throw new Error("Not implemented");
   }
   
-  async list(prefix?: string): Promise<string[]> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async list(_prefix?: string): Promise<string[]> {
     throw new Error("Not implemented");
   }
   
-  async getSignedUrl(key: string, expiresIn: number): Promise<string> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getSignedUrl(_key: string, _expiresIn: number): Promise<string> {
     throw new Error("Not implemented");
   }
 }
@@ -226,13 +236,19 @@ export class S3StorageProvider implements StorageProvider {
  * Implements storage using Supabase Storage buckets
  */
 export class SupabaseStorageProvider implements StorageProvider {
-  private supabase: any;
+  private supabase: ReturnType<typeof createClient>;
   private bucket: string;
   
   constructor() {
-    const supabaseUrl = process.env.SUPABASE_URL || "https://lutlwrjbetraagitvgmf.supabase.co";
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1dGx3cmpiZXRyYWFnaXR2Z21mIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MDc5NDM1NCwiZXhwIjoyMDY2MzcwMzU0fQ.UUJ78cNezG5A7kkrvHidcclfQ8_GRETfcOcrJAN6Xow";
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     this.bucket = process.env.SUPABASE_STORAGE_BUCKET || "abacushub-files";
+    
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error(
+        'Missing required Supabase environment variables. Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY'
+      );
+    }
     
     this.supabase = createClient(supabaseUrl, supabaseKey, {
       auth: {
@@ -251,7 +267,8 @@ export class SupabaseStorageProvider implements StorageProvider {
       });
       
     if (error) {
-      throw new Error(`Failed to upload file: ${error.message}`);
+      const err = error as Error;
+      throw new Error(`Failed to upload file: ${err.message}`);
     }
   }
   
@@ -261,7 +278,8 @@ export class SupabaseStorageProvider implements StorageProvider {
       .download(key);
       
     if (error) {
-      throw new Error(`Failed to read file: ${error.message}`);
+      const err = error as Error;
+      throw new Error(`Failed to read file: ${err.message}`);
     }
     
     const arrayBuffer = await data.arrayBuffer();
@@ -274,7 +292,8 @@ export class SupabaseStorageProvider implements StorageProvider {
       .remove([key]);
       
     if (error) {
-      throw new Error(`Failed to delete file: ${error.message}`);
+      const err = error as Error;
+      throw new Error(`Failed to delete file: ${err.message}`);
     }
   }
   
@@ -310,6 +329,9 @@ export class SupabaseStorageProvider implements StorageProvider {
     }
     
     const file = data[0];
+    if (!file) {
+      throw new Error(`File not found: ${key}`);
+    }
     return {
       size: file.metadata?.size || 0,
       lastModified: new Date(file.updated_at || file.created_at),
@@ -326,10 +348,11 @@ export class SupabaseStorageProvider implements StorageProvider {
       });
       
     if (error) {
-      throw new Error(`Failed to list files: ${error.message}`);
+      const err = error as Error;
+      throw new Error(`Failed to list files: ${err.message}`);
     }
     
-    return data?.map((file: any) => 
+    return data?.map((file: { name: string }) => 
       prefix ? `${prefix}/${file.name}` : file.name
     ) || [];
   }
@@ -340,7 +363,8 @@ export class SupabaseStorageProvider implements StorageProvider {
       .createSignedUrl(key, expiresIn);
       
     if (error) {
-      throw new Error(`Failed to create signed URL: ${error.message}`);
+      const err = error as Error;
+      throw new Error(`Failed to create signed URL: ${err.message}`);
     }
     
     return data.signedUrl;
@@ -396,7 +420,7 @@ export class VercelBlobStorageProvider implements StorageProvider {
   
   async read(key: string): Promise<Buffer> {
     // For Vercel Blob, we need to fetch the file from the public URL
-    const metadata = await this.getMetadata(key);
+    // const metadata = await this.getMetadata(key);
     const response = await fetch(await this.getPublicUrl(key));
     
     if (!response.ok) {
@@ -415,8 +439,10 @@ export class VercelBlobStorageProvider implements StorageProvider {
     try {
       await head(key, { token: this.token });
       return true;
-    } catch (error: any) {
-      if (error.message?.includes('not found') || error.status === 404) {
+    } catch (error: unknown) {
+      const err = error as NodeJS.ErrnoException | Error & { status?: number };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (err.message?.includes('not found') || (err as any).status === 404) {
         return false;
       }
       throw error;
@@ -446,6 +472,7 @@ export class VercelBlobStorageProvider implements StorageProvider {
     return blobs.map(blob => blob.pathname);
   }
   
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getSignedUrl(key: string, expiresIn: number): Promise<string> {
     // Vercel Blob Storage files are publicly accessible by default
     // For private access, you would need to implement your own token-based system
@@ -494,6 +521,7 @@ export class StorageFactory {
    * Reset the singleton instance (useful for testing)
    */
   static reset(): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.instance = undefined as any;
   }
 }

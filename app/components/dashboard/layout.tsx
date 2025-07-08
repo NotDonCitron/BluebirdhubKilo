@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { useTheme } from 'next-themes';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -15,15 +15,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from '@/components/ui/sheet';
 import {
-  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -45,8 +42,7 @@ import {
   Menu,
   Bell,
   Plus,
-  Sparkles,
-  Keyboard
+  Sparkles
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -58,6 +54,12 @@ import { RealTimeStatus } from '@/components/dashboard/real-time-status';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
+}
+
+interface Workspace {
+  id: string;
+  name: string;
+  color: string;
 }
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
@@ -156,11 +158,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </Button>
           </div>
           <div className="space-y-1">
-            {workspaces.slice(0, 3).map((workspace: any) => (
+            {workspaces.slice(0, 3).map((workspace: Workspace) => (
               <Link
                 key={workspace.id}
                 href={`/dashboard/workspaces/${workspace.id}`}
-                onClick={() => setIsSidebarOpen(false)}
+                onClick={() => {
+                  console.log(`Navigating to workspace: ${workspace.name} (${workspace.id})`);
+                  setIsSidebarOpen(false);
+                }}
                 className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm hover:bg-muted transition-colors"
               >
                 <div
@@ -335,7 +340,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </CommandGroup>
           {workspaces.length > 0 && (
             <CommandGroup heading="Workspaces">
-              {workspaces.map((workspace: any) => (
+              {workspaces.map((workspace: Workspace) => (
                 <CommandItem
                   key={workspace.id}
                   onSelect={() => {

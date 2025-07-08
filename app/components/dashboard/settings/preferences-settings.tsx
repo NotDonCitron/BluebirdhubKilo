@@ -6,7 +6,6 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import { toast } from 'react-hot-toast';
 import { Loader2, Palette, Globe, Clock, Monitor, Moon, Sun } from 'lucide-react';
 
@@ -53,7 +52,7 @@ export function PreferencesSettings() {
     }
   };
 
-  const updatePreference = async (key: keyof UserPreferences, value: any) => {
+  const updatePreference = async (key: keyof UserPreferences, value: string | boolean) => {
     if (!preferences) return;
 
     const updatedPreferences = { ...preferences, [key]: value };

@@ -24,7 +24,8 @@ export function createRateLimiter(config: RateLimitConfig) {
     const now = Date.now();
     
     // Clean up expired entries
-    if (store[key] && now > store[key].resetTime) {
+    const storeEntry = store[key];
+    if (storeEntry && storeEntry.resetTime && now > storeEntry.resetTime) {
       delete store[key];
     }
     
@@ -37,18 +38,19 @@ export function createRateLimiter(config: RateLimitConfig) {
     }
     
     // Check if limit exceeded
-    if (store[key].count >= config.maxRequests) {
+    const currentEntry = store[key];
+    if (currentEntry && currentEntry.count >= config.maxRequests) {
       return NextResponse.json(
         { 
           error: config.message || 'Too many requests, please try again later.',
-          retryAfter: Math.ceil((store[key].resetTime - now) / 1000)
+          retryAfter: Math.ceil(((currentEntry?.resetTime || now) - now) / 1000)
         },
         { 
           status: 429,
           headers: {
             'X-RateLimit-Limit': config.maxRequests.toString(),
             'X-RateLimit-Remaining': '0',
-            'X-RateLimit-Reset': store[key].resetTime.toString(),
+            'X-RateLimit-Reset': currentEntry?.resetTime?.toString() || '0',
           }
         }
       );
@@ -62,18 +64,24 @@ export function createRateLimiter(config: RateLimitConfig) {
       // Only count request if it meets criteria
       const shouldCount = !config.skipSuccessfulRequests || response.status >= 400;
       if (shouldCount && (!config.skipFailedRequests || response.status < 400)) {
-        store[key].count++;
+        const entry = store[key];
+        if (entry) {
+          entry.count++;
+        }
       }
     } else {
       // Count the request
-      store[key].count++;
+      const entry = store[key];
+      if (entry) {
+        entry.count++;
+      }
       response = NextResponse.next();
     }
     
     // Add rate limit headers
     response.headers.set('X-RateLimit-Limit', config.maxRequests.toString());
-    response.headers.set('X-RateLimit-Remaining', Math.max(0, config.maxRequests - store[key].count).toString());
-    response.headers.set('X-RateLimit-Reset', store[key].resetTime.toString());
+    response.headers.set('X-RateLimit-Remaining', Math.max(0, config.maxRequests - (store[key]?.count || 0)).toString());
+    response.headers.set('X-RateLimit-Reset', store[key]?.resetTime?.toString() || '0');
     
     return response;
   };
@@ -93,33 +101,36 @@ function getClientKey(request: NextRequest): string {
   return `${ip}:${userId}`;
 }
 
-// Predefined rate limiters
+// Predefined rate limiters with secure limits
 export const strictRateLimit = createRateLimiter({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  maxRequests: 10,
+  maxRequests: 5, // 5 attempts per 15 minutes
   message: 'Too many attempts, please try again later.',
 });
 
 export const authRateLimit = createRateLimiter({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  maxRequests: 5,
+  maxRequests: 5, // 5 auth attempts per 15 minutes
   message: 'Too many authentication attempts, please try again later.',
 });
 
 export const apiRateLimit = createRateLimiter({
   windowMs: 60 * 1000, // 1 minute
-  maxRequests: 100,
+  maxRequests: 100, // 100 API calls per minute
   message: 'API rate limit exceeded, please slow down.',
 });
 
 export const fileUploadRateLimit = createRateLimiter({
   windowMs: 60 * 1000, // 1 minute
-  maxRequests: 10,
+  maxRequests: 10, // 10 upload attempts per minute
   message: 'Too many file uploads, please wait.',
 });
 
 // Utility function for API routes
-export function withRateLimit(handler: Function, rateLimiter: Function) {
+export function withRateLimit(
+  handler: (request: NextRequest) => Promise<NextResponse>,
+  rateLimiter: (request: NextRequest, callback: () => Promise<NextResponse>) => Promise<NextResponse>
+) {
   return async (request: NextRequest) => {
     const rateLimitResponse = await rateLimiter(request, async () => {
       return handler(request);
@@ -134,19 +145,27 @@ export function createIPRateLimit(maxRequests: number, windowMs: number) {
   const ipStore: { [ip: string]: { count: number; resetTime: number } } = {};
   
   return (request: NextRequest) => {
-    const ip = getClientKey(request).split(':')[0];
+    const clientKey = getClientKey(request);
+    if (!clientKey) return false;
+    
+    const ip = clientKey.split(':')[0];
+    if (!ip) return false;
+    
     const now = Date.now();
     
-    if (!ipStore[ip] || now > ipStore[ip].resetTime) {
+    const ipEntry = ipStore[ip];
+    if (!ipEntry || (ipEntry?.resetTime && now > ipEntry.resetTime)) {
       ipStore[ip] = { count: 1, resetTime: now + windowMs };
       return true;
     }
     
-    if (ipStore[ip].count >= maxRequests) {
+    if (ipEntry && ipEntry.count >= maxRequests) {
       return false;
     }
     
-    ipStore[ip].count++;
+    if (ipEntry) {
+      ipEntry.count++;
+    }
     return true;
   };
 }
@@ -155,7 +174,8 @@ export function createIPRateLimit(maxRequests: number, windowMs: number) {
 setInterval(() => {
   const now = Date.now();
   Object.keys(store).forEach(key => {
-    if (store[key] && now > store[key].resetTime) {
+    const entry = store[key];
+    if (entry && now > entry.resetTime) {
       delete store[key];
     }
   });
