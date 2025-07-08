@@ -2,6 +2,7 @@ import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { prisma } from '@/lib/db';
 import bcrypt from 'bcryptjs';
+import { appLogger } from '@/lib/logger';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -12,14 +13,13 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
-        console.log('🔐 NextAuth authorize called with:', {
+        appLogger.auth('login', undefined, {
           email: credentials?.email,
-          hasPassword: !!credentials?.password,
-          timestamp: new Date().toISOString()
+          hasPassword: !!credentials?.password
         });
 
         if (!credentials?.email || !credentials?.password) {
-          console.log('❌ Missing credentials');
+          appLogger.auth('failed_login', undefined, { reason: 'missing_credentials' });
           return null;
         }
 
@@ -30,15 +30,17 @@ export const authOptions: NextAuthOptions = {
             }
           });
 
-          console.log('👤 User lookup result:', {
+          appLogger.debug('User lookup result', {
             found: !!user,
-            email: user?.email,
             hasPassword: !!user?.password,
             role: user?.role
           });
 
           if (!user || !user.password) {
-            console.log('❌ User not found or no password');
+            appLogger.auth('failed_login', undefined, { 
+              reason: 'user_not_found_or_no_password',
+              email: credentials.email 
+            });
             return null;
           }
 
@@ -47,17 +49,15 @@ export const authOptions: NextAuthOptions = {
             user.password
           );
 
-          console.log('🔑 Password validation:', {
-            isValid: isPasswordValid,
-            email: user.email
-          });
-
           if (!isPasswordValid) {
-            console.log('❌ Invalid password');
+            appLogger.auth('failed_login', user.id, { 
+              reason: 'invalid_password',
+              email: user.email 
+            });
             return null;
           }
 
-          console.log('✅ Authentication successful for:', user.email);
+          appLogger.auth('login', user.id, { email: user.email });
           return {
             id: user.id,
             email: user.email,
@@ -66,7 +66,9 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
           };
         } catch (error) {
-          console.error('💥 Auth error:', error);
+          appLogger.error('Authentication error', error as Error, {
+            email: credentials?.email
+          });
           return null;
         }
       }

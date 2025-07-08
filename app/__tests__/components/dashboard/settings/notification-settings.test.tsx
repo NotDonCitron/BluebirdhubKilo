@@ -13,7 +13,7 @@ import {
 } from '@/__tests__/utils/test-mocks';
 
 // Mock fetch responses
-const mockFetch = jest.fn();
+const mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
 global.fetch = mockFetch;
 
 // Mock the useDebouncedCallback hook to execute immediately

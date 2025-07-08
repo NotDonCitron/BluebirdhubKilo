@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
+import { appLogger } from '@/lib/logger';
 
 export async function POST() {
   try {
@@ -165,7 +166,7 @@ export async function POST() {
       },
     });
   } catch (error) {
-    console.error('Error exporting user data:', error);
+    appLogger.error('Error exporting user data:', error);
     return NextResponse.json(
       { error: 'Failed to export data' },
       { status: 500 }

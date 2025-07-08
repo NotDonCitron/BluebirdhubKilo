@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
+import { appLogger } from '@/lib/logger';
 
 export async function GET() {
   try {
@@ -63,7 +64,7 @@ export async function GET() {
       storageLimit,
     });
   } catch (error) {
-    console.error('Error fetching account info:', error);
+    appLogger.error('Error fetching account info:', error);
     return NextResponse.json(
       { error: 'Failed to fetch account information' },
       { status: 500 }

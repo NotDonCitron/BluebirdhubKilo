@@ -26,7 +26,7 @@ const mockToast = createToastMocks();
 (toast as any).error = mockToast.error;
 
 // Mock fetch
-const mockFetch = jest.fn();
+const mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
 global.fetch = mockFetch;
 
 describe('AccountSettings', () => {

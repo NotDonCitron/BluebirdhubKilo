@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
+import { appLogger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -106,7 +107,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(comment);
   } catch (error) {
-    console.error('Error creating comment:', error);
+    appLogger.error('Error creating comment:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

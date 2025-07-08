@@ -1,0 +1,36 @@
+{
+  "testSuite": "AppFlowy Redesign Complete Functionality",
+  "timestamp": "2025-07-08T00:06:10.826Z",
+  "summary": {
+    "totalTests": 0,
+    "passedTests": 0,
+    "failedTests": 0,
+    "coverage": {}
+  },
+  "categories": {
+    "design": {
+      "status": "pending",
+      "tests": []
+    },
+    "responsive": {
+      "status": "pending",
+      "tests": []
+    },
+    "forms": {
+      "status": "pending",
+      "tests": []
+    },
+    "performance": {
+      "status": "pending",
+      "tests": []
+    },
+    "accessibility": {
+      "status": "pending",
+      "tests": []
+    },
+    "integration": {
+      "status": "pending",
+      "tests": []
+    }
+  }
+}

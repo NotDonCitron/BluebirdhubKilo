@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
 // Rate limiting temporarily disabled for build fix
 import { z } from 'zod';
+import { appLogger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -48,7 +49,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(notificationSettings);
   } catch (error) {
-    console.error('Error fetching notification settings:', error);
+    appLogger.error('Error fetching notification settings:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -110,7 +111,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    console.error('Error updating notification settings:', error);
+    appLogger.error('Error updating notification settings:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

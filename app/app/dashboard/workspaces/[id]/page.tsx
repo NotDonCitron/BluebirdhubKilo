@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { appLogger } from '@/lib/logger';
 
 interface WorkspaceMember {
   id: string;
@@ -117,7 +118,7 @@ export default function WorkspaceDetailPage() {
         throw new Error('Failed to fetch workspace');
       }
     } catch (error) {
-      console.error('Error fetching workspace:', error);
+      appLogger.error('Error fetching workspace:', error);
       toast({
         title: 'Error',
         description: 'Failed to load workspace',

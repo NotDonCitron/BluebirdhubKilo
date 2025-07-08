@@ -190,7 +190,10 @@ export function validateRequest<T>(schema: z.ZodSchema<T>) {
           if (!fields[path]) {
             fields[path] = [];
           }
-          fields[path].push(err.message);
+          const fieldArray = fields[path];
+          if (fieldArray) {
+            fieldArray.push(err.message);
+          }
         });
         throw new ValidationError('Validation failed', fields);
       }
@@ -210,18 +213,29 @@ export function validateRateLimit(_identifier: string, _maxRequests: number, _wi
 // Content Security Policy helpers
 export const CSP_DIRECTIVES = {
   'default-src': ["'self'"],
-  'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-  'style-src': ["'self'", "'unsafe-inline'"],
-  'img-src': ["'self'", 'data:', 'https:'],
-  'connect-src': ["'self'"],
-  'font-src': ["'self'"],
+  'script-src': ["'self'", "'wasm-unsafe-eval'"], // Required for Next.js SWC
+  'style-src': ["'self'", "'unsafe-inline'"], // Required for CSS-in-JS and Tailwind
+  'img-src': ["'self'", 'data:', 'https:', 'blob:'],
+  'connect-src': ["'self'", 'https:', 'wss:', 'ws:'], // Allow HTTPS and WebSocket connections
+  'font-src': ["'self'", 'data:', 'https:'],
   'object-src': ["'none'"],
-  'media-src': ["'self'"],
-  'frame-src': ["'none'"],
+  'base-uri': ["'self'"],
+  'form-action': ["'self'"],
+  'frame-ancestors': ["'none'"],
+  'media-src': ["'self'", 'blob:', 'data:'],
+  'worker-src': ["'self'", 'blob:'],
+  'child-src': ["'self'"],
+  'manifest-src': ["'self'"],
+  'upgrade-insecure-requests': []
 };
 
 export function generateCSPHeader(): string {
   return Object.entries(CSP_DIRECTIVES)
-    .map(([directive, sources]) => `${directive} ${sources.join(' ')}`)
+    .map(([directive, sources]) => {
+      if (sources.length === 0) {
+        return directive;
+      }
+      return `${directive} ${sources.join(' ')}`;
+    })
     .join('; ');
 }

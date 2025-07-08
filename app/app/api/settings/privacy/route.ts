@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
 import { z } from 'zod';
+import { appLogger } from '@/lib/logger';
 
 const privacyUpdateSchema = z.object({
   profileVisibility: z.enum(['PUBLIC', 'WORKSPACE_ONLY', 'PRIVATE']).optional(),
@@ -72,7 +73,7 @@ export async function GET() {
 
     return NextResponse.json(userSettings);
   } catch (error) {
-    console.error('Error fetching privacy settings:', error);
+    appLogger.error('Error fetching privacy settings:', error);
     return NextResponse.json(
       { error: 'Failed to fetch privacy settings' },
       { status: 500 }
@@ -129,7 +130,7 @@ export async function PUT(request: NextRequest) {
       );
     }
     
-    console.error('Error updating privacy settings:', error);
+    appLogger.error('Error updating privacy settings:', error);
     return NextResponse.json(
       { error: 'Failed to update privacy settings' },
       { status: 500 }

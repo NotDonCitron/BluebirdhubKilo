@@ -38,7 +38,6 @@ export class TestBrowser {
         '--disable-accelerated-2d-canvas',
         '--no-first-run',
         '--no-zygote',
-        '--single-process',
         '--disable-gpu',
         '--disable-web-security',
         '--disable-features=VizDisplayCompositor',
@@ -47,14 +46,19 @@ export class TestBrowser {
         '--disable-backgrounding-occluded-windows',
         '--disable-renderer-backgrounding',
         '--disable-ipc-flooding-protection',
-        '--memory-pressure-off'
+        '--memory-pressure-off',
+        '--disable-blink-features=AutomationControlled',
+        '--disable-sync',
+        '--metrics-recording-only',
+        '--no-default-browser-check',
+        '--no-crash-upload'
       ],
       defaultViewport: {
         width: 1366,
         height: 768
       },
-      // Use pipe mode to avoid WebSocket transport issues
-      pipe: true,
+      // Use pipe mode to avoid WebSocket transport issues in CI
+      pipe: process.env.CI === 'true',
       timeout: 60000 // Browser launch timeout
     });
 
@@ -113,7 +117,7 @@ export class TestBrowser {
     const filepath = join(config.screenshotPath, filename);
     
     await page.screenshot({
-      path: filepath,
+      path: filepath as `${string}.png`,
       fullPage
     });
     

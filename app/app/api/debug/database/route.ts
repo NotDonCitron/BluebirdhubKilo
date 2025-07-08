@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { appLogger } from '@/lib/logger';
 
 export async function GET() {
   try {
@@ -33,7 +34,7 @@ export async function GET() {
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-    console.error('Database debug error:', error);
+    appLogger.error('Database debug error:', error);
     return NextResponse.json({
       status: 'error',
       error: error instanceof Error ? error.message : 'Unknown error',

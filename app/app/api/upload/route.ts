@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { storage } from "@/lib/storage";
 import { sendUploadNotification } from "@/lib/notifications";
+import { appLogger } from "@/lib/logger";
 import { z } from "zod";
 import path from "path";
 import crypto from "crypto";
@@ -42,7 +43,9 @@ setInterval(() => {
   for (const [uploadId, upload] of activeUploads.entries()) {
     if (now - upload.lastActivity.getTime() > UPLOAD_TIMEOUT) {
       // Clean up temp file
-      storage.delete(upload.tempPath).catch(console.error);
+      storage.delete(upload.tempPath).catch(error => 
+        appLogger.error('Failed to cleanup temp file', error as Error, { uploadId })
+      );
       activeUploads.delete(uploadId);
     }
   }
@@ -73,7 +76,10 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Invalid action" }, { status: 400 });
     }
   } catch (error) {
-    console.error("Upload error:", error);
+    appLogger.error("Upload API error", error as Error, {
+      userId: session?.user?.id,
+      action: searchParams.get("action")
+    });
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

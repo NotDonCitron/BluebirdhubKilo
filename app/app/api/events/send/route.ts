@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
 import { z } from 'zod';
+import { appLogger } from '@/lib/logger';
 
 // Import the functions from the stream route
 // Note: This is a workaround since we can't import directly from route files
@@ -55,7 +56,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Log for debugging
-    console.log(`Event sent: ${type}`, eventPayload);
+    appLogger.info(`Event sent: ${type}`, eventPayload);
 
     return NextResponse.json({ 
       success: true, 
@@ -70,7 +71,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.error('Error sending event:', error);
+    appLogger.error('Error sending event:', error);
     return NextResponse.json(
       { error: 'Failed to send event' },
       { status: 500 }
@@ -92,7 +93,7 @@ export async function GET() {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Error getting event status:', error);
+    appLogger.error('Error getting event status:', error);
     return NextResponse.json(
       { error: 'Failed to get event status' },
       { status: 500 }

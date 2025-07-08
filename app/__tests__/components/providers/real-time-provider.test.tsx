@@ -15,7 +15,23 @@ jest.mock('react-hot-toast', () => ({
 
 const mockUseSession = useSession as jest.MockedFunction<typeof useSession>;
 
-// Use the global EventSource mock from jest.setup.js instead of overriding it
+// Create a mock EventSource instance that we can access in tests
+const mockEventSource = {
+  addEventListener: jest.fn(),
+  removeEventListener: jest.fn(),
+  close: jest.fn(),
+  readyState: 0,
+  url: '',
+  simulateMessage: jest.fn(),
+  simulateError: jest.fn(),
+};
+
+// Override the global EventSource mock to return our controllable instance
+const MockEventSourceConstructor = jest.fn(() => mockEventSource);
+MockEventSourceConstructor.CONNECTING = 0;
+MockEventSourceConstructor.OPEN = 1;
+MockEventSourceConstructor.CLOSED = 2;
+global.EventSource = MockEventSourceConstructor as any;
 
 // Mock fetch for settings
 global.fetch = jest.fn();
@@ -66,6 +82,12 @@ describe('RealTimeProvider', () => {
       data: mockSession,
       status: 'authenticated',
     } as any);
+
+    // Clear the EventSource mock calls
+    (global.EventSource as jest.Mock).mockClear();
+    mockEventSource.addEventListener.mockClear();
+    mockEventSource.removeEventListener.mockClear();
+    mockEventSource.close.mockClear();
 
     // Mock notification settings fetch
     (global.fetch as jest.Mock).mockResolvedValue({

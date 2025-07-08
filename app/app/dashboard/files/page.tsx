@@ -39,6 +39,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useDropzone } from 'react-dropzone';
+import { appLogger } from '@/lib/logger';
 
 interface FileData {
   id: string;
@@ -99,7 +100,7 @@ export default function FilesPage() {
       setFiles(filesData);
       setWorkspaces(workspacesData);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      appLogger.error('Error fetching data:', error);
       toast({
         title: 'Error',
         description: 'Failed to load data',
@@ -147,7 +148,7 @@ export default function FilesPage() {
           throw new Error('Upload failed');
         }
       } catch (error) {
-        console.error('Error uploading file:', error);
+        appLogger.error('Error uploading file:', error);
         toast({
           title: 'Error',
           description: `Failed to upload ${file.name}`,
@@ -182,7 +183,7 @@ export default function FilesPage() {
         });
       }
     } catch (error) {
-      console.error('Error deleting file:', error);
+      appLogger.error('Error deleting file:', error);
       toast({
         title: 'Error',
         description: 'Failed to delete file',

@@ -1,4 +1,5 @@
 import { storage } from "./storage";
+import { appLogger } from '@/lib/logger';
 
 const CLEANUP_INTERVAL = 60 * 60 * 1000; // 1 hour
 const MAX_CHUNK_AGE = 24 * 60 * 60 * 1000; // 24 hours
@@ -8,7 +9,7 @@ const MAX_CHUNK_AGE = 24 * 60 * 60 * 1000; // 24 hours
  */
 export async function cleanupOrphanedChunks() {
   try {
-    console.log("Starting orphaned chunk cleanup...");
+    appLogger.info("Starting orphaned chunk cleanup...");
     
     // List all files in the temp directory
     const tempFiles = await storage.list("temp/");
@@ -27,15 +28,15 @@ export async function cleanupOrphanedChunks() {
           cleaned++;
         }
       } catch (error) {
-        console.error(`Failed to clean up chunk ${file}:`, error);
+        appLogger.error(`Failed to clean up chunk ${file}:`, error);
         errors++;
       }
     }
     
-    console.log(`Cleanup complete. Removed ${cleaned} orphaned chunks, ${errors} errors.`);
+    appLogger.info(`Cleanup complete. Removed ${cleaned} orphaned chunks, ${errors} errors.`);
     return { cleaned, errors };
   } catch (error) {
-    console.error("Failed to run chunk cleanup:", error);
+    appLogger.error("Failed to run chunk cleanup:", error);
     throw error;
   }
 }
@@ -45,11 +46,11 @@ export async function cleanupOrphanedChunks() {
  */
 export function startPeriodicCleanup() {
   // Run cleanup immediately on startup
-  cleanupOrphanedChunks().catch(console.error);
+  cleanupOrphanedChunks().catch(error => appLogger.error('Cleanup error', error as Error));
   
   // Schedule periodic cleanup
   const interval = setInterval(() => {
-    cleanupOrphanedChunks().catch(console.error);
+    cleanupOrphanedChunks().catch(error => appLogger.error('Cleanup error', error as Error));
   }, CLEANUP_INTERVAL);
   
   // Return cleanup function
@@ -61,15 +62,15 @@ export function startPeriodicCleanup() {
  */
 export async function cleanupDeletedFiles() {
   try {
-    console.log("Starting deleted files cleanup...");
+    appLogger.info("Starting deleted files cleanup...");
     
     // This would need to query the database for all file URLs
     // and compare with storage to find orphaned files
     // Implementation depends on specific requirements
     
-    console.log("Deleted files cleanup complete.");
+    appLogger.info("Deleted files cleanup complete.");
   } catch (error) {
-    console.error("Failed to clean up deleted files:", error);
+    appLogger.error("Failed to clean up deleted files:", error);
     throw error;
   }
 }

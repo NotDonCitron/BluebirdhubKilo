@@ -5,6 +5,7 @@ import { prisma } from '@/lib/db';
 // Rate limiting temporarily disabled for build fix
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
+import { appLogger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -45,7 +46,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(user);
   } catch (error) {
-    console.error('Error fetching profile:', error);
+    appLogger.error('Error fetching profile:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -156,7 +157,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    console.error('Error updating profile:', error);
+    appLogger.error('Error updating profile:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

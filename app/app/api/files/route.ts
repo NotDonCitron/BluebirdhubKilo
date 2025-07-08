@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
+import { appLogger } from '@/lib/logger';
 // Rate limiting temporarily disabled for build fix
 
 export const dynamic = 'force-dynamic';
@@ -97,7 +98,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(files);
   } catch (error) {
-    console.error('Error fetching files:', error);
+    appLogger.error('Error fetching files:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -187,11 +188,11 @@ export async function POST(request: NextRequest) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ fileId: createdFile.id })
-    }).catch(console.error);
+    }).catch(error => appLogger.error('File notification error', error as Error));
 
     return NextResponse.json(createdFile);
   } catch (error) {
-    console.error('Error uploading file:', error);
+    appLogger.error('Error uploading file:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

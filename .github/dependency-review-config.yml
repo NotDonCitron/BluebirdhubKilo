@@ -1,0 +1,20 @@
+fail_on_severity: 'moderate'
+allow_licenses:
+  - 'MIT'
+  - 'Apache-2.0'
+  - 'BSD-2-Clause'
+  - 'BSD-3-Clause'
+  - 'ISC'
+  - 'CC0-1.0'
+deny_licenses:
+  - 'GPL-2.0'
+  - 'GPL-3.0'
+  - 'AGPL-1.0'
+  - 'AGPL-3.0'
+fail_on_scopes:
+  - 'runtime'
+allow_ghsas:
+  - 'GHSA-example-12345' # Example: Allow specific advisories if needed
+comment_summary_in_pr: 'always'
+retry_on_snapshot_warnings: true
+warn_only: false

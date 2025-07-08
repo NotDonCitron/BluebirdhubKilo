@@ -118,9 +118,11 @@ export const createMockSession = (overrides: any = {}) => ({
  * Creates a mock NextRequest for API route testing
  */
 export const createMockRequest = (url: string, options: RequestInit = {}) => {
+  const { signal, ...restOptions } = options;
   return new NextRequest(url, {
     method: 'GET',
-    ...options
+    ...restOptions,
+    ...(signal !== null ? { signal } : {})
   });
 };
 

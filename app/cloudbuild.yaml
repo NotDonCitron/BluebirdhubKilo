@@ -1,12 +1,14 @@
 # Cloud Build configuration for AbacusHub
-# Triggered on commits to main branch
+# Enhanced CI/CD pipeline with testing and quality gates
 
 steps:
-  # Step 1: Install dependencies
+  # Step 1: Install dependencies with caching
   - name: 'node:18'
     entrypoint: npm
-    args: ['ci']
+    args: ['ci', '--cache', '.npm']
     dir: 'app'
+    env:
+      - 'NPM_CONFIG_CACHE=.npm'
 
   # Step 2: Generate Prisma client
   - name: 'node:18'
@@ -16,19 +18,33 @@ steps:
     env:
       - 'DATABASE_URL=${_DATABASE_URL}'
 
-  # Step 3: Run linting
+  # Step 3: Run format checking
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'format:check']
+    dir: 'app'
+
+  # Step 4: Run linting
   - name: 'node:18'
     entrypoint: npm
     args: ['run', 'lint']
     dir: 'app'
 
-  # Step 4: Run type checking
+  # Step 5: Run type checking
   - name: 'node:18'
     entrypoint: npm
     args: ['run', 'type-check']
     dir: 'app'
 
-  # Step 5: Build the application
+  # Step 6: Run unit tests with coverage
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['run', 'test', '--', '--coverage', '--watchAll=false']
+    dir: 'app'
+    env:
+      - 'CI=true'
+
+  # Step 7: Build the application
   - name: 'node:18'
     entrypoint: npm
     args: ['run', 'build']
@@ -39,7 +55,13 @@ steps:
       - 'NEXTAUTH_SECRET=${_NEXTAUTH_SECRET}'
       - 'DATABASE_URL=${_DATABASE_URL}'
 
-  # Step 6: Run database migrations (production)
+  # Step 8: Security audit
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['audit', '--audit-level=high']
+    dir: 'app'
+
+  # Step 9: Run database migrations (production)
   - name: 'node:18'
     entrypoint: npm
     args: ['run', 'db:migrate']
@@ -47,7 +69,7 @@ steps:
     env:
       - 'DATABASE_URL=${_DATABASE_URL}'
 
-  # Step 7: Deploy to App Engine
+  # Step 10: Deploy to App Engine
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -56,6 +78,17 @@ steps:
       - 'app/app.yaml'
       - '--quiet'
       - '--project=${PROJECT_ID}'
+
+  # Step 11: Health check after deployment
+  - name: 'node:18'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Waiting for deployment to be ready..."
+        sleep 30
+        curl -f ${_NEXTAUTH_URL}/api/health || exit 1
+        echo "Health check passed!"
 
 # Substitution variables (define in Cloud Build trigger or use default values)
 substitutions:

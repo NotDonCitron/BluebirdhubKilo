@@ -19,6 +19,7 @@ import {
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { TestRealTime } from '@/components/dashboard/test-real-time';
+import { appLogger } from '@/lib/logger';
 
 interface Workspace {
   id: string;
@@ -98,7 +99,7 @@ export default function DashboardPage() {
           stats
         };
         
-        console.log('Dashboard data loaded:', {
+        appLogger.debug('Dashboard data loaded', {
           workspacesCount: workspaces.length,
           tasksCount: tasks.length,
           filesCount: files.length,
@@ -107,7 +108,7 @@ export default function DashboardPage() {
         
         setData(dashboardData);
       } catch (error) {
-        console.error('Error fetching dashboard data:', error);
+        appLogger.error('Error fetching dashboard data:', error);
       } finally {
         setLoading(false);
       }

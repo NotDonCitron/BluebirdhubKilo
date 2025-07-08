@@ -38,6 +38,7 @@ import {
   Trash2
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { appLogger } from '@/lib/logger';
 
 interface Task {
   id: string;
@@ -113,7 +114,7 @@ export default function TasksPage() {
       setWorkspaces(workspacesData);
       // setUsers(usersData);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      appLogger.error('Error fetching data:', error);
       toast({
         title: 'Error',
         description: 'Failed to load data',
@@ -164,7 +165,7 @@ export default function TasksPage() {
         throw new Error('Failed to create task');
       }
     } catch (error) {
-      console.error('Error creating task:', error);
+      appLogger.error('Error creating task:', error);
       toast({
         title: 'Error',
         description: 'Failed to create task',
@@ -192,7 +193,7 @@ export default function TasksPage() {
         });
       }
     } catch (error) {
-      console.error('Error updating task:', error);
+      appLogger.error('Error updating task:', error);
       toast({
         title: 'Error',
         description: 'Failed to update task',
@@ -219,7 +220,7 @@ export default function TasksPage() {
         });
       }
     } catch (error) {
-      console.error('Error deleting task:', error);
+      appLogger.error('Error deleting task:', error);
       toast({
         title: 'Error',
         description: 'Failed to delete task',

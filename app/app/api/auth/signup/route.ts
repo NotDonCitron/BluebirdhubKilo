@@ -2,25 +2,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/db';
+import { appLogger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   // Add comprehensive error logging
-  console.log('=== SIGNUP API START ===');
-  console.log('Timestamp:', new Date().toISOString());
-  console.log('URL:', request.url);
-  console.log('Method:', request.method);
+  appLogger.info('=== SIGNUP API START ===');
+  appLogger.info('Timestamp:', new Date();.toISOString());
+  appLogger.info('URL:', request.url);
+  appLogger.info('Method:', request.method);
   
   try {
     // Use Next.js built-in JSON parsing with error handling
     let body;
     try {
       body = await request.json();
-      console.log('JSON parsed successfully');
-      console.log('Request body keys:', Object.keys(body));
+      appLogger.info('JSON parsed successfully');
+      appLogger.info('Request body keys:', Object.keys(body););
     } catch (jsonError) {
-      console.error('JSON parsing failed:', jsonError);
+      appLogger.error('JSON parsing failed:', jsonError);
       return NextResponse.json(
         { 
           error: 'Invalid JSON format',
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Signup request data:', { 
+    appLogger.info('Signup attempt', { 
       email: body?.email, 
       name: body?.name, 
       hasPassword: !!body?.password 
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!email || !password || !name) {
-      console.log('Validation failed - Missing fields:', { 
+      appLogger.warn('Signup validation failed', { 
         email: !!email, 
         password: !!password, 
         name: !!name 
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest) {
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      console.log('Invalid email format:', email);
+      appLogger.info('Invalid email format:', email);
       return NextResponse.json(
         { 
           error: 'Invalid email format',
@@ -72,7 +73,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Validation passed - checking if user exists');
+    appLogger.info('Validation passed - checking if user exists');
 
     // Check if user already exists
     let existingUser;
@@ -80,9 +81,9 @@ export async function POST(request: NextRequest) {
       existingUser = await prisma.user.findUnique({
         where: { email }
       });
-      console.log('Database query completed - user exists:', !!existingUser);
+      appLogger.info('Database query completed - user exists:', !!existingUser);
     } catch (dbError) {
-      console.error('Database error during user lookup:', dbError);
+      appLogger.error('Database error during user lookup:', dbError);
       return NextResponse.json(
         { 
           error: 'Database connection error',
@@ -94,7 +95,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (existingUser) {
-      console.log('User already exists with email:', email);
+      appLogger.info('User already exists with email:', email);
       return NextResponse.json(
         { 
           error: 'User already exists',
@@ -105,15 +106,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('User does not exist - proceeding with creation');
+    appLogger.info('User does not exist - proceeding with creation');
 
     // Hash password
     let hashedPassword;
     try {
       hashedPassword = await bcrypt.hash(password, 12);
-      console.log('Password hashed successfully');
+      appLogger.info('Password hashed successfully');
     } catch (hashError) {
-      console.error('Password hashing error:', hashError);
+      appLogger.error('Password hashing error:', hashError);
       return NextResponse.json(
         { 
           error: 'Password processing error',
@@ -127,7 +128,7 @@ export async function POST(request: NextRequest) {
     // Create user
     let user;
     try {
-      console.log('Creating user with data:', { email, name });
+      appLogger.info('Creating user with data:', { email, name });
       user = await prisma.user.create({
         data: {
           email,
@@ -136,9 +137,9 @@ export async function POST(request: NextRequest) {
           // role defaults to USER as per schema
         }
       });
-      console.log('User created successfully with ID:', user.id);
+      appLogger.info('User created successfully with ID:', user.id);
     } catch (createError) {
-      console.error('User creation error:', createError);
+      appLogger.error('User creation error:', createError);
       return NextResponse.json(
         { 
           error: 'User creation failed',
@@ -149,7 +150,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('=== SIGNUP SUCCESS ===');
+    appLogger.info('=== SIGNUP SUCCESS ===');
     return NextResponse.json({
       message: 'User created successfully',
       user: {
@@ -162,11 +163,11 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('=== SIGNUP CRITICAL ERROR ===');
-    console.error('Error type:', error?.constructor?.name);
-    console.error('Error message:', (error as Error)?.message);
-    console.error('Error stack:', (error as Error)?.stack);
-    console.error('=== END CRITICAL ERROR ===');
+    appLogger.error('=== SIGNUP CRITICAL ERROR ===');
+    appLogger.error('Error type:', error?.constructor?.name);
+    appLogger.error('Error message:', (error as Error);?.message);
+    appLogger.error('Error stack:', (error as Error);?.stack);
+    appLogger.error('=== END CRITICAL ERROR ===');
     
     return NextResponse.json(
       { 

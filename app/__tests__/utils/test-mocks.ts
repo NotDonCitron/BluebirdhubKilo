@@ -113,8 +113,8 @@ export const createSuccessResponse = <T>(data: T) => ({
   ok: true,
   status: 200,
   statusText: 'OK',
-  json: jest.fn().mockResolvedValue(data),
-  text: jest.fn().mockResolvedValue(JSON.stringify(data)),
+  json: jest.fn().mockResolvedValue(data) as any,
+  text: jest.fn().mockResolvedValue(JSON.stringify(data)) as any,
   headers: new Headers(),
   redirected: false,
   type: 'basic',
@@ -134,8 +134,8 @@ export const createErrorResponse = (status: number = 500, message: string = 'Ser
   ok: false,
   status,
   statusText: message,
-  json: jest.fn().mockResolvedValue({ error: message }),
-  text: jest.fn().mockResolvedValue(JSON.stringify({ error: message })),
+  json: jest.fn().mockResolvedValue({ error: message }) as any,
+  text: jest.fn().mockResolvedValue(JSON.stringify({ error: message })) as any,
   headers: new Headers(),
   redirected: false,
   type: 'basic',
@@ -271,13 +271,20 @@ export const createToastMocks = () => ({
  */
 export const setupFileUploadMocks = () => {
   // Mock File constructor
-  global.File = jest.fn().mockImplementation((bits, filename, options) => ({
-    size: bits.reduce((acc: number, bit: any) => acc + (bit.length || 0), 0),
-    name: filename,
-    type: options?.type || 'application/octet-stream',
-    lastModified: Date.now(),
-    slice: jest.fn()
-  })) as any;
+  global.File = class MockFile {
+    size: number;
+    name: string;
+    type: string;
+    lastModified: number;
+    slice = jest.fn();
+
+    constructor(bits: any[], filename: string, options?: any) {
+      this.size = (bits as any[]).reduce((acc: number, bit: any) => acc + (bit.length || 0), 0);
+      this.name = filename;
+      this.type = options?.type || 'application/octet-stream';
+      this.lastModified = Date.now();
+    }
+  } as any;
 
   // Mock FileReader
   const mockFileReader = {
@@ -288,7 +295,7 @@ export const setupFileUploadMocks = () => {
     addEventListener: jest.fn()
   };
   
-  global.FileReader = jest.fn().mockImplementation(() => mockFileReader);
+  global.FileReader = jest.fn().mockImplementation(() => mockFileReader) as any;
   
   return mockFileReader;
 };
@@ -307,7 +314,7 @@ export const setupEventSourceMock = () => {
     CLOSED: 2
   };
 
-  global.EventSource = jest.fn().mockImplementation(() => mockEventSource);
+  global.EventSource = jest.fn().mockImplementation(() => mockEventSource) as any;
   
   return mockEventSource;
 };
@@ -379,7 +386,7 @@ export const waitForElement = async (getElement: () => HTMLElement | null, timeo
  * Standard setup for component tests with session and fetch mocks
  */
 export const setupComponentTest = () => {
-  const mockFetch = jest.fn();
+  const mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
   global.fetch = mockFetch;
   
   const toastMocks = createToastMocks();

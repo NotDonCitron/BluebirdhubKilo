@@ -14,6 +14,10 @@ const customJestConfig = {
     '^@/prisma/(.*)$': '<rootDir>/prisma/$1',
   },
   testEnvironment: 'jest-environment-jsdom',
+  reporters: [
+    'default',
+    ['<rootDir>/lib/jest-file-reporter.js', { outputPath: 'logs/test.txt' }]
+  ],
   collectCoverageFrom: [
     'components/**/*.{js,jsx,ts,tsx}',
     'app/**/*.{js,jsx,ts,tsx}',
@@ -29,6 +33,11 @@ const customJestConfig = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
+  },
+  globals: {
+    'ts-jest': {
+      tsconfig: '<rootDir>/tsconfig.test.json',
+    },
   },
   transformIgnorePatterns: [
     '/node_modules/',

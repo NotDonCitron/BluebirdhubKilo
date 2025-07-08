@@ -1,15 +1,12 @@
 /** @type {import('jest').Config} */
 module.exports = {
   displayName: 'E2E Tests',
-  testEnvironment: 'node', // Use Node.js environment for Puppeteer
+  testEnvironment: 'node',
   roots: ['<rootDir>/tests/e2e'],
   testMatch: [
     '<rootDir>/tests/e2e/**/*.test.ts',
     '<rootDir>/tests/e2e/**/*.test.js'
   ],
-  transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
-  },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
@@ -19,20 +16,24 @@ module.exports = {
     '^@/app/(.*)$': '<rootDir>/app/$1',
     '^@/prisma/(.*)$': '<rootDir>/prisma/$1',
   },
-  setupFilesAfterEnv: [],
-  testTimeout: 180000, // 3 minutes timeout for E2E tests
+  setupFilesAfterEnv: ['<rootDir>/tests/e2e/setup.ts'],
+  testTimeout: 120000, // 2 minutes timeout for E2E tests
   verbose: true,
   collectCoverageFrom: [
-    'tests/e2e/**/*.{ts,tsx}',
-    'tests/utils/**/*.{ts,tsx}',
-    '!tests/**/*.d.ts',
+    'app/**/*.{ts,tsx}',
+    'components/**/*.{ts,tsx}',
+    'lib/**/*.{ts,tsx}',
+    'hooks/**/*.{ts,tsx}',
+    '!**/*.d.ts',
+    '!**/*.test.{ts,tsx}',
+    '!**/node_modules/**'
   ],
   coverageDirectory: 'coverage/e2e',
   coverageReporters: ['text', 'lcov', 'html'],
-  maxConcurrency: 1, // Run E2E tests sequentially
-  maxWorkers: 1, // Use only one worker for E2E tests
-  forceExit: true, // Force Jest to exit after tests complete
-  detectOpenHandles: true, // Help detect async operations that prevent Jest from exiting
+  maxConcurrency: 1,
+  maxWorkers: 1,
+  forceExit: true,
+  detectOpenHandles: true,
   reporters: [
     'default',
     [
@@ -54,7 +55,8 @@ module.exports = {
         target: 'ES2020',
         skipLibCheck: true,
         allowSyntheticDefaultImports: true,
-        esModuleInterop: true
+        esModuleInterop: true,
+        moduleResolution: 'node'
       }
     }]
   }

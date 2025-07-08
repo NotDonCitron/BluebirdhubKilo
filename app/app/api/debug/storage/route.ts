@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { storage } from "@/app/lib/storage";
+import { appLogger } from '@/lib/logger';
 
 export async function GET() {
   try {
@@ -30,7 +31,7 @@ export async function GET() {
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-    console.error('Storage debug error:', error);
+    appLogger.error('Storage debug error:', error);
     return NextResponse.json({
       status: 'error',
       type: process.env.STORAGE_TYPE || 'local',

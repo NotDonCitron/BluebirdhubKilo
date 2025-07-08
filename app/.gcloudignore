@@ -1,105 +1,68 @@
-# This file specifies files that are *not* uploaded to Google Cloud
-# using gcloud. It follows the same syntax as .gitignore, with the addition of
-# "#!include" directives (which insert the entries of the given .gitignore-style
-# file at that point).
-
-# For more information, run:
-#   $ gcloud topic gcloudignore
-
-.gcloudignore
-
-# Include .gitignore content
-#!include:.gitignore
-
-# Node.js dependencies
-node_modules/
-
-# Development files
-.env*.local
-.vscode/
-.idea/
-
-# Build outputs (will be rebuilt)
-.next/
-out/
-dist/
-build/
-
-# Tests
-__tests__/
+# Exclude files from GCP deployment
+.git
+.gitignore
+node_modules
+tests/
 coverage/
-*.test.js
+docs/
+*.md
+*.log
+*.png
+*.jpg
+*.jpeg
+*.gif
+.env.local
+.env.development
+.eslintrc.json
+jest.config.js
+jest.e2e.config.js
+jest.setup.js
+jest.setup.api.js
+postcss.config.js
+tailwind.config.ts
+tsconfig.tsbuildinfo
+.next/cache
+
+# Test files
+__tests__/
 *.test.ts
 *.test.tsx
-jest.config.js
-jest.setup.js
+*.test.js
+*.test.jsx
 
-# Documentation
-README.md
-*.md
-docs/
+# Development scripts
+scripts/create-test-user.js
+debug-*.js
+test-*.js
+validate-*.js
+run-integration-tests*.js
+generate-test-report.js
+comprehensive-login-test.js
+enhanced-test.js
+fix-test-selectors*.js
 
-# Development tools
-.eslintrc*
-.prettierrc*
-tsconfig.json
-tailwind.config.ts
-postcss.config.js
+# Reports and analysis
+test-errors*.md
+e2e-test*.md
+integration-test*.md
+fix-errors.md
+eslint-*.md
+switch-testing-errors.md
 
-# Git
-.git/
-.gitignore
+# MCP server
+mcp-server/
 
-# OS files
-.DS_Store
-Thumbs.db
+# Uploads directory
+uploads/
 
-# Logs
-logs/
-*.log
-
-# Database files (development)
-*.db
-*.sqlite
-*.sqlite3
+# Development database
 prisma/dev.db
 prisma/prisma/
 
-# Temporary files
-temp/
-tmp/
-uploads/
-
-# Development scripts
-test-*.js
-enhanced-test.js
-scripts/create-test-user.js
-
-# Error reports
-*-errors-summary.txt
-*-progress-report.md
-deployment-status.md
-
-# Python virtual environment
-venv/
-test-debug-agent/
-
-# MCP server (development only)
-mcp-server/
-
-# Vercel config (not needed for GCP)
-vercel.json
-.vercelignore
-
-# CodeRabbit config (development only)
-.coderabbit.yaml
-
-# Docker files (not needed for App Engine)
-Dockerfile
-.dockerignore
-docker-compose.yml
-
-# Cache
-.cache/
-.parcel-cache/
-tsconfig.tsbuildinfo
+# Problematic directories
+app/(main)/debug/
+app/(main)/files/
+app/(main)/test-upload/
+app/test-auth/
+app/test-debug/
+app/test/

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { appLogger } from '@/lib/logger';
 
 interface DatabaseStatus {
   status: string;
@@ -51,7 +52,7 @@ export default function DebugPage() {
       const storageData = await storageResponse.json();
       setStorageStatus(storageData);
     } catch (error) {
-      console.error('Error checking status:', error);
+      appLogger.error('Error checking status:', error);
     } finally {
       setLoading(false);
     }

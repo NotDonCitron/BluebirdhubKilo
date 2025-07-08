@@ -12,6 +12,11 @@ global.TextDecoder = TextDecoder as any;
 Object.defineProperty(global, 'Request', {
   writable: true,
   value: class MockRequest {
+    url: string;
+    method: string;
+    headers: Headers;
+    body: any;
+    
     constructor(url: string, init?: RequestInit) {
       this.url = url;
       this.method = init?.method || 'GET';
@@ -26,6 +31,12 @@ Object.defineProperty(global, 'Request', {
 Object.defineProperty(global, 'Response', {
   writable: true,
   value: class MockResponse {
+    body: any;
+    status: number;
+    statusText: string;
+    headers: Headers;
+    ok: boolean;
+    
     constructor(body?: any, init?: ResponseInit) {
       this.body = body;
       this.status = init?.status || 200;

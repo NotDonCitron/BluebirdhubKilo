@@ -39,6 +39,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { appLogger } from '@/lib/logger';
 
 interface WorkspaceMember {
   id: string;
@@ -90,7 +91,7 @@ export default function WorkspacesPage() {
       const data = await response.json();
       setWorkspaces(data);
     } catch (error) {
-      console.error('Error fetching workspaces:', error);
+      appLogger.error('Error fetching workspaces:', error);
       toast({
         title: 'Error',
         description: 'Failed to load workspaces',
@@ -109,11 +110,11 @@ export default function WorkspacesPage() {
   const handleCreateWorkspace = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log('🏢 === FRONTEND WORKSPACE CREATION START ===');
-    console.log('📝 Workspace data:', newWorkspace);
+    appLogger.info('🏢 === FRONTEND WORKSPACE CREATION START ===');
+    appLogger.info('📝 Workspace data:', newWorkspace);
     
     try {
-      console.log('📡 Sending POST request to /api/workspaces...');
+      appLogger.info('📡 Sending POST request to /api/workspaces...');
       const response = await fetch('/api/workspaces', {
         method: 'POST',
         headers: {
@@ -122,12 +123,12 @@ export default function WorkspacesPage() {
         body: JSON.stringify(newWorkspace),
       });
 
-      console.log('📊 Response status:', response.status);
-      console.log('📋 Response headers:', Object.fromEntries(response.headers.entries()));
+      appLogger.info('📊 Response status:', response.status);
+      appLogger.info('📋 Response headers:', Object.fromEntries(response.headers.entries();));
 
       if (response.ok) {
         const workspace = await response.json();
-        console.log('✅ Workspace created successfully:', workspace);
+        appLogger.info('✅ Workspace created successfully:', workspace);
         
         setWorkspaces([workspace, ...workspaces]);
         setIsCreateDialogOpen(false);
@@ -144,7 +145,7 @@ export default function WorkspacesPage() {
       } else {
         // Get detailed error information
         const errorText = await response.text();
-        console.log('❌ Response error body:', errorText);
+        appLogger.info('❌ Response error body:', errorText);
         
         let errorData;
         try {
@@ -153,7 +154,7 @@ export default function WorkspacesPage() {
           errorData = { error: errorText };
         }
         
-        console.log('💥 Parsed error data:', errorData);
+        appLogger.info('💥 Parsed error data:', errorData);
         
         const errorMessage = errorData.error || errorData.message || `HTTP ${response.status}`;
         const errorDetails = errorData.details ? ` (${errorData.details})` : '';
@@ -167,11 +168,9 @@ export default function WorkspacesPage() {
         throw new Error(`HTTP ${response.status}: ${errorMessage}${errorDetails}`);
       }
     } catch (error) {
-      console.error('💥 Frontend workspace creation error:', error);
-      console.error('Error details:', {
-        message: (error as Error).message,
-        stack: (error as Error).stack,
-        name: (error as Error).name
+      appLogger.error('💥 Frontend workspace creation error:', error);
+      appLogger.error('Workspace creation error', error as Error, {
+        operation: 'create_workspace'
       });
       
       // Only show toast if we haven't already shown one
@@ -184,7 +183,7 @@ export default function WorkspacesPage() {
       }
     }
     
-    console.log('🏢 === FRONTEND WORKSPACE CREATION END ===');
+    appLogger.info('🏢 === FRONTEND WORKSPACE CREATION END ===');
   };
 
   const handleDeleteWorkspace = async (workspaceId: string) => {
@@ -207,7 +206,7 @@ export default function WorkspacesPage() {
         throw new Error('Failed to delete workspace');
       }
     } catch (error) {
-      console.error('Error deleting workspace:', error);
+      appLogger.error('Error deleting workspace:', error);
       toast({
         title: 'Error',
         description: 'Failed to delete workspace',

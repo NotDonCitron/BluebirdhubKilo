@@ -240,9 +240,15 @@ export class SupabaseStorageProvider implements StorageProvider {
   private bucket: string;
   
   constructor() {
-    const supabaseUrl = process.env.SUPABASE_URL || "https://lutlwrjbetraagitvgmf.supabase.co";
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1dGx3cmpiZXRyYWFnaXR2Z21mIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MDc5NDM1NCwiZXhwIjoyMDY2MzcwMzU0fQ.UUJ78cNezG5A7kkrvHidcclfQ8_GRETfcOcrJAN6Xow";
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     this.bucket = process.env.SUPABASE_STORAGE_BUCKET || "abacushub-files";
+    
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error(
+        'Missing required Supabase environment variables. Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY'
+      );
+    }
     
     this.supabase = createClient(supabaseUrl, supabaseKey, {
       auth: {
@@ -323,6 +329,9 @@ export class SupabaseStorageProvider implements StorageProvider {
     }
     
     const file = data[0];
+    if (!file) {
+      throw new Error(`File not found: ${key}`);
+    }
     return {
       size: file.metadata?.size || 0,
       lastModified: new Date(file.updated_at || file.created_at),

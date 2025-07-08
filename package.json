@@ -2,5 +2,9 @@
   "dependencies": {
     "puppeteer": "^24.11.2",
     "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^15.3.5",
+    "eslint-plugin-testing-library": "^7.5.3"
   }
 }

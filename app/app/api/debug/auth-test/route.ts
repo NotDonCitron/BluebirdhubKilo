@@ -1,31 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import bcrypt from 'bcryptjs';
+import { appLogger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
-  console.log('🔍 DEBUG AUTH TEST API CALLED');
+  appLogger.debug('🔍 DEBUG AUTH TEST API CALLED');
   
   try {
     const body = await request.json();
     const { email, password } = body;
     
-    console.log('📨 Request data:', { email, hasPassword: !!password });
+    appLogger.info('📨 Request data:', { email, hasPassword: !!password });
     
     // Test 1: Check environment variables
-    console.log('🌍 Environment check:');
-    console.log('  DATABASE_URL:', process.env.DATABASE_URL);
-    console.log('  NEXTAUTH_SECRET:', process.env.NEXTAUTH_SECRET ? 'SET' : 'MISSING');
-    console.log('  NEXTAUTH_URL:', process.env.NEXTAUTH_URL);
+    appLogger.info('🌍 Environment check:');
+    appLogger.info('  DATABASE_URL:', process.env.DATABASE_URL);
+    appLogger.info('  NEXTAUTH_SECRET:', process.env.NEXTAUTH_SECRET ? 'SET' : 'MISSING');
+    appLogger.info('  NEXTAUTH_URL:', process.env.NEXTAUTH_URL);
     
     // Test 2: Database connection
-    console.log('💾 Testing database connection...');
+    appLogger.info('💾 Testing database connection...');
     await prisma.$connect();
-    console.log('✅ Database connected successfully');
+    appLogger.info('✅ Database connected successfully');
     
     // Test 3: User lookup
-    console.log('👤 Looking up user...');
+    appLogger.info('👤 Looking up user...');
     const user = await prisma.user.findUnique({
       where: { email: email }
     });
@@ -63,16 +64,16 @@ export async function POST(request: NextRequest) {
     }
     
     // Test 4: Password verification
-    console.log('🔑 Testing password...');
+    appLogger.info('🔑 Testing password...');
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    console.log('🔑 Password result:', { isValid: isPasswordValid });
+    appLogger.info('🔑 Password result:', { isValid: isPasswordValid });
     
     // Test 5: List all users for debugging
-    console.log('📋 All users in database:');
+    appLogger.info('📋 All users in database:');
     const allUsers = await prisma.user.findMany({
       select: { email: true, name: true, role: true }
     });
-    console.log('📋 Users:', allUsers);
+    appLogger.info('📋 Users:', allUsers);
     
     await prisma.$disconnect();
     
@@ -90,7 +91,7 @@ export async function POST(request: NextRequest) {
     });
     
   } catch (error) {
-    console.error('💥 Auth test error:', error);
+    appLogger.error('💥 Auth test error:', error);
     return NextResponse.json({
       success: false,
       error: 'Database or auth error',

@@ -3,12 +3,19 @@ import { getToken } from 'next-auth/jwt';
 import { generateCSPHeader } from './lib/validation';
 import { createIPRateLimit } from './lib/rate-limiting';
 
-// Rate limiters for different endpoints - INCREASED FOR TESTING
-const generalRateLimit = createIPRateLimit(1000, 60 * 1000); // 1000 requests per minute
-const authRateLimit = createIPRateLimit(100, 15 * 60 * 1000); // 100 requests per 15 minutes (was 5)
-const apiRateLimit = createIPRateLimit(1000, 60 * 1000); // 1000 requests per minute
+// Rate limiters for different endpoints with security-focused limits
+const generalRateLimit = createIPRateLimit(300, 60 * 1000); // 300 requests per minute
+const authRateLimit = createIPRateLimit(5, 15 * 60 * 1000); // 5 requests per 15 minutes
+const apiRateLimit = createIPRateLimit(100, 60 * 1000); // 100 requests per minute
 
 export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+  
+  // Block debug endpoints in production
+  if (process.env.NODE_ENV === 'production' && pathname.startsWith('/api/debug')) {
+    return new NextResponse('Not Found', { status: 404 });
+  }
+  
   const response = NextResponse.next();
   
   // Security headers
@@ -36,18 +43,18 @@ export async function middleware(request: NextRequest) {
     }
   }
   
-  // CSRF protection for POST requests (disabled for development)
-  // TODO: Re-enable CSRF protection in production
-  /*
+  // CSRF protection for POST requests
   if (request.method === 'POST' && !request.nextUrl.pathname.startsWith('/api/auth/')) {
     const csrfToken = request.headers.get('x-csrf-token');
     const sessionToken = request.headers.get('x-session-token');
     
-    if (!csrfToken || !sessionToken || csrfToken !== sessionToken) {
-      return new NextResponse('CSRF token validation failed', { status: 403 });
+    // Skip CSRF for upload endpoints as they use multipart/form-data
+    if (!request.nextUrl.pathname.startsWith('/api/upload')) {
+      if (!csrfToken || !sessionToken || csrfToken !== sessionToken) {
+        return new NextResponse('CSRF token validation failed', { status: 403 });
+      }
     }
   }
-  */
   
   return response;
 }
@@ -126,12 +133,14 @@ async function shouldProtectRoute(request: NextRequest): Promise<boolean> {
     '/about',
     '/privacy',
     '/terms',
-    '/test-upload',
-    '/api/upload', // Temporarily public for testing
-    '/api/debug',
     '/_next',
     '/favicon.ico',
   ];
+  
+  // Add debug routes only in development
+  if (process.env.NODE_ENV === 'development') {
+    publicRoutes.push('/api/debug');
+  }
   
   // Check if route is explicitly public
   if (publicRoutes.some(route => pathname.startsWith(route))) {

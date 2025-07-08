@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
+import { appLogger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
     };
 
     // In a real implementation, this would trigger the SSE broadcast
-    console.log('Test event would be sent:', eventData);
+    appLogger.info('Test event would be sent:', eventData);
 
     return NextResponse.json({ 
       success: true, 
@@ -35,7 +36,7 @@ export async function POST(request: NextRequest) {
       eventData 
     });
   } catch (error) {
-    console.error('Error triggering test event:', error);
+    appLogger.error('Error triggering test event:', error);
     return NextResponse.json(
       { error: 'Failed to trigger test event' },
       { status: 500 }
