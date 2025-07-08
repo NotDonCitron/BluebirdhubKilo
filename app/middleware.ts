@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
-import { generateCSPHeader } from './lib/validation';
-import { createIPRateLimit } from './lib/rate-limiting';
 
-// Rate limiters for different endpoints with security-focused limits
-const generalRateLimit = createIPRateLimit(300, 60 * 1000); // 300 requests per minute
-const authRateLimit = createIPRateLimit(5, 15 * 60 * 1000); // 5 requests per 15 minutes
-const apiRateLimit = createIPRateLimit(100, 60 * 1000); // 100 requests per minute
+import { createIPRateLimit } from './lib/rate-limiting';
+import { generateCSPHeader } from './lib/validation';
+
+// Rate limiters for different endpoints with environment-based limits
+const rateLimitRequests = parseInt(process.env.RATE_LIMIT_REQUESTS || '100', 10);
+const rateLimitWindow = parseInt(process.env.RATE_LIMIT_WINDOW || '60000', 10);
+const disableSSERateLimiting = process.env.DISABLE_SSE_RATE_LIMITING === 'true';
+
+const generalRateLimit = createIPRateLimit(rateLimitRequests, rateLimitWindow);
+const authRateLimit = createIPRateLimit(rateLimitRequests, rateLimitWindow);
+const apiRateLimit = createIPRateLimit(rateLimitRequests, rateLimitWindow);
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
@@ -21,8 +26,8 @@ export async function middleware(request: NextRequest) {
   // Security headers
   addSecurityHeaders(response);
   
-  // Rate limiting
-  if (!handleRateLimit(request)) {
+  // Rate limiting (skip if disabled for development)
+  if (!disableSSERateLimiting && !handleRateLimit(request)) {
     return new NextResponse('Too Many Requests', { status: 429 });
   }
   

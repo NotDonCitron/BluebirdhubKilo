@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { storage } from "@/app/lib/storage";
 import { appLogger } from '@/lib/logger';
 
@@ -31,7 +32,7 @@ export async function GET(request: NextRequest) {
           appLogger.info(`Deleted orphaned chunk: temp/${file}`);
         }
       } catch (error) {
-        appLogger.error(`Failed to clean up chunk temp/${file}:`, error);
+        appLogger.error(`Failed to clean up chunk temp/${file}:`, error as Error);
         errors++;
       }
     }
@@ -43,11 +44,11 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString(),
     };
     
-    appLogger.info(`Cleanup complete:`, result);
+    appLogger.info(`Cleanup complete`, result);
     
     return NextResponse.json(result);
   } catch (error) {
-    appLogger.error("Chunk cleanup failed:", error);
+    appLogger.error("Chunk cleanup failed:", error as Error);
     return NextResponse.json(
       { 
         error: "Cleanup failed", 

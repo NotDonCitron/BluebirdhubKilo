@@ -1,4 +1,13 @@
-import { createLogger, format, transports, Logger } from 'winston';
+// Browser compatibility check
+const isBrowser = typeof window !== 'undefined';
+
+// Conditional import for Winston (server-side only)
+let winston: any = null;
+if (!isBrowser) {
+  winston = await import('winston');
+}
+
+import { browserLogger } from './browser-logger';
 
 // Log levels: error, warn, info, http, verbose, debug, silly
 export enum LogLevel {
@@ -26,7 +35,7 @@ function sanitizeLogData(data: any): any {
     let sanitized = data;
     SENSITIVE_PATTERNS.forEach(pattern => {
       sanitized = sanitized.replace(pattern, (match) => {
-        const [key, ...rest] = match.split(/[:=]/);
+        const [key] = match.split(/[:=]/);
         return `${key}:***REDACTED***`;
       });
     });
@@ -58,7 +67,10 @@ function sanitizeLogData(data: any): any {
 }
 
 // Create Winston logger instance
-function createAppLogger(): Logger {
+function createAppLogger(): any {
+  if (isBrowser) return null;
+  
+  const { createLogger, format, transports } = winston;
   const isProduction = process.env.NODE_ENV === 'production';
   const isDevelopment = process.env.NODE_ENV === 'development';
   
@@ -66,7 +78,7 @@ function createAppLogger(): Logger {
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     format.errors({ stack: true }),
     format.json(),
-    format.printf(({ timestamp, level, message, stack, ...meta }) => {
+    format.printf(({ timestamp, level, message, stack, ...meta }: any) => {
       const sanitizedMeta = sanitizeLogData(meta);
       const logObject = {
         timestamp,
@@ -89,7 +101,7 @@ function createAppLogger(): Logger {
         format: format.combine(
           format.colorize(),
           format.simple(),
-          format.printf(({ timestamp, level, message, ...meta }) => {
+          format.printf(({ timestamp, level, message, ...meta }: any) => {
             const metaStr = Object.keys(meta).length ? JSON.stringify(sanitizeLogData(meta), null, 2) : '';
             return `${timestamp} [${level}]: ${sanitizeLogData(message)} ${metaStr}`;
           })
@@ -138,16 +150,16 @@ function createAppLogger(): Logger {
   });
 }
 
-// Create logger instance
-const logger = createAppLogger();
+// Create logger instance (only on server)
+const logger = !isBrowser ? createAppLogger() : null;
 
 // Enhanced logging interface
 export class AppLogger {
   private static instance: AppLogger;
-  private logger: Logger;
+  private logger: any;
   
   private constructor() {
-    this.logger = logger;
+    this.logger = isBrowser ? null : logger;
   }
   
   public static getInstance(): AppLogger {
@@ -159,52 +171,72 @@ export class AppLogger {
 
   // Error logging with context
   error(message: string, error?: Error, context?: Record<string, any>): void {
-    this.logger.error(message, {
-      error: error ? {
-        name: error.name,
-        message: error.message,
-        stack: error.stack
-      } : undefined,
-      context: sanitizeLogData(context),
-      timestamp: new Date().toISOString()
-    });
+    if (isBrowser) {
+      browserLogger.error(message, error, context);
+    } else {
+      this.logger?.error(message, {
+        error: error ? {
+          name: error.name,
+          message: error.message,
+          stack: error.stack
+        } : undefined,
+        context: sanitizeLogData(context),
+        timestamp: new Date().toISOString()
+      });
+    }
   }
 
   // Warning logging
   warn(message: string, context?: Record<string, any>): void {
-    this.logger.warn(message, {
-      context: sanitizeLogData(context),
-      timestamp: new Date().toISOString()
-    });
+    if (isBrowser) {
+      browserLogger.warn(message, context);
+    } else {
+      this.logger?.warn(message, {
+        context: sanitizeLogData(context),
+        timestamp: new Date().toISOString()
+      });
+    }
   }
 
   // Info logging
   info(message: string, context?: Record<string, any>): void {
-    this.logger.info(message, {
-      context: sanitizeLogData(context),
-      timestamp: new Date().toISOString()
-    });
+    if (isBrowser) {
+      browserLogger.info(message, context);
+    } else {
+      this.logger?.info(message, {
+        context: sanitizeLogData(context),
+        timestamp: new Date().toISOString()
+      });
+    }
   }
 
   // HTTP request logging
   http(method: string, url: string, statusCode: number, responseTime?: number, context?: Record<string, any>): void {
-    this.logger.http(`${method} ${url} ${statusCode}`, {
-      method,
-      url: sanitizeLogData(url),
-      statusCode,
-      responseTime,
-      context: sanitizeLogData(context),
-      timestamp: new Date().toISOString()
-    });
+    if (isBrowser) {
+      browserLogger.http(method, url, statusCode, responseTime, context);
+    } else {
+      this.logger?.http(`${method} ${url} ${statusCode}`, {
+        method,
+        url: sanitizeLogData(url),
+        statusCode,
+        responseTime,
+        context: sanitizeLogData(context),
+        timestamp: new Date().toISOString()
+      });
+    }
   }
 
   // Debug logging (only in development)
   debug(message: string, context?: Record<string, any>): void {
     if (process.env.NODE_ENV === 'development') {
-      this.logger.debug(message, {
-        context: sanitizeLogData(context),
-        timestamp: new Date().toISOString()
-      });
+      if (isBrowser) {
+        browserLogger.debug(message, context);
+      } else {
+        this.logger?.debug(message, {
+          context: sanitizeLogData(context),
+          timestamp: new Date().toISOString()
+        });
+      }
     }
   }
 

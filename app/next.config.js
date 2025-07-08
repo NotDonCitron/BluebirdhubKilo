@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
@@ -84,10 +85,12 @@ const nextConfig = {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin'
           },
-          // Allow inline styles and scripts for Next.js hydration
+          // Development-friendly CSP
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self';"
+            value: process.env.NODE_ENV === 'development'
+              ? "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; connect-src 'self' https: wss: ws:; font-src 'self' data: https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"
+              : "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; connect-src 'self' https: wss: ws:; font-src 'self' data: https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"
           }
         ]
       }
@@ -102,6 +105,31 @@ const nextConfig = {
         fs: false,
         net: false,
         tls: false,
+        crypto: false,
+        stream: false,
+        http: false,
+        https: false,
+        zlib: false,
+        path: false,
+        buffer: false,
+        util: false,
+        assert: false,
+        querystring: false,
+        url: false,
+        os: false,
+        child_process: false,
+        cluster: false,
+        dgram: false,
+        dns: false,
+        events: false,
+        readline: false,
+        repl: false,
+        string_decoder: false,
+        sys: false,
+        timers: false,
+        tty: false,
+        vm: false,
+        worker_threads: false,
       };
     }
     

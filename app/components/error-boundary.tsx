@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+import React, { Component } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -65,7 +66,7 @@ const DefaultErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorB
   </div>
 );
 
-export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
@@ -79,10 +80,11 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     // Log error to monitoring service in production
     console.error('Error caught by boundary:', error, errorInfo);
     
-    // You can integrate with error tracking services like Sentry here
-    // if (typeof window !== 'undefined' && window.Sentry) {
-    //   window.Sentry.captureException(error, { contexts: { react: errorInfo } });
-    // }
+    // Optional Sentry integration - only if available
+    if (typeof window !== 'undefined' && 'Sentry' in window) {
+      const sentry = (window as { Sentry?: { captureException: (error: Error, options: { contexts: { react: React.ErrorInfo } }) => void } }).Sentry;
+      sentry?.captureException(error, { contexts: { react: errorInfo } });
+    }
   }
 
   resetErrorBoundary = () => {

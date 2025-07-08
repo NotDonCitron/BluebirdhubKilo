@@ -1,8 +1,11 @@
-import { Page } from 'puppeteer';
-import { config } from '../e2e/setup';
-import { AUTH_SELECTORS, TASK_SELECTORS, WORKSPACE_SELECTORS, FILE_SELECTORS } from './selectors';
 import * as fs from 'fs';
 import * as path from 'path';
+
+import { Page } from 'puppeteer';
+
+import { config } from '../e2e/setup';
+
+import { AUTH_SELECTORS, TASK_SELECTORS, WORKSPACE_SELECTORS, FILE_SELECTORS } from './selectors';
 
 // Error categorization system
 export enum ErrorCategory {
@@ -458,7 +461,7 @@ export class TestHelpers {
           obstructingElement
         };
       }, selector);
-    } catch (error) {
+    } catch {
       return { exists: false };
     }
   }
@@ -484,7 +487,7 @@ export class TestHelpers {
           }, 2000);
         }
       }, selector, color);
-    } catch (error) {
+    } catch {
       // Silently fail - this is just for debugging
     }
   }
@@ -559,7 +562,7 @@ export class TestHelpers {
           )
         };
       }, selector);
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -1060,9 +1063,7 @@ export class TestHelpers {
     return this.adaptiveWait(timeMs);
   }
 
-  async waitForNavigation(expectedUrl?: string, timeout: number = 5000): Promise<TestResult> {
-    // Store timeout for potential use in error messages
-    const navigationTimeout = timeout;
+  async waitForNavigation(expectedUrl?: string, _timeout: number = 5000): Promise<TestResult> {
     try {
       // Wait for navigation with proper timeout handling
       await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for navigation
@@ -1138,7 +1139,7 @@ export class TestHelpers {
             { timeout: 10000 },
             loadingIndicators
           );
-        } catch (e) {
+        } catch {
           console.warn('⚠️ Loading indicators did not disappear within timeout');
           await this.captureScreenshot(`${pageType}-loading-indicators-timeout`);
         }
@@ -1321,15 +1322,13 @@ export class TestHelpers {
           check();
         });
       }, selectors, visible, timeout);
-    } catch (error) {
+    } catch {
       return null;
     }
   }
   
   // Enhanced modal interaction helpers
   async waitForModalToAppear(modalSelector: string = '[role="dialog"], .modal, dialog', timeout: number = 5000): Promise<TestResult> {
-    // Track start time for diagnostics
-    const startTimestamp = Date.now();
     try {
       // Take before screenshot
       await this.captureScreenshot('before-modal-wait');
@@ -1432,9 +1431,6 @@ export class TestHelpers {
         const isModalFocused = visibleModals.some(modal =>
           modal === activeElement || modal.contains(activeElement)
         );
-        
-        // Analyze potential interaction blockers
-        const interactionBlockers = [];
         
         // Check if body has modal open class
         const bodyHasModalClass = document.body.classList.contains('modal-open') ||

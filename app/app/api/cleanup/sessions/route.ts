@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { prisma } from "@/lib/db";
 import { appLogger } from '@/lib/logger';
 
@@ -47,11 +48,11 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString(),
     };
     
-    appLogger.info("Session cleanup complete:", cleanupResult);
+    appLogger.info("Session cleanup complete", cleanupResult);
     
     return NextResponse.json(cleanupResult);
   } catch (error) {
-    appLogger.error("Session cleanup failed:", error);
+    appLogger.error("Session cleanup failed:", error as Error);
     return NextResponse.json(
       { 
         error: "Cleanup failed", 

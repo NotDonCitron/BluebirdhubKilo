@@ -1,12 +1,15 @@
 
+import '../lib/polyfills';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+
 import './globals.css';
+
+import { ErrorBoundary } from '@/components/error-boundary';
+import { SessionProvider } from '@/components/providers/session-provider';
+import { SessionTimeoutProvider } from '@/components/providers/session-timeout-provider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
-import { SessionProvider } from '@/components/providers/session-provider';
-import { ErrorBoundary } from '@/components/error-boundary';
-import { SessionTimeoutProvider } from '@/components/providers/session-timeout-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 

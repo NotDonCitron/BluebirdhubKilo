@@ -52,7 +52,7 @@ export default function DebugPage() {
       const storageData = await storageResponse.json();
       setStorageStatus(storageData);
     } catch (error) {
-      appLogger.error('Error checking status:', error);
+      appLogger.error('Error checking status', error as Error);
     } finally {
       setLoading(false);
     }

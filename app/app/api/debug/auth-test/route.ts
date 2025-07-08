@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
 import bcrypt from 'bcryptjs';
+import { NextRequest, NextResponse } from 'next/server';
+
+import { prisma } from '@/lib/db';
 import { appLogger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
@@ -15,10 +16,11 @@ export async function POST(request: NextRequest) {
     appLogger.info('📨 Request data:', { email, hasPassword: !!password });
     
     // Test 1: Check environment variables
-    appLogger.info('🌍 Environment check:');
-    appLogger.info('  DATABASE_URL:', process.env.DATABASE_URL);
-    appLogger.info('  NEXTAUTH_SECRET:', process.env.NEXTAUTH_SECRET ? 'SET' : 'MISSING');
-    appLogger.info('  NEXTAUTH_URL:', process.env.NEXTAUTH_URL);
+    appLogger.info('🌍 Environment check', {
+      DATABASE_URL: process.env.DATABASE_URL,
+      NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET ? 'SET' : 'MISSING',
+      NEXTAUTH_URL: process.env.NEXTAUTH_URL
+    });
     
     // Test 2: Database connection
     appLogger.info('💾 Testing database connection...');
@@ -66,14 +68,14 @@ export async function POST(request: NextRequest) {
     // Test 4: Password verification
     appLogger.info('🔑 Testing password...');
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    appLogger.info('🔑 Password result:', { isValid: isPasswordValid });
+    appLogger.info('🔑 Password result', { isValid: isPasswordValid });
     
     // Test 5: List all users for debugging
     appLogger.info('📋 All users in database:');
     const allUsers = await prisma.user.findMany({
       select: { email: true, name: true, role: true }
     });
-    appLogger.info('📋 Users:', allUsers);
+    appLogger.info('📋 Users', { users: allUsers });
     
     await prisma.$disconnect();
     
@@ -91,7 +93,7 @@ export async function POST(request: NextRequest) {
     });
     
   } catch (error) {
-    appLogger.error('💥 Auth test error:', error);
+    appLogger.error('💥 Auth test error:', error as Error);
     return NextResponse.json({
       success: false,
       error: 'Database or auth error',

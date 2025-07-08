@@ -34,7 +34,7 @@ export async function sanitizeHtml(input: string): Promise<string> {
       ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'ol', 'ul', 'li'],
       ALLOWED_ATTR: [],
     });
-  } catch (error) {
+  } catch {
     // Fallback to basic text sanitization if DOMPurify fails
     return sanitizeText(input);
   }
@@ -213,7 +213,9 @@ export function validateRateLimit(_identifier: string, _maxRequests: number, _wi
 // Content Security Policy helpers
 export const CSP_DIRECTIVES = {
   'default-src': ["'self'"],
-  'script-src': ["'self'", "'wasm-unsafe-eval'"], // Required for Next.js SWC
+  'script-src': process.env.NODE_ENV === 'development'
+    ? ["'self'", "'unsafe-eval'", "'unsafe-inline'", "'wasm-unsafe-eval'"]
+    : ["'self'", "'wasm-unsafe-eval'"], // Allow eval and inline scripts in development
   'style-src': ["'self'", "'unsafe-inline'"], // Required for CSS-in-JS and Tailwind
   'img-src': ["'self'", 'data:', 'https:', 'blob:'],
   'connect-src': ["'self'", 'https:', 'wss:', 'ws:'], // Allow HTTPS and WebSocket connections
@@ -226,13 +228,14 @@ export const CSP_DIRECTIVES = {
   'worker-src': ["'self'", 'blob:'],
   'child-src': ["'self'"],
   'manifest-src': ["'self'"],
-  'upgrade-insecure-requests': []
+  'upgrade-insecure-requests': process.env.NODE_ENV === 'production' ? [] : undefined
 };
 
 export function generateCSPHeader(): string {
   return Object.entries(CSP_DIRECTIVES)
+    .filter(([, sources]) => sources !== undefined)
     .map(([directive, sources]) => {
-      if (sources.length === 0) {
+      if (!sources || sources.length === 0) {
         return directive;
       }
       return `${directive} ${sources.join(' ')}`;

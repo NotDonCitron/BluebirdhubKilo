@@ -9,9 +9,9 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: NextRequest) {
   // Add comprehensive error logging
   appLogger.info('=== SIGNUP API START ===');
-  appLogger.info('Timestamp:', new Date();.toISOString());
-  appLogger.info('URL:', request.url);
-  appLogger.info('Method:', request.method);
+  appLogger.info('Signup API started', { timestamp: new Date().toISOString() });
+  appLogger.info('Request details', { url: request.url });
+  appLogger.info('Request method', { method: request.method });
   
   try {
     // Use Next.js built-in JSON parsing with error handling
@@ -19,9 +19,9 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json();
       appLogger.info('JSON parsed successfully');
-      appLogger.info('Request body keys:', Object.keys(body););
+      appLogger.info('Request body keys:', Object.keys(body));
     } catch (jsonError) {
-      appLogger.error('JSON parsing failed:', jsonError);
+      appLogger.error('JSON parsing failed', jsonError as Error);
       return NextResponse.json(
         { 
           error: 'Invalid JSON format',
@@ -81,9 +81,9 @@ export async function POST(request: NextRequest) {
       existingUser = await prisma.user.findUnique({
         where: { email }
       });
-      appLogger.info('Database query completed - user exists:', !!existingUser);
+      appLogger.info('Database query completed', { userExists: !!existingUser });
     } catch (dbError) {
-      appLogger.error('Database error during user lookup:', dbError);
+      appLogger.error('Database error during user lookup', dbError as Error);
       return NextResponse.json(
         { 
           error: 'Database connection error',
@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
       hashedPassword = await bcrypt.hash(password, 12);
       appLogger.info('Password hashed successfully');
     } catch (hashError) {
-      appLogger.error('Password hashing error:', hashError);
+      appLogger.error('Password hashing error:', hashError as Error);
       return NextResponse.json(
         { 
           error: 'Password processing error',
@@ -137,9 +137,9 @@ export async function POST(request: NextRequest) {
           // role defaults to USER as per schema
         }
       });
-      appLogger.info('User created successfully with ID:', user.id);
+      appLogger.info('User created successfully', { userId: user.id });
     } catch (createError) {
-      appLogger.error('User creation error:', createError);
+      appLogger.error('User creation error:', createError as Error);
       return NextResponse.json(
         { 
           error: 'User creation failed',
@@ -164,9 +164,9 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     appLogger.error('=== SIGNUP CRITICAL ERROR ===');
-    appLogger.error('Error type:', error?.constructor?.name);
-    appLogger.error('Error message:', (error as Error);?.message);
-    appLogger.error('Error stack:', (error as Error);?.stack);
+    appLogger.error('Critical error during signup', error as Error, {
+      errorType: error?.constructor?.name || 'Unknown'
+    });
     appLogger.error('=== END CRITICAL ERROR ===');
     
     return NextResponse.json(

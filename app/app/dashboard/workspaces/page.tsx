@@ -124,7 +124,7 @@ export default function WorkspacesPage() {
       });
 
       appLogger.info('📊 Response status:', response.status);
-      appLogger.info('📋 Response headers:', Object.fromEntries(response.headers.entries();));
+      appLogger.info('📋 Response headers:', Object.fromEntries(response.headers.entries()));
 
       if (response.ok) {
         const workspace = await response.json();
